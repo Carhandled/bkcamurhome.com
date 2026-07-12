@@ -9,11 +9,15 @@ schedule. It:
      (and a new refresh token, which Etsy rotates on every use).
   2. Fetches every ACTIVE listing in the bkCAMUR Home Etsy shop, including
      images and current quantity.
-  3. Regenerates the product grid in index.html between the
-     <!-- ETSY_LISTINGS_START --> / <!-- ETSY_LISTINGS_END --> markers so the
-     site always mirrors exactly what's live on Etsy.
-  4. If Etsy issued a new refresh token, writes it back to the GitHub repo's
-     Actions secret (ETSY_REFRESH_TOKEN) so the next run can use it — Etsy
+  3. Sorts each listing into one of three categories by keyword match on its
+     title: Suzani Pillow Covers (Uzbekistan), Kilim Pillow Covers (Turkey),
+     or Rugs & Kilims (Turkey) - see categorize() below.
+  4. Regenerates each category's product grid in index.html between its own
+     comment markers, so the site always mirrors exactly what's live on
+     Etsy. A category with zero active listings gets a graceful
+     "coming soon" placeholder instead of an empty grid.
+  5. If Etsy issued a new refresh token, writes it back to the GitHub repo's
+     Actions secret (ETSY_REFRESH_TOKEN) so the next run can use it - Etsy
      refresh tokens are valid 90 days but rotate on each use, so this keeps
      the chain alive indefinitely without any human re-authorizing.
 
@@ -29,7 +33,6 @@ workflow):
 """
 
 import base64
-import json
 import os
 import sys
 from pathlib import Path
@@ -39,8 +42,42 @@ import requests
 ETSY_TOKEN_URL = "https://api.etsy.com/v3/public/oauth/token"
 ETSY_API_BASE = "https://api.etsy.com/v3/application"
 INDEX_HTML_PATH = Path("index.html")
-START_MARKER = "<!-- ETSY_LISTINGS_START -->"
-END_MARKER = "<!-- ETSY_LISTINGS_END -->"
+SHOP_URL = "https://www.etsy.com/shop/BKCAMURHOME"
+
+# Category key -> (start marker, end marker, meta label shown on each card,
+# empty-state copy shown when this category has zero active listings)
+CATEGORIES = {
+    "suzani": {
+        "start": "<!-- ETSY_SUZANI_START -->",
+        "end": "<!-- ETSY_SUZANI_END -->",
+        "meta": "Uzbekistan &middot; Hand-Embroidered",
+    },
+    "kilim_pillow": {
+        "start": "<!-- ETSY_KILIM_PILLOW_START -->",
+        "end": "<!-- ETSY_KILIM_PILLOW_END -->",
+        "meta": "Turkey &middot; Flatwoven Kilim",
+    },
+    "rug": {
+        "start": "<!-- ETSY_RUGS_START -->",
+        "end": "<!-- ETSY_RUGS_END -->",
+        "meta": "Turkey &middot; Hand-Loomed",
+    },
+}
+
+EMPTY_STATE_TEMPLATE = (
+    '<div class="cat-empty">\n'
+    "{label} are being sourced and will appear here as soon as they're "
+    'listed. In the meantime, browse the full shop on '
+    f'<a href="{SHOP_URL}" target="_blank" rel="noopener">Etsy</a> or '
+    '<a href="wholesale.html">inquire about trade access</a>.\n'
+    "</div>"
+)
+
+EMPTY_STATE_LABELS = {
+    "suzani": "Suzani pillow covers",
+    "kilim_pillow": "Kilim pillow covers",
+    "rug": "Rugs and kilims",
+}
 
 
 def env(name, required=True):
@@ -49,6 +86,18 @@ def env(name, required=True):
         print(f"ERROR: missing required environment variable {name}", file=sys.stderr)
         sys.exit(1)
     return val
+
+
+def categorize(title):
+    """Sort a listing into suzani / kilim_pillow / rug by keyword match on
+    its title. Adjust these keywords if real listing titles don't match -
+    this is intentionally simple so it's easy to tune by hand."""
+    t = (title or "").lower()
+    if "suzani" in t:
+        return "suzani"
+    if "kilim" in t and ("pillow" in t or "cushion" in t or "cover" in t):
+        return "kilim_pillow"
+    return "rug"
 
 
 def refresh_oauth_token(api_key, refresh_token):
@@ -106,7 +155,7 @@ def escape_html(text):
     )
 
 
-def build_card(listing):
+def build_card(listing, meta_label):
     title = escape_html(listing.get("title", "").strip())
     url = listing.get("url", "#")
     quantity = listing.get("quantity", 1)
@@ -126,11 +175,26 @@ def build_card(listing):
 <div class="product-info">
 <span class="one-of-a-kind">{badge}</span>
 <div class="product-name">{title}</div>
-<div class="product-meta">bkCAMUR Home &middot; Etsy</div>
+<div class="product-meta">{meta_label}</div>
 <div class="product-price">{price} &middot; Free Shipping</div>
 <a class="product-buy" href="{escape_html(url)}" target="_blank" rel="noopener">View &amp; Purchase</a>
 </div>
 </div>"""
+
+
+def group_by_category(listings):
+    grouped = {key: [] for key in CATEGORIES}
+    for listing in listings:
+        cat = categorize(listing.get("title", ""))
+        grouped.setdefault(cat, []).append(listing)
+    return grouped
+
+
+def build_category_block(cat_key, cat_listings):
+    meta_label = CATEGORIES[cat_key]["meta"]
+    if not cat_listings:
+        return EMPTY_STATE_TEMPLATE.format(label=EMPTY_STATE_LABELS[cat_key])
+    return "\n".join(build_card(l, meta_label) for l in cat_listings)
 
 
 def regenerate_index_html(listings):
@@ -139,25 +203,32 @@ def regenerate_index_html(listings):
         sys.exit(1)
 
     html = INDEX_HTML_PATH.read_text(encoding="utf-8")
+    grouped = group_by_category(listings)
 
-    if START_MARKER not in html or END_MARKER not in html:
-        print(
-            "ERROR: index.html is missing the ETSY_LISTINGS_START/END markers. "
-            "Add them inside <div class=\"product-grid\"> before running this script.",
-            file=sys.stderr,
-        )
-        sys.exit(1)
+    for cat_key, cfg in CATEGORIES.items():
+        start, end = cfg["start"], cfg["end"]
+        if start not in html or end not in html:
+            print(
+                f"ERROR: index.html is missing markers {start} / {end} "
+                "for category '" + cat_key + "'.",
+                file=sys.stderr,
+            )
+            sys.exit(1)
 
-    cards_html = "\n".join(build_card(l) for l in listings)
-    new_block = f"{START_MARKER}\n{cards_html}\n{END_MARKER}"
+        block_html = build_category_block(cat_key, grouped.get(cat_key, []))
+        new_block = f"{start}\n{block_html}\n{end}"
 
-    pre, rest = html.split(START_MARKER, 1)
-    _, post = rest.split(END_MARKER, 1)
-    new_html = pre + new_block + post
+        pre, rest = html.split(start, 1)
+        _, post = rest.split(end, 1)
+        html = pre + new_block + post
 
-    changed = new_html != html
+    original = INDEX_HTML_PATH.read_text(encoding="utf-8")
+    changed = html != original
     if changed:
-        INDEX_HTML_PATH.write_text(new_html, encoding="utf-8")
+        INDEX_HTML_PATH.write_text(html, encoding="utf-8")
+
+    counts = {k: len(v) for k, v in grouped.items()}
+    print(f"Listing counts by category: {counts}")
 
     return changed
 
@@ -200,14 +271,14 @@ def update_github_secret(gh_pat, repo, secret_name, secret_value):
 
 
 def main():
-    # Soft-skip (exit 0, no failure email) until all four secrets exist —
+    # Soft-skip (exit 0, no failure email) until all four secrets exist -
     # lets the workflow run hourly from day one without spamming failures
     # while the human setup steps in ETSY_AUTOMATION_SETUP.md are pending.
     required = ["ETSY_API_KEY", "ETSY_REFRESH_TOKEN", "ETSY_SHOP_ID", "GH_PAT"]
     missing = [name for name in required if not os.environ.get(name, "").strip()]
     if missing:
         print(
-            "Skipping sync — setup not finished yet. Missing secret(s): "
+            "Skipping sync - setup not finished yet. Missing secret(s): "
             + ", ".join(missing)
             + ". See ETSY_AUTOMATION_SETUP.md."
         )
@@ -230,7 +301,7 @@ def main():
     print("index.html updated." if changed else "No changes to index.html.")
 
     if new_refresh_token != refresh_token:
-        print("Refresh token rotated — updating GitHub secret...")
+        print("Refresh token rotated - updating GitHub secret...")
         update_github_secret(gh_pat, repo, "ETSY_REFRESH_TOKEN", new_refresh_token)
         print("ETSY_REFRESH_TOKEN secret updated.")
 
