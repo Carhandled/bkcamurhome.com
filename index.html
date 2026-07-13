@@ -13,6 +13,8 @@
 </script>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="icon" type="image/png" href="assets/image/logo.png" />
+<link rel="apple-touch-icon" href="assets/image/logo.png" />
 
 <title>bkCAMUR Home — Vintage Turkish Rugs, Kilim &amp; Uzbek Suzani Textiles</title>
 <meta name="description" content="bkCAMUR Home brings hand-loomed Turkish rugs and kilim pillow covers from Anatolia together with hand-embroidered suzani textiles from Uzbekistan. One-of-a-kind pieces for retail and trade. Based in Philadelphia." />
@@ -143,7 +145,12 @@ text-decoration: none;
 color: var(--espresso);
 font-weight: 600;
 white-space: nowrap;
+display: flex;
+align-items: center;
+gap: 10px;
 }
+
+.logo-mark { width: 36px; height: 36px; border-radius: 8px; object-fit: cover; flex-shrink: 0; }
 
 .logo span { color: var(--terracotta); font-style: italic; font-weight: 400; }
 
@@ -704,7 +711,7 @@ scroll-snap-align: start;
 
 <header>
 <nav>
-<a href="#top" class="logo">bkCAMUR <span>Home</span></a>
+<a href="#top" class="logo"><img src="assets/image/logo.png" alt="bkCAMUR Home logo" class="logo-mark" />bkCAMUR <span>Home</span></a>
 <ul class="nav-links" id="nav-links">
 <li><a href="#suzani">Suzani</a></li>
 <li><a href="#kilim-pillows">Kilim Pillows</a></li>
