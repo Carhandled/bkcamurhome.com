@@ -27,6 +27,7 @@ jobs:
       - name: Sync Etsy listings into index.html
         env:
           ETSY_API_KEY: ${{ secrets.ETSY_API_KEY }}
+          ETSY_SHARED_SECRET: ${{ secrets.ETSY_SHARED_SECRET }}
           ETSY_REFRESH_TOKEN: ${{ secrets.ETSY_REFRESH_TOKEN }}
           ETSY_SHOP_ID: ${{ secrets.ETSY_SHOP_ID }}
           GH_PAT: ${{ secrets.GH_PAT }}
