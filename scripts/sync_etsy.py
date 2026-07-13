@@ -24,6 +24,10 @@ schedule. It:
 Required environment variables (set as GitHub repo secrets, injected by the
 workflow):
     ETSY_API_KEY       - Etsy app "keystring"
+    ETSY_SHARED_SECRET - Etsy app "shared secret" (Etsy now requires both,
+                          combined as "keystring:sharedsecret", in every
+                          x-api-key header as of their Feb 2026 enforcement
+                          - see https://github.com/etsy/open-api/discussions/1521)
     ETSY_REFRESH_TOKEN - current refresh token
     ETSY_SHOP_ID       - numeric Etsy shop id for BKCAMURHOME
     GH_PAT             - fine-grained PAT scoped to this repo with
@@ -115,7 +119,7 @@ def refresh_oauth_token(api_key, refresh_token):
     return data["access_token"], data["refresh_token"]
 
 
-def fetch_active_listings(api_key, access_token, shop_id):
+def fetch_active_listings(x_api_key, access_token, shop_id):
     listings = []
     limit = 100
     offset = 0
@@ -123,7 +127,7 @@ def fetch_active_listings(api_key, access_token, shop_id):
         resp = requests.get(
             f"{ETSY_API_BASE}/shops/{shop_id}/listings/active",
             headers={
-                "x-api-key": api_key,
+                "x-api-key": x_api_key,
                 "Authorization": f"Bearer {access_token}",
             },
             params={"limit": limit, "offset": offset, "includes": "Images"},
@@ -274,7 +278,13 @@ def main():
     # Soft-skip (exit 0, no failure email) until all four secrets exist -
     # lets the workflow run hourly from day one without spamming failures
     # while the human setup steps in ETSY_AUTOMATION_SETUP.md are pending.
-    required = ["ETSY_API_KEY", "ETSY_REFRESH_TOKEN", "ETSY_SHOP_ID", "GH_PAT"]
+    required = [
+        "ETSY_API_KEY",
+        "ETSY_SHARED_SECRET",
+        "ETSY_REFRESH_TOKEN",
+        "ETSY_SHOP_ID",
+        "GH_PAT",
+    ]
     missing = [name for name in required if not os.environ.get(name, "").strip()]
     if missing:
         print(
@@ -285,16 +295,21 @@ def main():
         sys.exit(0)
 
     api_key = env("ETSY_API_KEY")
+    shared_secret = env("ETSY_SHARED_SECRET")
     refresh_token = env("ETSY_REFRESH_TOKEN")
     shop_id = env("ETSY_SHOP_ID")
     gh_pat = env("GH_PAT")
     repo = env("GITHUB_REPOSITORY")
 
+    # Etsy requires x-api-key to be "keystring:sharedsecret" as of their
+    # Feb 2026 enforcement - see module docstring.
+    x_api_key = f"{api_key}:{shared_secret}"
+
     print("Refreshing Etsy OAuth token...")
     access_token, new_refresh_token = refresh_oauth_token(api_key, refresh_token)
 
     print("Fetching active listings...")
-    listings = fetch_active_listings(api_key, access_token, shop_id)
+    listings = fetch_active_listings(x_api_key, access_token, shop_id)
     print(f"Found {len(listings)} active listing(s).")
 
     changed = regenerate_index_html(listings)
