@@ -37,7 +37,6 @@ workflow):
 """
 
 import base64
-import json
 import os
 import sys
 from pathlib import Path
@@ -141,7 +140,37 @@ def fetch_active_listings(x_api_key, access_token, shop_id):
         offset += limit
         if offset >= data.get("count", 0) or not results:
             break
+
+    # The "includes=Images" param above no longer populates an "images"
+    # field on this endpoint's response (confirmed empirically - Etsy
+    # returns the listing with no "images" key at all despite the include).
+    # Fetch each listing's images individually from the dedicated images
+    # endpoint instead, which is reliable.
+    for listing in listings:
+        listing["images"] = fetch_listing_images(
+            x_api_key, access_token, listing.get("listing_id")
+        )
+
     return listings
+
+
+def fetch_listing_images(x_api_key, access_token, listing_id):
+    if not listing_id:
+        return []
+    try:
+        resp = requests.get(
+            f"{ETSY_API_BASE}/listings/{listing_id}/images",
+            headers={
+                "x-api-key": x_api_key,
+                "Authorization": f"Bearer {access_token}",
+            },
+            timeout=30,
+        )
+        resp.raise_for_status()
+        return resp.json().get("results", [])
+    except requests.RequestException as exc:
+        print(f"WARNING: failed to fetch images for listing {listing_id}: {exc}")
+        return []
 
 
 def format_price(price):
@@ -309,16 +338,9 @@ def main():
     print("Refreshing Etsy OAuth token...")
     access_token, new_refresh_token = refresh_oauth_token(api_key, refresh_token)
 
-    print("Fetching active listings...")
+    print("Fetching active listings (with images)...")
     listings = fetch_active_listings(x_api_key, access_token, shop_id)
     print(f"Found {len(listings)} active listing(s).")
-
-    # TEMP DEBUG - remove once image field is confirmed. Prints the raw
-    # "images" value of the first listing so we can see the real key names
-    # Etsy is returning for the Images include.
-    if listings:
-        print("DEBUG first listing images: " + json.dumps(listings[0].get("images"))[:1500])
-        print("DEBUG first listing keys: " + json.dumps(sorted(listings[0].keys())))
 
     changed = regenerate_index_html(listings)
     print("index.html updated." if changed else "No changes to index.html.")
