@@ -276,6 +276,37 @@ transition: all 0.25s ease;
 .btn-primary { background: var(--terracotta); color: var(--warm-white) !important; }
 .btn-primary:hover { background: var(--terracotta-deep); }
 
+.newsletter { background: var(--near-black); color: var(--warm-white); text-align: center; padding: 70px 0; }
+.newsletter .container { max-width: 620px; }
+.newsletter .eyebrow { justify-content: center; display: flex; color: var(--gold); }
+.newsletter h2 { color: var(--warm-white); font-size: 30px; margin-bottom: 16px; }
+.newsletter p { color: #C9B79A; font-size: 14.5px; margin-bottom: 30px; }
+.newsletter-form { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+.newsletter-form input[type="email"] {
+flex: 1;
+min-width: 240px;
+padding: 15px 16px;
+border: 1px solid rgba(245,237,224,0.2);
+background: rgba(245,237,224,0.06);
+color: var(--warm-white);
+font-family: 'Montserrat', sans-serif;
+font-size: 14px;
+}
+.newsletter-form input[type="email"]::placeholder { color: #8C7B60; }
+.newsletter-form button {
+background: var(--gold);
+color: var(--espresso);
+border: none;
+padding: 15px 32px;
+font-size: 11px;
+letter-spacing: 0.2em;
+text-transform: uppercase;
+cursor: pointer;
+transition: background 0.25s ease;
+}
+.newsletter-form button:hover { background: #dab766; }
+.newsletter-note { font-size: 11px; color: #8C7B60; margin-top: 16px; }
+
 .read-next {
 background: var(--espresso);
 color: var(--warm-white);
@@ -437,6 +468,20 @@ font-size: 11px;
 </div>
 </article>
 
+<section class="newsletter">
+<div class="container">
+<span class="eyebrow">Stay Connected</span>
+<h2>Join the List</h2>
+<p>New arrivals, restocks, and behind-the-scenes sourcing stories from Anatolia and Uzbekistan — straight to your inbox. No spam, unsubscribe anytime.</p>
+<form class="newsletter-form" id="newsletter-form" action="https://formspree.io/f/mbdnjbak" method="POST">
+<input type="email" name="email" placeholder="Your email address" required />
+<input type="hidden" name="_subject" value="New bkCAMUR Home newsletter signup" />
+<button type="submit">Subscribe</button>
+</form>
+<p class="newsletter-note" id="newsletter-note">By subscribing, you agree to receive emails from bkCAMUR Home. Unsubscribe anytime.</p>
+</div>
+</section>
+
 <section class="read-next">
 <div class="container">
 <span class="eyebrow">Keep Reading</span>
@@ -475,6 +520,10 @@ font-size: 11px;
 <a href="../wholesale.html">Trade / Wholesale</a>
 <a href="../index.html#contact">Contact</a>
 </div>
+<div class="footer-col">
+<h4>Follow</h4>
+<a href="https://www.instagram.com/bkcamurhome/" target="_blank" rel="noopener">Instagram</a>
+</div>
 </div>
 </div>
 <div class="footer-bottom">
@@ -483,6 +532,36 @@ font-size: 11px;
 </div>
 </div>
 </footer>
+
+<script>
+document.getElementById('newsletter-form').addEventListener('submit', function (e) {
+  e.preventDefault();
+  const form = e.target;
+  const note = document.getElementById('newsletter-note');
+  const btn = form.querySelector('button');
+  btn.disabled = true;
+  btn.textContent = 'Subscribing…';
+  fetch(form.action, {
+    method: 'POST',
+    body: new FormData(form),
+    headers: { 'Accept': 'application/json' }
+  }).then(function (response) {
+    if (response.ok) {
+      form.reset();
+      form.style.display = 'none';
+      note.textContent = 'You\'re on the list — thanks for signing up!';
+    } else {
+      btn.disabled = false;
+      btn.textContent = 'Subscribe';
+      note.textContent = 'Something went wrong — please try again or email hello@bkcamurhome.com directly.';
+    }
+  }).catch(function () {
+    btn.disabled = false;
+    btn.textContent = 'Subscribe';
+    note.textContent = 'Something went wrong — please try again or email hello@bkcamurhome.com directly.';
+  });
+});
+</script>
 
 </body>
 </html>
