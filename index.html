@@ -536,6 +536,38 @@ margin: 0 auto;
 .contact p { color: var(--taupe-grey); font-size: 15px; margin-bottom: 36px; }
 .contact-links { display: flex; gap: 18px; justify-content: center; flex-wrap: wrap; }
 
+.newsletter { background: var(--near-black); color: var(--warm-white); text-align: center; }
+.newsletter .container { max-width: 620px; }
+.newsletter .eyebrow { justify-content: center; display: flex; color: var(--gold); }
+.newsletter h2 { color: var(--warm-white); font-size: 34px; margin-bottom: 16px; }
+.newsletter p { color: #C9B79A; font-size: 14.5px; margin-bottom: 30px; }
+.newsletter-form { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+.newsletter-form input[type="email"] {
+flex: 1;
+min-width: 240px;
+padding: 15px 16px;
+border: 1px solid rgba(245,237,224,0.2);
+background: rgba(245,237,224,0.06);
+color: var(--warm-white);
+font-family: 'Montserrat', sans-serif;
+font-size: 14px;
+}
+.newsletter-form input[type="email"]::placeholder { color: #8C7B60; }
+.newsletter-form button {
+background: var(--gold);
+color: var(--espresso);
+border: none;
+padding: 15px 32px;
+font-size: 11px;
+letter-spacing: 0.2em;
+text-transform: uppercase;
+cursor: pointer;
+transition: background 0.25s ease;
+}
+.newsletter-form button:hover { background: #dab766; }
+.newsletter-note { font-size: 11px; color: #8C7B60; margin-top: 16px; }
+.newsletter-success { display: none; font-size: 14px; color: var(--gold); }
+
 /* ============ FOOTER ============ */
 footer {
 background: var(--near-black);
@@ -656,7 +688,7 @@ section { padding: 76px 0; }
 <div class="traditions-grid">
 <div class="tradition-card">
 <div class="tradition-photo">
-<img src="https://i.etsystatic.com/61471058/r/il/bdd34f/8280145031/il_1588xN.8280145031_tl8g.jpg" alt="Vintage Turkish kilim pillow cover, flatwoven detail" />
+<img src="https://i.etsystatic.com/61471058/r/il/ddcfd2/8243459220/il_1588xN.8243459220_2o2n.jpg" alt="Vintage Turkish rug, hand-loomed wool" />
 </div>
 <div class="tradition-copy">
 <span class="eyebrow">Türkiye</span>
@@ -1028,7 +1060,7 @@ section { padding: 76px 0; }
 <div class="product-info">
 <span class="one-of-a-kind">1 of 1 Available</span>
 <div class="product-name">Kilim Pillow Cover 20x20, Striped Pattern Vintage Turkish Rug Pillow, Upcycled Wool Boho Accent</div>
-<div class="product-meta">Turkey &middot; Flatwoven Kilim</div>
+<div class="product-meta">Türkiye &middot; Flatwoven Kilim</div>
 <div class="product-price">$70.00 &middot; Free Shipping</div>
 <a class="product-buy" href="https://www.etsy.com/listing/4535250220/kilim-pillow-cover-20x20-striped-pattern" target="_blank" rel="noopener">View &amp; Purchase</a>
 </div>
@@ -1039,7 +1071,7 @@ section { padding: 76px 0; }
 <div class="product-info">
 <span class="one-of-a-kind">1 of 1 Available</span>
 <div class="product-name">Kilim Pillow Cover 24x18, Vintage Turkish Rug Pillow, Upcycled Wool Boho Accent</div>
-<div class="product-meta">Turkey &middot; Flatwoven Kilim</div>
+<div class="product-meta">Türkiye &middot; Flatwoven Kilim</div>
 <div class="product-price">$75.00 &middot; Free Shipping</div>
 <a class="product-buy" href="https://www.etsy.com/listing/4535269030/kilim-pillow-cover-24x18-vintage-turkish" target="_blank" rel="noopener">View &amp; Purchase</a>
 </div>
@@ -1050,7 +1082,7 @@ section { padding: 76px 0; }
 <div class="product-info">
 <span class="one-of-a-kind">1 of 1 Available</span>
 <div class="product-name">Kilim Pillow Cover Pair 16x16, Matching Vintage Turkish Rug Pillows, Set of 2 Upcycled Wool Cushions</div>
-<div class="product-meta">Turkey &middot; Flatwoven Kilim</div>
+<div class="product-meta">Türkiye &middot; Flatwoven Kilim</div>
 <div class="product-price">$120.00 &middot; Free Shipping</div>
 <a class="product-buy" href="https://www.etsy.com/listing/4535261074/kilim-pillow-cover-pair-16x16-matching" target="_blank" rel="noopener">View &amp; Purchase</a>
 </div>
@@ -1061,7 +1093,7 @@ section { padding: 76px 0; }
 <div class="product-info">
 <span class="one-of-a-kind">1 of 1 Available</span>
 <div class="product-name">Kilim Pillow Cover 18x18, Vintage Turkish Rug Pillow, Upcycled Wool Boho Accent</div>
-<div class="product-meta">Turkey &middot; Flatwoven Kilim</div>
+<div class="product-meta">Türkiye &middot; Flatwoven Kilim</div>
 <div class="product-price">$70.00 &middot; Free Shipping</div>
 <a class="product-buy" href="https://www.etsy.com/listing/4535242305/kilim-pillow-cover-18x18-vintage-turkish" target="_blank" rel="noopener">View &amp; Purchase</a>
 </div>
@@ -1072,7 +1104,7 @@ section { padding: 76px 0; }
 <div class="product-info">
 <span class="one-of-a-kind">1 of 1 Available</span>
 <div class="product-name">Mustard Yellow Striped Kilim Pillow Cover 20x20, Vintage Turkish Wool Cushion, Boho Accent Pillow</div>
-<div class="product-meta">Turkey &middot; Flatwoven Kilim</div>
+<div class="product-meta">Türkiye &middot; Flatwoven Kilim</div>
 <div class="product-price">$70.00 &middot; Free Shipping</div>
 <a class="product-buy" href="https://www.etsy.com/listing/4535111220/mustard-yellow-striped-kilim-pillow" target="_blank" rel="noopener">View &amp; Purchase</a>
 </div>
@@ -1083,7 +1115,7 @@ section { padding: 76px 0; }
 <div class="product-info">
 <span class="one-of-a-kind">1 of 1 Available</span>
 <div class="product-name">Red Striped Kilim Pillow Cover 20x20, Vintage Turkish Wool Cushion, Southwestern Boho Decor</div>
-<div class="product-meta">Turkey &middot; Flatwoven Kilim</div>
+<div class="product-meta">Türkiye &middot; Flatwoven Kilim</div>
 <div class="product-price">$70.00 &middot; Free Shipping</div>
 <a class="product-buy" href="https://www.etsy.com/listing/4535096857/red-striped-kilim-pillow-cover-20x20" target="_blank" rel="noopener">View &amp; Purchase</a>
 </div>
@@ -1094,7 +1126,7 @@ section { padding: 76px 0; }
 <div class="product-info">
 <span class="one-of-a-kind">1 of 1 Available</span>
 <div class="product-name">Orange Pink Striped Kilim Pillow Cover 20x20, Vintage Turkish Wool Cushion, Colorful Boho Accent</div>
-<div class="product-meta">Turkey &middot; Flatwoven Kilim</div>
+<div class="product-meta">Türkiye &middot; Flatwoven Kilim</div>
 <div class="product-price">$70.00 &middot; Free Shipping</div>
 <a class="product-buy" href="https://www.etsy.com/listing/4535108426/orange-pink-striped-kilim-pillow-cover" target="_blank" rel="noopener">View &amp; Purchase</a>
 </div>
@@ -1124,7 +1156,7 @@ section { padding: 76px 0; }
 <div class="product-info">
 <span class="one-of-a-kind">1 of 1 Available</span>
 <div class="product-name">Vintage Yalameh Rug, Handmade Wool Area Rug, Red Blue Tribal Persian Style Carpet, Geometric Oriental Runner, Boho Home Decor</div>
-<div class="product-meta">Turkey &middot; Hand-Loomed</div>
+<div class="product-meta">Türkiye &middot; Hand-Loomed</div>
 <div class="product-price">$650.00 &middot; Free Shipping</div>
 <a class="product-buy" href="https://www.etsy.com/listing/4532906490/vintage-yalameh-rug-handmade-wool-area" target="_blank" rel="noopener">View &amp; Purchase</a>
 </div>
@@ -1201,7 +1233,22 @@ section { padding: 76px 0; }
 <div class="contact-links">
 <a href="https://www.etsy.com/shop/BKCAMURHOME#shop-owner" target="_blank" rel="noopener" class="btn btn-primary" style="color:var(--espresso);">Message Us on Etsy</a>
 <a href="wholesale.html" class="btn btn-outline" style="border-color:var(--espresso); color:var(--espresso);">Trade &amp; Wholesale Inquiries</a>
+<a href="https://www.instagram.com/bkcamurhome/" target="_blank" rel="noopener" class="btn btn-outline" style="border-color:var(--espresso); color:var(--espresso);">Follow on Instagram</a>
 </div>
+</div>
+</section>
+
+<section class="newsletter">
+<div class="container">
+<span class="eyebrow">Stay Connected</span>
+<h2>Join the List</h2>
+<p>New arrivals, restocks, and behind-the-scenes sourcing stories from Anatolia and Uzbekistan — straight to your inbox. No spam, unsubscribe anytime.</p>
+<form class="newsletter-form" id="newsletter-form" action="https://formspree.io/f/mbdnjbak" method="POST">
+<input type="email" name="email" placeholder="Your email address" required />
+<input type="hidden" name="_subject" value="New bkCAMUR Home newsletter signup" />
+<button type="submit">Subscribe</button>
+</form>
+<p class="newsletter-note" id="newsletter-note">By subscribing, you agree to receive emails from bkCAMUR Home. Unsubscribe anytime.</p>
 </div>
 </section>
 
@@ -1228,6 +1275,11 @@ section { padding: 76px 0; }
 <a href="#policies">Shipping &amp; Policies</a>
 <a href="#contact">Contact</a>
 </div>
+<div class="footer-col">
+<h4>Follow</h4>
+<a href="https://www.instagram.com/bkcamurhome/" target="_blank" rel="noopener">Instagram</a>
+<a href="https://www.etsy.com/shop/BKCAMURHOME" target="_blank" rel="noopener">Etsy Shop</a>
+</div>
 </div>
 </div>
 <div class="footer-bottom">
@@ -1236,6 +1288,36 @@ section { padding: 76px 0; }
 </div>
 </div>
 </footer>
+
+<script>
+document.getElementById('newsletter-form').addEventListener('submit', function (e) {
+  e.preventDefault();
+  const form = e.target;
+  const note = document.getElementById('newsletter-note');
+  const btn = form.querySelector('button');
+  btn.disabled = true;
+  btn.textContent = 'Subscribing…';
+  fetch(form.action, {
+    method: 'POST',
+    body: new FormData(form),
+    headers: { 'Accept': 'application/json' }
+  }).then(function (response) {
+    if (response.ok) {
+      form.reset();
+      form.style.display = 'none';
+      note.textContent = 'You\'re on the list — thanks for signing up!';
+    } else {
+      btn.disabled = false;
+      btn.textContent = 'Subscribe';
+      note.textContent = 'Something went wrong — please try again or email hello@bkcamurhome.com directly.';
+    }
+  }).catch(function () {
+    btn.disabled = false;
+    btn.textContent = 'Subscribe';
+    note.textContent = 'Something went wrong — please try again or email hello@bkcamurhome.com directly.';
+  });
+});
+</script>
 
 </body>
 </html>
