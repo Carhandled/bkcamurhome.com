@@ -39,6 +39,7 @@ workflow):
 import base64
 import os
 import sys
+import time
 from pathlib import Path
 
 import requests
@@ -145,32 +146,47 @@ def fetch_active_listings(x_api_key, access_token, shop_id):
     # field on this endpoint's response (confirmed empirically - Etsy
     # returns the listing with no "images" key at all despite the include).
     # Fetch each listing's images individually from the dedicated images
-    # endpoint instead, which is reliable.
+    # endpoint instead, which is reliable. Etsy's rate limit is 5
+    # requests/second, so throttle between calls and retry on 429/5xx -
+    # firing all of these back-to-back caused ~40% of them to fail silently.
+    failures = 0
     for listing in listings:
         listing["images"] = fetch_listing_images(
             x_api_key, access_token, listing.get("listing_id")
         )
+        if not listing["images"]:
+            failures += 1
+        time.sleep(0.3)
+
+    if failures:
+        print(f"WARNING: {failures}/{len(listings)} listing(s) ended up with no image.")
 
     return listings
 
 
-def fetch_listing_images(x_api_key, access_token, listing_id):
+def fetch_listing_images(x_api_key, access_token, listing_id, max_attempts=3):
     if not listing_id:
         return []
-    try:
-        resp = requests.get(
-            f"{ETSY_API_BASE}/listings/{listing_id}/images",
-            headers={
-                "x-api-key": x_api_key,
-                "Authorization": f"Bearer {access_token}",
-            },
-            timeout=30,
-        )
-        resp.raise_for_status()
-        return resp.json().get("results", [])
-    except requests.RequestException as exc:
-        print(f"WARNING: failed to fetch images for listing {listing_id}: {exc}")
-        return []
+    for attempt in range(1, max_attempts + 1):
+        try:
+            resp = requests.get(
+                f"{ETSY_API_BASE}/listings/{listing_id}/images",
+                headers={
+                    "x-api-key": x_api_key,
+                    "Authorization": f"Bearer {access_token}",
+                },
+                timeout=30,
+            )
+            if resp.status_code == 429 or resp.status_code >= 500:
+                raise requests.HTTPError(f"{resp.status_code} for listing {listing_id}")
+            resp.raise_for_status()
+            return resp.json().get("results", [])
+        except requests.RequestException as exc:
+            if attempt == max_attempts:
+                print(f"WARNING: failed to fetch images for listing {listing_id}: {exc}")
+                return []
+            time.sleep(1.5 * attempt)
+    return []
 
 
 def format_price(price):
