@@ -37,6 +37,7 @@ workflow):
 """
 
 import base64
+import json
 import os
 import sys
 from pathlib import Path
@@ -311,6 +312,13 @@ def main():
     print("Fetching active listings...")
     listings = fetch_active_listings(x_api_key, access_token, shop_id)
     print(f"Found {len(listings)} active listing(s).")
+
+    # TEMP DEBUG - remove once image field is confirmed. Prints the raw
+    # "images" value of the first listing so we can see the real key names
+    # Etsy is returning for the Images include.
+    if listings:
+        print("DEBUG first listing images: " + json.dumps(listings[0].get("images"))[:1500])
+        print("DEBUG first listing keys: " + json.dumps(sorted(listings[0].keys())))
 
     changed = regenerate_index_html(listings)
     print("index.html updated." if changed else "No changes to index.html.")
