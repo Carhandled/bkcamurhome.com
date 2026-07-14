@@ -1,0 +1,18 @@
+{
+  "name": "bkCAMUR Home — Vintage Turkish Rugs & Uzbek Suzani Textiles",
+  "short_name": "bkCAMUR Home",
+  "description": "Hand-loomed vintage Turkish rugs, kilim pillow covers, and hand-embroidered Uzbek suzani textiles. One of a kind, based in Philadelphia.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#FBF7EF",
+  "theme_color": "#2B1B12",
+  "icons": [
+    {
+      "src": "/assets/image/logo.png",
+      "sizes": "500x500",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

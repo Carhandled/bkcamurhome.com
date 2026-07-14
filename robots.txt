@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /etsy-oauth-callback.html
+
+Sitemap: https://www.bkcamurhome.com/sitemap.xml

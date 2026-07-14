@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="robots" content="noindex, follow" />
+<link rel="icon" type="image/png" href="/assets/image/logo.png" />
+<link rel="apple-touch-icon" href="/assets/image/logo.png" />
+<link rel="manifest" href="/manifest.json" />
+<title>Page Not Found — bkCAMUR Home</title>
+<meta name="theme-color" content="#2B1B12" />
+
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+--near-black: #201409;
+--espresso: #2B1B12;
+--terracotta: #B5563C;
+--terracotta-deep: #96432D;
+--cream: #F5EDE0;
+--warm-white: #FBF7EF;
+--gold: #C9A24C;
+--taupe-grey: #7C6F5E;
+--line: #E4D9C6;
+}
+
+body {
+background: linear-gradient(160deg, var(--espresso) 0%, #3a2517 58%, var(--terracotta-deep) 130%);
+color: var(--warm-white);
+font-family: 'Montserrat', sans-serif;
+font-weight: 300;
+min-height: 100vh;
+display: flex;
+align-items: center;
+justify-content: center;
+text-align: center;
+padding: 40px 24px;
+}
+
+.wrap { max-width: 560px; }
+
+.logo-mark {
+width: 72px;
+height: 72px;
+border-radius: 14px;
+object-fit: cover;
+margin: 0 auto 32px;
+display: block;
+}
+
+.eyebrow {
+font-size: 11px;
+letter-spacing: 0.32em;
+text-transform: uppercase;
+color: var(--gold);
+font-weight: 500;
+margin-bottom: 20px;
+display: block;
+}
+
+h1 {
+font-family: 'Cormorant Garamond', serif;
+font-weight: 500;
+font-size: 64px;
+line-height: 1.1;
+margin-bottom: 20px;
+}
+
+h1 em { color: var(--gold); font-style: italic; }
+
+p {
+font-size: 16px;
+color: #E6D9C4;
+line-height: 1.7;
+margin-bottom: 36px;
+}
+
+.btn-row { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; }
+
+.btn {
+display: inline-block;
+padding: 16px 32px;
+font-size: 11px;
+letter-spacing: 0.2em;
+text-transform: uppercase;
+text-decoration: none;
+transition: all 0.25s ease;
+border: 1px solid transparent;
+}
+
+.btn-primary { background: var(--gold); color: var(--espresso); }
+.btn-primary:hover { background: #dab766; }
+
+.btn-outline { border-color: rgba(245, 237, 224, 0.4); color: var(--warm-white); }
+.btn-outline:hover { border-color: var(--gold); color: var(--gold); }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+<img src="/assets/image/logo.png" alt="bkCAMUR Home logo" class="logo-mark" />
+<span class="eyebrow">404 — Page Not Found</span>
+<h1>This piece isn't <em>where you left it.</em></h1>
+<p>The page you're looking for may have moved, sold, or never existed. Every piece we carry is one of a kind &mdash; browse the current collection or head back home.</p>
+<div class="btn-row">
+<a href="/" class="btn btn-primary">Back to Home</a>
+<a href="/#suzani" class="btn btn-outline">Shop the Collection</a>
+<a href="/blog/" class="btn btn-outline">Read the Journal</a>
+</div>
+</div>
+
+</body>
+</html>
