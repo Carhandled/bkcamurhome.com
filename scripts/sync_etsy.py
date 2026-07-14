@@ -195,6 +195,12 @@ def format_price(price):
     return f"${amount / divisor:,.2f}"
 
 
+def raw_price(price):
+    amount = price.get("amount", 0)
+    divisor = price.get("divisor", 100) or 100
+    return amount / divisor
+
+
 def escape_html(text):
     return (
         (text or "")
@@ -205,11 +211,55 @@ def escape_html(text):
     )
 
 
+def escape_json_string(text):
+    # Minimal escaping for safe embedding inside a JSON string literal that
+    # itself sits inside an HTML <script> block.
+    return (
+        (text or "")
+        .replace("\\", "\\\\")
+        .replace('"', '\\"')
+        .replace("</script", "<\\/script")
+        .replace("\n", " ")
+        .strip()
+    )
+
+
+def build_product_schema(listing, title, url, image_url, price_obj):
+    """Product + Offer JSON-LD for a single listing, so search engines can
+    show price/availability rich results for individual pieces."""
+    currency = price_obj.get("currency_code") or "USD"
+    price_value = f"{raw_price(price_obj):.2f}"
+    name = escape_json_string(title)
+    image = escape_json_string(image_url)
+    product_url = escape_json_string(url)
+    listing_id = listing.get("listing_id", "")
+    return f"""<script type="application/ld+json">
+{{
+"@context": "https://schema.org",
+"@type": "Product",
+"name": "{name}",
+"image": "{image}",
+"url": "{product_url}",
+"sku": "{listing_id}",
+"brand": {{ "@type": "Brand", "name": "bkCAMUR Home" }},
+"offers": {{
+"@type": "Offer",
+"url": "{product_url}",
+"priceCurrency": "{currency}",
+"price": "{price_value}",
+"availability": "https://schema.org/InStock",
+"itemCondition": "https://schema.org/UsedCondition"
+}}
+}}
+</script>"""
+
+
 def build_card(listing, meta_label):
     title = escape_html(listing.get("title", "").strip())
     url = listing.get("url", "#")
     quantity = listing.get("quantity", 1)
-    price = format_price(listing.get("price", {}))
+    price_obj = listing.get("price", {})
+    price = format_price(price_obj)
 
     images = listing.get("images") or []
     image_url = images[0].get("url_570xN") if images else ""
@@ -218,6 +268,8 @@ def build_card(listing, meta_label):
         badge = f"{quantity} Available"
     else:
         badge = "1 of 1 Available"
+
+    schema = build_product_schema(listing, listing.get("title", "").strip(), url, image_url, price_obj)
 
     return f"""
 <div class="product-card">
@@ -229,7 +281,8 @@ def build_card(listing, meta_label):
 <div class="product-price">{price} &middot; Free Shipping</div>
 <a class="product-buy" href="{escape_html(url)}" target="_blank" rel="noopener">View &amp; Purchase</a>
 </div>
-</div>"""
+</div>
+{schema}"""
 
 
 def group_by_category(listings):
