@@ -142,10 +142,11 @@ gap: 10px;
 }
 .logo-mark { width: 34px; height: 34px; border-radius: 8px; object-fit: cover; flex-shrink: 0; }
 .logo span { color: var(--terracotta); font-style: italic; font-weight: 400; }
-.nav-links { display: flex; gap: 32px; list-style: none; }
+.nav-links { display: flex; gap: 14px; margin: 0 20px; list-style: none; }
 .nav-links a {
-font-size: 11px;
-letter-spacing: 0.14em;
+font-size: 10px;
+letter-spacing: 0.06em;
+white-space: nowrap;
 text-transform: uppercase;
 text-decoration: none;
 color: var(--espresso);
@@ -155,7 +156,7 @@ transition: color 0.25s ease;
 .nav-cta {
 background: var(--terracotta);
 color: var(--warm-white) !important;
-padding: 12px 26px;
+padding: 12px 22px;
 font-size: 10px;
 letter-spacing: 0.2em;
 text-transform: uppercase;
@@ -366,8 +367,9 @@ gap: 12px;
 font-size: 11px;
 }
 
-@media (max-width: 860px) {
-.post-hero h1 { font-size: 32px; }
+@media (max-width: 1279px) {
+/* nav collapses to the drawer early: the full bar
+   does not fit alongside the logo and CTA below this width */
 /* mobile nav */
 .menu-toggle { display: flex; }
 .nav-cta { display: none; }
@@ -415,6 +417,10 @@ user-select: none;
 .nav-links a:active { color: var(--terracotta); }
 .nav-mobile-cta { display: block; margin-top: 28px; border-bottom: none; }
 .nav-mobile-cta a { padding: 15px; text-align: center; }
+}
+
+@media (max-width: 860px) {
+.post-hero h1 { font-size: 32px; }
 .read-next-grid { grid-template-columns: 1fr; }
 .post-body { font-size: 15.5px; }
 }
@@ -431,6 +437,7 @@ user-select: none;
 <li><a href="../index.html#rugs-kilims">Rugs &amp; Kilims</a></li>
 <li><a href="index.html">Journal</a></li>
 <li><a href="../wholesale.html">Trade / Wholesale</a></li>
+<li><a href="../sourcing.html">Custom Sourcing</a></li>
 <li class="nav-mobile-cta"><a href="../index.html#shop" class="btn btn-primary">Shop the Collection</a></li>
 </ul>
 <a href="../index.html#shop" class="nav-cta">Shop the Collection</a>
@@ -568,6 +575,7 @@ user-select: none;
 <a href="../index.html#story">Our Story</a>
 <a href="index.html">Journal</a>
 <a href="../wholesale.html">Trade / Wholesale</a>
+<a href="../sourcing.html">Custom Sourcing</a>
 <a href="../index.html#contact">Contact</a>
 </div>
 <div class="footer-col">

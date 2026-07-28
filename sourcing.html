@@ -17,23 +17,23 @@
 <link rel="apple-touch-icon" href="assets/image/logo.png" />
 <link rel="manifest" href="/manifest.json" />
 
-<title>Trade &amp; Wholesale — bkCAMUR Home</title>
-<meta name="description" content="Wholesale and trade pricing for bkCAMUR Home's Turkish rugs, kilim pillow covers, and Uzbek suzani textiles. For interior designers, boutique retailers, and volume buyers." />
+<title>Custom Sourcing — bkCAMUR Home</title>
+<meta name="description" content="Custom vintage sourcing from bkCAMUR Home. Send us your brief and we hunt Anatolia for rugs and kilims, and Uzbekistan for suzani — matched to your size, palette, and budget. For interior designers and homeowners." />
 <meta name="robots" content="index, follow, max-image-preview:large" />
-<link rel="canonical" href="https://www.bkcamurhome.com/wholesale.html" />
+<link rel="canonical" href="https://www.bkcamurhome.com/sourcing.html" />
 <meta name="theme-color" content="#2B1B12" />
 
 <meta property="og:type" content="website" />
 <meta property="og:site_name" content="bkCAMUR Home" />
 <meta property="og:locale" content="en_US" />
-<meta property="og:title" content="Trade &amp; Wholesale — bkCAMUR Home" />
-<meta property="og:description" content="Wholesale and trade pricing for hand-loomed Turkish rugs, kilim pillow covers, and Uzbek suzani textiles. For interior designers, boutique retailers, and volume buyers." />
-<meta property="og:url" content="https://www.bkcamurhome.com/wholesale.html" />
-<meta property="og:image" content="https://i.etsystatic.com/61471058/r/il/23b327/7953800297/il_1588xN.7953800297_od8y.jpg" />
+<meta property="og:title" content="Custom Sourcing — bkCAMUR Home" />
+<meta property="og:description" content="We hunt. You choose. Custom vintage rug, kilim, and suzani sourcing matched to your size, palette, and budget — for interior designers and homeowners." />
+<meta property="og:url" content="https://www.bkcamurhome.com/sourcing.html" />
+<meta property="og:image" content="https://i.etsystatic.com/61471058/r/il/ddcfd2/8243459220/il_1588xN.8243459220_2o2n.jpg" />
 <meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content="Trade &amp; Wholesale — bkCAMUR Home" />
-<meta name="twitter:description" content="Wholesale and trade pricing for hand-loomed Turkish rugs, kilim pillow covers, and Uzbek suzani textiles." />
-<meta name="twitter:image" content="https://i.etsystatic.com/61471058/r/il/23b327/7953800297/il_1588xN.7953800297_od8y.jpg" />
+<meta name="twitter:title" content="Custom Sourcing — bkCAMUR Home" />
+<meta name="twitter:description" content="We hunt. You choose. Custom vintage rug, kilim, and suzani sourcing matched to your size, palette, and budget." />
+<meta name="twitter:image" content="https://i.etsystatic.com/61471058/r/il/ddcfd2/8243459220/il_1588xN.8243459220_2o2n.jpg" />
 
 <script type="application/ld+json">
 {
@@ -41,7 +41,7 @@
 "@type": "BreadcrumbList",
 "itemListElement": [
 { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.bkcamurhome.com/" },
-{ "@type": "ListItem", "position": 2, "name": "Trade & Wholesale", "item": "https://www.bkcamurhome.com/wholesale.html" }
+{ "@type": "ListItem", "position": 2, "name": "Custom Sourcing", "item": "https://www.bkcamurhome.com/sourcing.html" }
 ]
 }
 </script>
@@ -346,6 +346,28 @@ gap: 12px;
 font-size: 11px;
 }
 
+/* custom sourcing page */
+.page-hero .hero-tagline {
+font-family: 'Cormorant Garamond', serif;
+font-weight: 400;
+font-style: italic;
+font-size: 30px;
+line-height: 1.2;
+color: var(--gold);
+margin-bottom: 20px;
+}
+.cat-cards.cat-cards-2 { grid-template-columns: repeat(2, 1fr); }
+.steps-row.steps-3 { grid-template-columns: repeat(3, 1fr); }
+.no-obligation {
+margin-top: 22px;
+padding: 16px 18px;
+border: 1px solid rgba(201, 162, 76, 0.45);
+background: rgba(201, 162, 76, 0.08);
+font-size: 13.5px;
+color: #E6D9C4;
+}
+.form-note-lead { font-size: 12.5px; color: var(--taupe-grey); margin: -8px 0 20px; }
+
 @media (max-width: 1279px) {
 /* nav collapses to the drawer early: the full bar
    does not fit alongside the logo and CTA below this width */
@@ -400,9 +422,12 @@ user-select: none;
 
 @media (max-width: 960px) {
 .page-hero h1 { font-size: 38px; }
+.page-hero .hero-tagline { font-size: 24px; }
 .cat-cards { grid-template-columns: 1fr; }
+.cat-cards.cat-cards-2 { grid-template-columns: 1fr; }
 .terms-grid { grid-template-columns: repeat(2, 1fr); }
 .steps-row { grid-template-columns: repeat(2, 1fr); }
+.steps-row.steps-3 { grid-template-columns: 1fr; }
 .inquiry-grid { grid-template-columns: 1fr; }
 .form-two { grid-template-columns: 1fr; }
 section { padding: 70px 0; }
@@ -420,7 +445,7 @@ section { padding: 70px 0; }
 <li><a href="index.html#rugs-kilims">Rugs &amp; Kilims</a></li>
 <li><a href="index.html#story">Our Story</a></li>
 <li><a href="blog/index.html">Journal</a></li>
-<li><a href="sourcing.html">Custom Sourcing</a></li>
+<li><a href="wholesale.html">Trade / Wholesale</a></li>
 <li><a href="index.html#contact">Contact</a></li>
 <li class="nav-mobile-cta"><a href="index.html#suzani" class="btn btn-primary">Shop Retail</a></li>
 </ul>
@@ -434,12 +459,13 @@ section { padding: 70px 0; }
 
 <section class="page-hero">
 <div class="container">
-<span class="eyebrow">For Designers, Retailers &amp; Buyers</span>
-<h1>Trade &amp; Wholesale</h1>
-<p>Suzani textiles from Uzbekistan, and kilim pillow covers and rugs from Anatolia — available at trade pricing for interior designers, boutique retailers, stylists, and volume buyers.</p>
+<span class="eyebrow">Not Finding "The One"?</span>
+<h1>Custom Sourcing</h1>
+<p class="hero-tagline">We hunt. You choose.</p>
+<p>Our work doesn't stop at what's listed. Send us a brief and we go looking — custom vintage rug and kilim sourcing from Anatolia, and custom suzani sourcing from Uzbekistan, matched to your size, palette, and budget.</p>
 <div class="btn-row">
-<a href="#inquire" class="btn btn-primary">Start a Wholesale Inquiry</a>
-<a href="https://www.etsy.com/shop/BKCAMURHOME#shop-owner" target="_blank" rel="noopener" class="btn btn-outline">Message Us on Etsy</a>
+<a href="#brief" class="btn btn-primary">Send Your Brief</a>
+<a href="wholesale.html" class="btn btn-outline">Buying at Volume? Trade &amp; Wholesale</a>
 </div>
 </div>
 </section>
@@ -447,39 +473,29 @@ section { padding: 70px 0; }
 <section>
 <div class="container">
 <div class="section-head">
-<span class="eyebrow">What's Available for Trade</span>
-<h2>Three collections, one source.</h2>
-<p>Every category we carry retail is also available wholesale — sourced directly, never through a middleman.</p>
+<span class="eyebrow">Who This Is For</span>
+<h2>A specific vision, met with a specific piece.</h2>
+<p>Custom sourcing is for <strong>interior designers</strong> working a client project who need a piece to a size and palette, and for <strong>homeowners</strong> who already know exactly what they're looking for and haven't found it yet. You tell us what the room needs; we go looking on our next buying run.</p>
 </div>
-<div class="cat-cards">
+<div class="cat-cards cat-cards-2">
 <div class="cat-card">
 <div class="cat-card-photo">
-<img src="https://i.etsystatic.com/61471058/r/il/23b327/7953800297/il_1588xN.7953800297_od8y.jpg" srcset="https://i.etsystatic.com/61471058/r/il/23b327/7953800297/il_340xN.7953800297_od8y.jpg 340w, https://i.etsystatic.com/61471058/r/il/23b327/7953800297/il_570xN.7953800297_od8y.jpg 570w, https://i.etsystatic.com/61471058/r/il/23b327/7953800297/il_794xN.7953800297_od8y.jpg 794w, https://i.etsystatic.com/61471058/r/il/23b327/7953800297/il_1140xN.7953800297_od8y.jpg 1140w, https://i.etsystatic.com/61471058/r/il/23b327/7953800297/il_1588xN.7953800297_od8y.jpg 1588w" sizes="(max-width: 960px) 100vw, 33vw" alt="Suzani pillow covers, Uzbekistan" />
+<img src="https://i.etsystatic.com/61471058/r/il/ddcfd2/8243459220/il_1588xN.8243459220_2o2n.jpg" srcset="https://i.etsystatic.com/61471058/r/il/ddcfd2/8243459220/il_340xN.8243459220_2o2n.jpg 340w, https://i.etsystatic.com/61471058/r/il/ddcfd2/8243459220/il_570xN.8243459220_2o2n.jpg 570w, https://i.etsystatic.com/61471058/r/il/ddcfd2/8243459220/il_794xN.8243459220_2o2n.jpg 794w, https://i.etsystatic.com/61471058/r/il/ddcfd2/8243459220/il_1140xN.8243459220_2o2n.jpg 1140w, https://i.etsystatic.com/61471058/r/il/ddcfd2/8243459220/il_1588xN.8243459220_2o2n.jpg 1588w" sizes="(max-width: 960px) 100vw, 45vw" alt="Vintage Turkish rug, hand-loomed wool" />
+</div>
+<div class="cat-card-copy">
+<span class="eyebrow">Anatolia, Türkiye</span>
+<h3>Custom Rug &amp; Kilim Sourcing</h3>
+<p>Vintage hand-loomed rugs and flatwoven kilims, hunted to your dimensions and palette — runners, room-size, or a specific wall piece.</p>
+</div>
+</div>
+<div class="cat-card">
+<div class="cat-card-photo">
+<img src="https://i.etsystatic.com/61471058/r/il/23b327/7953800297/il_1588xN.7953800297_od8y.jpg" srcset="https://i.etsystatic.com/61471058/r/il/23b327/7953800297/il_340xN.7953800297_od8y.jpg 340w, https://i.etsystatic.com/61471058/r/il/23b327/7953800297/il_570xN.7953800297_od8y.jpg 570w, https://i.etsystatic.com/61471058/r/il/23b327/7953800297/il_794xN.7953800297_od8y.jpg 794w, https://i.etsystatic.com/61471058/r/il/23b327/7953800297/il_1140xN.7953800297_od8y.jpg 1140w, https://i.etsystatic.com/61471058/r/il/23b327/7953800297/il_1588xN.7953800297_od8y.jpg 1588w" sizes="(max-width: 960px) 100vw, 45vw" alt="Hand-embroidered suzani textile, Uzbekistan" />
 </div>
 <div class="cat-card-copy">
 <span class="eyebrow">Uzbekistan</span>
-<h3>Suzani Pillow Covers</h3>
-<p>Hand-embroidered silk-thread suzani cushion covers, available in mixed-design assortments for retail shelves.</p>
-</div>
-</div>
-<div class="cat-card">
-<div class="cat-card-photo">
-<img src="https://i.etsystatic.com/61471058/r/il/bdd34f/8280145031/il_1588xN.8280145031_tl8g.jpg" srcset="https://i.etsystatic.com/61471058/r/il/bdd34f/8280145031/il_340xN.8280145031_tl8g.jpg 340w, https://i.etsystatic.com/61471058/r/il/bdd34f/8280145031/il_570xN.8280145031_tl8g.jpg 570w, https://i.etsystatic.com/61471058/r/il/bdd34f/8280145031/il_794xN.8280145031_tl8g.jpg 794w, https://i.etsystatic.com/61471058/r/il/bdd34f/8280145031/il_1140xN.8280145031_tl8g.jpg 1140w, https://i.etsystatic.com/61471058/r/il/bdd34f/8280145031/il_1588xN.8280145031_tl8g.jpg 1588w" sizes="(max-width: 960px) 100vw, 33vw" alt="Kilim pillow covers, Türkiye" />
-</div>
-<div class="cat-card-copy">
-<span class="eyebrow">Türkiye</span>
-<h3>Kilim Pillow Covers</h3>
-<p>Upcycled from antique flatwoven kilims. Each piece is one of a kind, sold as individual units or curated sets.</p>
-</div>
-</div>
-<div class="cat-card">
-<div class="cat-card-photo">
-<img src="https://i.etsystatic.com/61471058/r/il/ddcfd2/8243459220/il_1588xN.8243459220_2o2n.jpg" srcset="https://i.etsystatic.com/61471058/r/il/ddcfd2/8243459220/il_340xN.8243459220_2o2n.jpg 340w, https://i.etsystatic.com/61471058/r/il/ddcfd2/8243459220/il_570xN.8243459220_2o2n.jpg 570w, https://i.etsystatic.com/61471058/r/il/ddcfd2/8243459220/il_794xN.8243459220_2o2n.jpg 794w, https://i.etsystatic.com/61471058/r/il/ddcfd2/8243459220/il_1140xN.8243459220_2o2n.jpg 1140w, https://i.etsystatic.com/61471058/r/il/ddcfd2/8243459220/il_1588xN.8243459220_2o2n.jpg 1588w" sizes="(max-width: 960px) 100vw, 33vw" alt="Rugs and kilims, Türkiye" />
-</div>
-<div class="cat-card-copy">
-<span class="eyebrow">Türkiye</span>
-<h3>Rugs &amp; Kilims</h3>
-<p>Hand-loomed rugs and flatwoven kilims in a range of sizes, ideal for showrooms, staging, and retail floor sets.</p>
+<h3>Custom Suzani Sourcing</h3>
+<p>Hand-embroidered silk-thread suzani for special projects — full dowry panels, pillow-scale pieces, or a particular motif and colorway.</p>
 </div>
 </div>
 </div>
@@ -489,118 +505,105 @@ section { padding: 70px 0; }
 <section class="terms">
 <div class="container">
 <div class="section-head center" style="max-width:600px;">
-<span class="eyebrow">Starting Terms</span>
-<h2>How wholesale works</h2>
-<p>General starting terms below — final pricing and terms are confirmed after your inquiry and depend on category and order size.</p>
-</div>
-<div class="terms-grid">
-<div class="term-card">
-<div class="term-label">Minimum Order</div>
-<div class="term-value">None</div>
-<p>No minimum order — trade pricing applies to orders of any size.</p>
-</div>
-<div class="term-card">
-<div class="term-label">Lead Time</div>
-<div class="term-value">2–4 weeks</div>
-<p>Vintage pieces are sourced to order; in-stock pieces ship faster.</p>
-</div>
-<div class="term-card">
-<div class="term-label">Payment Terms</div>
-<div class="term-value">50/50</div>
-<p>Deposit on order, balance before shipment. Net terms available for approved accounts.</p>
-</div>
-<div class="term-card">
-<div class="term-label">Line Sheet</div>
-<div class="term-value">On Request</div>
-<p>Current availability and trade pricing sent after inquiry.</p>
-</div>
-</div>
-<p class="terms-note">These are starting terms for planning purposes — every wholesale order is confirmed individually. <a href="#inquire" style="color:var(--terracotta);">Reach out</a> for exact pricing.</p>
-</div>
-</section>
-
-<section>
-<div class="container">
-<div class="section-head center" style="max-width:600px;">
 <span class="eyebrow">The Process</span>
-<h2>From inquiry to delivery</h2>
+<h2>How it works</h2>
+<p>Three steps, no obligation at any point along the way.</p>
 </div>
-<div class="steps-row">
+<div class="steps-row steps-3">
 <div class="step">
 <span class="step-num">01</span>
-<h3>Inquire</h3>
-<p>Tell us your business, categories of interest, and order size using the form below.</p>
+<h3>Send your brief</h3>
+<p>Piece type, approximate dimensions, palette, budget range, and timeline — the form below covers it in a couple of minutes.</p>
 </div>
 <div class="step">
 <span class="step-num">02</span>
-<h3>Line Sheet &amp; Pricing</h3>
-<p>We send current availability, trade pricing, and photos for your review.</p>
+<h3>We hunt</h3>
+<p>We go looking through our sources in Anatolia and Uzbekistan and send you the options we find, with photos, measurements, and pricing.</p>
 </div>
 <div class="step">
 <span class="step-num">03</span>
-<h3>Confirm Your Order</h3>
-<p>Choose your pieces from the line sheet and confirm. Every piece is inspected before it's packed.</p>
-</div>
-<div class="step">
-<span class="step-num">04</span>
-<h3>Ship</h3>
-<p>Packed with care and shipped from the US, with tracking provided for every order.</p>
+<h3>You choose</h3>
+<p>Pick the piece you want — or none of them. Anything you buy ships insured from the US with tracking.</p>
 </div>
 </div>
-<p class="terms-note">Looking for a specific piece we don't stock? See <a href="sourcing.html" style="color:var(--terracotta);">Custom Sourcing</a>.</p>
 </div>
 </section>
 
-<section class="inquiry" id="inquire">
+<section class="inquiry" id="brief">
 <div class="container inquiry-grid">
 <div>
 <span class="eyebrow on-dark">Get Started</span>
-<h2>Request wholesale pricing.</h2>
-<p>Fill out the form and we'll follow up with a line sheet and pricing for the categories you're interested in.</p>
+<h2>Send us your brief.</h2>
+<p>The more specific you are, the better we hunt. Dimensions and palette matter most — budget and timeline tell us which sources to work.</p>
 <ul class="inquiry-list">
-<li>Interior designers &amp; stylists buying for client projects</li>
-<li>Boutique retailers building out a home decor assortment</li>
-<li>Volume buyers and showrooms</li>
+<li>Interior designers sourcing a piece for a client project</li>
+<li>Homeowners with a room and a very specific vision</li>
+<li>Anyone searching for a piece that hasn't crossed their path yet</li>
 </ul>
+<p class="no-obligation"><strong>No obligation</strong> — if we can't find it, you owe nothing.</p>
 <p style="margin-top:28px;">Prefer email? Reach us directly at <strong>hello@bkcamurhome.com</strong>, or send a message through our <a href="https://www.etsy.com/shop/BKCAMURHOME#shop-owner" target="_blank" rel="noopener" style="color:var(--gold); text-decoration:underline;">Etsy shop</a>.</p>
 </div>
 
-<form class="form-card" id="wholesale-form">
+<form class="form-card" id="sourcing-form">
 <div class="form-two">
 <div class="form-row">
-<label for="wf-name">Full Name</label>
-<input type="text" id="wf-name" name="name" required />
+<label for="sf-name">Full Name</label>
+<input type="text" id="sf-name" name="name" required />
 </div>
 <div class="form-row">
-<label for="wf-company">Company / Studio</label>
-<input type="text" id="wf-company" name="company" />
+<label for="sf-email">Email</label>
+<input type="email" id="sf-email" name="email" required />
 </div>
 </div>
 <div class="form-two">
 <div class="form-row">
-<label for="wf-email">Email</label>
-<input type="email" id="wf-email" name="email" required />
+<label for="sf-buyer">I'm a</label>
+<select id="sf-buyer" name="buyer_type">
+<option>Homeowner</option>
+<option>Trade (designer, stylist, retailer)</option>
+</select>
 </div>
 <div class="form-row">
-<label for="wf-category">Category of Interest</label>
-<select id="wf-category" name="category">
-<option>Suzani Pillow Covers</option>
-<option>Kilim Pillow Covers</option>
-<option>Rugs &amp; Kilims</option>
-<option>All Categories</option>
+<label for="sf-piece">Piece Type</label>
+<select id="sf-piece" name="piece_type">
+<option>Rug</option>
+<option>Kilim</option>
+<option>Suzani</option>
+<option>Not sure yet</option>
 </select>
 </div>
 </div>
+<div class="form-two">
 <div class="form-row">
-<label for="wf-qty">Estimated Order Size</label>
-<input type="text" id="wf-qty" name="quantity" placeholder="e.g. 12 pieces, quarterly reorder" />
+<label for="sf-dimensions">Approx. Dimensions</label>
+<input type="text" id="sf-dimensions" name="dimensions" placeholder="e.g. 8 × 10 ft, or 20 × 20 in" />
 </div>
 <div class="form-row">
-<label for="wf-message">Tell us about your business</label>
-<textarea id="wf-message" name="message" placeholder="Business type, timeline, and anything else we should know"></textarea>
+<label for="sf-budget">Budget Range</label>
+<select id="sf-budget" name="budget">
+<option>Under $500</option>
+<option>$500 – $1,500</option>
+<option>$1,500 – $5,000</option>
+<option>$5,000+</option>
+</select>
 </div>
-<button type="submit" class="form-submit">Send Inquiry</button>
-<p class="form-note">This opens your email client with the details pre-filled — nothing is sent automatically.</p>
+</div>
+<div class="form-two">
+<div class="form-row">
+<label for="sf-palette">Palette / Colors</label>
+<input type="text" id="sf-palette" name="palette" placeholder="e.g. faded rust and indigo, low contrast" />
+</div>
+<div class="form-row">
+<label for="sf-timeline">Timeline</label>
+<input type="text" id="sf-timeline" name="timeline" placeholder="e.g. install in 6 weeks, or no rush" />
+</div>
+</div>
+<div class="form-row">
+<label for="sf-message">Anything else we should know</label>
+<textarea id="sf-message" name="message" placeholder="The room, the piece it sits with, what you've already ruled out — anything that helps us hunt"></textarea>
+</div>
+<button type="submit" class="form-submit">Send Your Brief</button>
+<p class="form-note">This opens your email client with the details pre-filled — nothing is sent automatically. No obligation: if we can't find it, you owe nothing.</p>
 </form>
 </div>
 </section>
@@ -644,24 +647,31 @@ section { padding: 70px 0; }
 </footer>
 
 <script>
-document.getElementById('wholesale-form').addEventListener('submit', function (e) {
+document.getElementById('sourcing-form').addEventListener('submit', function (e) {
   e.preventDefault();
-  const name = document.getElementById('wf-name').value;
-  const company = document.getElementById('wf-company').value;
-  const email = document.getElementById('wf-email').value;
-  const category = document.getElementById('wf-category').value;
-  const qty = document.getElementById('wf-qty').value;
-  const message = document.getElementById('wf-message').value;
+  const name = document.getElementById('sf-name').value;
+  const email = document.getElementById('sf-email').value;
+  const buyer = document.getElementById('sf-buyer').value;
+  const piece = document.getElementById('sf-piece').value;
+  const dimensions = document.getElementById('sf-dimensions').value;
+  const budget = document.getElementById('sf-budget').value;
+  const palette = document.getElementById('sf-palette').value;
+  const timeline = document.getElementById('sf-timeline').value;
+  const message = document.getElementById('sf-message').value;
 
-  const subject = encodeURIComponent('Wholesale Inquiry — ' + (company || name));
+  const subject = encodeURIComponent('Custom Sourcing Brief — ' + piece + ' — ' + name);
   const bodyLines = [
     'Name: ' + name,
-    'Company / Studio: ' + company,
     'Email: ' + email,
-    'Category of Interest: ' + category,
-    'Estimated Order Size: ' + qty,
+    'Buyer Type: ' + buyer,
     '',
-    'Message:',
+    'Piece Type: ' + piece,
+    'Approx. Dimensions: ' + dimensions,
+    'Palette / Colors: ' + palette,
+    'Budget Range: ' + budget,
+    'Timeline: ' + timeline,
+    '',
+    'Anything else:',
     message
   ];
   const body = encodeURIComponent(bodyLines.join('\n'));
