@@ -88,6 +88,38 @@ def build_auth_url(client_id, redirect_uri, challenge, state):
     return f"{AUTH_URL}?{query}"
 
 
+def extract_code(raw, expected_state):
+    """Accept either a bare code or the full callback URL pasted from the
+    browser address bar, since both are natural things to copy."""
+    if "?" not in raw and "&" not in raw:
+        return raw
+
+    query = urllib.parse.urlparse(raw).query or raw.lstrip("?")
+    params = urllib.parse.parse_qs(query)
+
+    if "error" in params:
+        print(
+            f"ERROR: Etsy returned an error instead of a code: "
+            f"{params['error'][0]}",
+            file=sys.stderr,
+        )
+        sys.exit(1)
+
+    got_state = params.get("state", [None])[0]
+    if got_state and got_state != expected_state:
+        # Not fatal on its own, but it means this URL came from a different
+        # authorization attempt, whose verifier we no longer hold.
+        print(
+            "ERROR: that callback URL is from a different authorization run "
+            f"(state {got_state!r}, expected {expected_state!r}).\n"
+            "Re-run this script and use the URL it prints.",
+            file=sys.stderr,
+        )
+        sys.exit(1)
+
+    return (params.get("code") or [""])[0].strip()
+
+
 def exchange_code(client_id, redirect_uri, code, verifier):
     body = urllib.parse.urlencode(
         {
@@ -161,9 +193,10 @@ def main():
     print(f"         (expected state: {state})")
     print("=" * 72)
 
-    code = input("\nPaste the code value here: ").strip()
+    raw = input("\nPaste the code (or the whole callback URL) here: ").strip()
+    code = extract_code(raw, state)
     if not code:
-        print("ERROR: no code entered.", file=sys.stderr)
+        print("ERROR: no authorization code found in that input.", file=sys.stderr)
         sys.exit(1)
 
     print("\nExchanging code for tokens...")
