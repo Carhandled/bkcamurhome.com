@@ -2237,21 +2237,28 @@ document.getElementById('newsletter-form').addEventListener('submit', function (
 
 <script>
 (function () {
-  document.querySelectorAll('.expand-btn').forEach(function (btn) {
-    btn.addEventListener('click', function () {
-      const category = this.getAttribute('data-category');
-      const categoryDiv = document.querySelector('.product-category[data-category="' + category + '"]');
-      if (!categoryDiv) return;
+  document.querySelectorAll('.product-category').forEach(function (categoryDiv) {
+    const cardCount = categoryDiv.querySelectorAll('.product-card').length;
+    if (cardCount > 6) {
+      const category = categoryDiv.getAttribute('data-category');
+      const btn = document.createElement('button');
+      btn.className = 'expand-btn';
+      btn.setAttribute('data-category', category);
+      btn.textContent = 'See More (' + (cardCount - 6) + ' more)';
 
-      const isExpanded = categoryDiv.classList.contains('expanded');
-      if (isExpanded) {
-        categoryDiv.classList.remove('expanded');
-        this.textContent = 'See More (' + (categoryDiv.querySelectorAll('.product-card').length - 6) + ' more)';
-      } else {
-        categoryDiv.classList.add('expanded');
-        this.textContent = 'See Less';
-      }
-    });
+      categoryDiv.parentNode.insertBefore(btn, categoryDiv.nextSibling);
+
+      btn.addEventListener('click', function () {
+        const isExpanded = categoryDiv.classList.contains('expanded');
+        if (isExpanded) {
+          categoryDiv.classList.remove('expanded');
+          this.textContent = 'See More (' + (cardCount - 6) + ' more)';
+        } else {
+          categoryDiv.classList.add('expanded');
+          this.textContent = 'See Less';
+        }
+      });
+    }
   });
 })();
 </script>

@@ -299,10 +299,7 @@ def build_category_block(cat_key, cat_listings):
         return EMPTY_STATE_TEMPLATE.format(label=EMPTY_STATE_LABELS[cat_key])
     cards = "\n".join(build_card(l, meta_label) for l in cat_listings)
     # Wrap cards in a container that supports expand/collapse (shows 2 rows on desktop initially)
-    wrapper = f'<div class="product-category" data-category="{cat_key}">\n{cards}\n</div>'
-    if len(cat_listings) > 6:
-        wrapper += f'\n<button class="expand-btn" data-category="{cat_key}">See More ({len(cat_listings) - 6} more)</button>'
-    return wrapper
+    return f'<div class="product-category" data-category="{cat_key}">\n{cards}\n</div>'
 
 
 def regenerate_index_html(listings):
