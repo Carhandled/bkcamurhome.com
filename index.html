@@ -739,21 +739,23 @@ scroll-snap-align: start;
 .product-card { flex-basis: 80vw; }
 }
 
-.product-category {
-display: contents;
-}
-
-.product-category .product-card:nth-child(n+7) {
+/* Collapse each grid to its first two rows, desktop only: below 960px
+   .product-grid becomes a horizontal swipe carousel, where hiding cards
+   makes no sense. nth-of-type rather than nth-child because each card is
+   followed by its JSON-LD <script> sibling - nth-child would count those
+   too and start hiding at the 4th card instead of the 7th. */
+@media (min-width: 961px) {
+.product-grid > div.product-card:nth-of-type(n+7) {
 display: none;
 }
-
-.product-category.expanded .product-card {
+.product-grid.expanded > div.product-card {
 display: flex;
+}
 }
 
 .expand-btn {
 grid-column: 1 / -1;
-align-self: center;
+justify-self: center;
 margin-top: 24px;
 padding: 12px 24px;
 font-size: 12px;
@@ -773,16 +775,9 @@ background: var(--espresso);
 color: var(--warm-white);
 }
 
-@media (max-width: 768px) {
-.product-category .product-card:nth-child(n+5) {
-display: none;
-}
-}
-
-@media (max-width: 560px) {
-.product-category .product-card:nth-child(n+3) {
-display: none;
-}
+/* Nothing is collapsed in the mobile carousel, so there is nothing to expand. */
+@media (max-width: 960px) {
+.expand-btn { display: none; }
 }
 </style>
 </head>
@@ -2237,28 +2232,24 @@ document.getElementById('newsletter-form').addEventListener('submit', function (
 
 <script>
 (function () {
-  document.querySelectorAll('.product-category').forEach(function (categoryDiv) {
-    const cardCount = categoryDiv.querySelectorAll('.product-card').length;
-    if (cardCount > 6) {
-      const category = categoryDiv.getAttribute('data-category');
-      const btn = document.createElement('button');
-      btn.className = 'expand-btn';
-      btn.setAttribute('data-category', category);
-      btn.textContent = 'See More (' + (cardCount - 6) + ' more)';
+  var VISIBLE = 6; // two rows of the 3-column desktop grid
+  document.querySelectorAll('.product-grid').forEach(function (grid) {
+    var hidden = grid.querySelectorAll('.product-card').length - VISIBLE;
+    if (hidden < 1) return;
 
-      categoryDiv.parentNode.insertBefore(btn, categoryDiv.nextSibling);
+    var collapsedLabel = 'See More (' + hidden + ' more)';
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'expand-btn';
+    btn.textContent = collapsedLabel;
+    btn.setAttribute('aria-expanded', 'false');
+    grid.appendChild(btn);
 
-      btn.addEventListener('click', function () {
-        const isExpanded = categoryDiv.classList.contains('expanded');
-        if (isExpanded) {
-          categoryDiv.classList.remove('expanded');
-          this.textContent = 'See More (' + (cardCount - 6) + ' more)';
-        } else {
-          categoryDiv.classList.add('expanded');
-          this.textContent = 'See Less';
-        }
-      });
-    }
+    btn.addEventListener('click', function () {
+      var expanded = grid.classList.toggle('expanded');
+      btn.textContent = expanded ? 'See Less' : collapsedLabel;
+      btn.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+    });
   });
 })();
 </script>

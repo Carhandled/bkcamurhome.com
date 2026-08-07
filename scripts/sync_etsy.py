@@ -315,9 +315,10 @@ def build_category_block(cat_key, cat_listings):
     meta_label = CATEGORIES[cat_key]["meta"]
     if not cat_listings:
         return EMPTY_STATE_TEMPLATE.format(label=EMPTY_STATE_LABELS[cat_key])
-    cards = "\n".join(build_card(l, meta_label) for l in cat_listings)
-    # Wrap cards in a container that supports expand/collapse (shows 2 rows on desktop initially)
-    return f'<div class="product-category" data-category="{cat_key}">\n{cards}\n</div>'
+    # Emitted flat, as direct children of .product-grid - the two-row collapse
+    # and its "See More" button are applied by CSS/JS in index.html and rely on
+    # the cards not being wrapped in anything.
+    return "\n".join(build_card(l, meta_label) for l in cat_listings)
 
 
 def regenerate_index_html(listings):
