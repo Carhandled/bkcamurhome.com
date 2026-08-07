@@ -106,18 +106,27 @@ def categorize(title):
 
 
 def refresh_oauth_token(api_key, refresh_token):
-    resp = requests.post(
-        ETSY_TOKEN_URL,
-        data={
-            "grant_type": "refresh_token",
-            "client_id": api_key,
-            "refresh_token": refresh_token,
-        },
-        timeout=30,
-    )
-    resp.raise_for_status()
-    data = resp.json()
-    return data["access_token"], data["refresh_token"]
+    try:
+        resp = requests.post(
+            ETSY_TOKEN_URL,
+            data={
+                "grant_type": "refresh_token",
+                "client_id": api_key,
+                "refresh_token": refresh_token,
+            },
+            timeout=30,
+        )
+        resp.raise_for_status()
+        data = resp.json()
+        return data["access_token"], data["refresh_token"]
+    except requests.exceptions.RequestException as e:
+        print(f"ERROR: Failed to refresh Etsy token: {e}", file=sys.stderr)
+        if hasattr(e, 'response') and e.response is not None:
+            try:
+                print(f"Response: {e.response.text}", file=sys.stderr)
+            except:
+                pass
+        sys.exit(1)
 
 
 def fetch_active_listings(x_api_key, access_token, shop_id):
@@ -125,22 +134,31 @@ def fetch_active_listings(x_api_key, access_token, shop_id):
     limit = 100
     offset = 0
     while True:
-        resp = requests.get(
-            f"{ETSY_API_BASE}/shops/{shop_id}/listings/active",
-            headers={
-                "x-api-key": x_api_key,
-                "Authorization": f"Bearer {access_token}",
-            },
-            params={"limit": limit, "offset": offset, "includes": "Images"},
-            timeout=30,
-        )
-        resp.raise_for_status()
-        data = resp.json()
-        results = data.get("results", [])
-        listings.extend(results)
-        offset += limit
-        if offset >= data.get("count", 0) or not results:
-            break
+        try:
+            resp = requests.get(
+                f"{ETSY_API_BASE}/shops/{shop_id}/listings/active",
+                headers={
+                    "x-api-key": x_api_key,
+                    "Authorization": f"Bearer {access_token}",
+                },
+                params={"limit": limit, "offset": offset, "includes": "Images"},
+                timeout=30,
+            )
+            resp.raise_for_status()
+            data = resp.json()
+            results = data.get("results", [])
+            listings.extend(results)
+            offset += limit
+            if offset >= data.get("count", 0) or not results:
+                break
+        except requests.exceptions.RequestException as e:
+            print(f"ERROR: Failed to fetch listings: {e}", file=sys.stderr)
+            if hasattr(e, 'response') and e.response is not None:
+                try:
+                    print(f"Response: {e.response.text}", file=sys.stderr)
+                except:
+                    pass
+            sys.exit(1)
 
     # The "includes=Images" param above no longer populates an "images"
     # field on this endpoint's response (confirmed empirically - Etsy
