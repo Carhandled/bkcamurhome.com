@@ -63,13 +63,13 @@
 .cross-link { background: var(--cream); border-left: 3px solid var(--gold); padding: 20px 24px; margin: 34px 0; }
 .cross-link p { margin: 0; line-height: 1.75; }
 
-/* The closed mobile drawer is parked off-canvas at right:-100%, which made
-   every page scroll sideways on a phone (pre-dates the category pages -
-   the committed baseline slid 289px at 390px wide). Clip the overflow rather
-   than hiding it: `clip` does not create a scroll container, so the sticky
-   header keeps working. `hidden` is the fallback for browsers without clip. */
-html { overflow-x: hidden; overflow-x: clip; }
-body { overflow-x: hidden; overflow-x: clip; }
+/* The closed drawer used to be parked at right:-100%, which made every page
+   scroll sideways on a phone. Do NOT fix that by clipping overflow on <html>:
+   any overflow on the root makes it the containing block for position:fixed,
+   so the drawer starts positioning against the document instead of the
+   viewport - open it at the bottom of a long page and it appears thousands of
+   pixels above you. The drawer now keeps its box on-screen at right:0 and is
+   moved out of view with a transform instead (see the drawer rules below). */
 </style>
 </head>
 <body>

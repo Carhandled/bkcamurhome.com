@@ -688,14 +688,21 @@ display: flex;
 flex-direction: column;
 position: fixed;
 top: 0;
-right: -100%;
+right: 0;
+/* Revealed with clip-path, not by moving the box: a transformed or
+   negatively-offset fixed element still contributes horizontal scroll, and
+   clipping <html> to hide that would make the root the containing block for
+   position:fixed - which parks this drawer at the top of the document instead
+   of the viewport. clip-path changes no layout at all. */
+clip-path: inset(0 0 0 100%);
+visibility: hidden;
 width: min(320px, 82vw);
 height: 100vh;
 height: 100dvh;
 background: var(--warm-white);
 padding: 100px 0 40px;
 gap: 0;
-transition: right 0.3s ease;
+transition: clip-path 0.3s ease, visibility 0.3s;
 box-shadow: -10px 0 40px rgba(0,0,0,0.2);
 z-index: 300;
 overflow-y: auto;
@@ -703,7 +710,7 @@ pointer-events: none;
 -webkit-user-select: none;
 user-select: none;
 }
-.nav-links.open { right: 0; pointer-events: auto; z-index: 300; }
+.nav-links.open { clip-path: inset(0); visibility: visible; pointer-events: auto; z-index: 300; }
 .nav-links li { width: 100%; border-bottom: 1px solid var(--line); pointer-events: auto; }
 .nav-links a {
   display: flex;
@@ -913,7 +920,30 @@ transition: transform 0.3s ease, box-shadow 0.3s ease;
 .tile-origin { font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--taupe-grey); }
 .tile-copy h3 { font-family: 'Cormorant Garamond', serif; font-size: 25px; font-weight: 500; }
 .tile-copy p { font-size: 14px; line-height: 1.7; color: #5A4A38; }
-.tile-link { margin-top: auto; padding-top: 12px; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--terracotta); }
+.collection-tile { cursor: pointer; }
+.tile-link {
+margin-top: auto;
+align-self: flex-start;
+display: inline-flex;
+align-items: center;
+gap: 9px;
+margin-top: 18px;
+padding: 11px 20px;
+border: 1px solid var(--espresso);
+font-size: 10px;
+letter-spacing: 0.16em;
+text-transform: uppercase;
+color: var(--espresso);
+transition: background 0.25s ease, color 0.25s ease, gap 0.25s ease;
+}
+.tile-arrow { font-size: 13px; line-height: 1; }
+.collection-tile:hover .tile-link,
+.collection-tile:focus-visible .tile-link {
+background: var(--espresso);
+color: var(--warm-white);
+gap: 14px;
+}
+.collection-tile:focus-visible { outline: 2px solid var(--terracotta); outline-offset: 3px; }
 @media (max-width: 860px) { .collection-tiles { grid-template-columns: 1fr; gap: 24px; } }
 
 .story-teaser { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: center; }
@@ -924,13 +954,13 @@ transition: transform 0.3s ease, box-shadow 0.3s ease;
 .story-teaser-copy .btn { margin-top: 12px; }
 @media (max-width: 960px) { .story-teaser { grid-template-columns: 1fr; gap: 30px; } .story-teaser-copy h2 { font-size: 30px; } }
 
-/* The closed mobile drawer is parked off-canvas at right:-100%, which made
-   every page scroll sideways on a phone (pre-dates the category pages -
-   the committed baseline slid 289px at 390px wide). Clip the overflow rather
-   than hiding it: `clip` does not create a scroll container, so the sticky
-   header keeps working. `hidden` is the fallback for browsers without clip. */
-html { overflow-x: hidden; overflow-x: clip; }
-body { overflow-x: hidden; overflow-x: clip; }
+/* The closed drawer used to be parked at right:-100%, which made every page
+   scroll sideways on a phone. Do NOT fix that by clipping overflow on <html>:
+   any overflow on the root makes it the containing block for position:fixed,
+   so the drawer starts positioning against the document instead of the
+   viewport - open it at the bottom of a long page and it appears thousands of
+   pixels above you. The drawer now keeps its box on-screen at right:0 and is
+   moved out of view with a transform instead (see the drawer rules below). */
 
 /* Floating CTA - see /assets/js/floating-cta.js. Shown on every page because
    the header CTA is hidden below 1279px, which left phones with no route to
@@ -1079,7 +1109,7 @@ pointer-events: auto;
 <span class="tile-origin">Uzbekistan</span>
 <h3>Suzani Pillow Covers</h3>
 <p>Silk-thread embroidery on hand-loomed cotton, cut from vintage dowry textiles.</p>
-<span class="tile-link">Browse suzani &rarr;</span>
+<span class="tile-link">Browse suzani<span class="tile-arrow">&rarr;</span></span>
 </div>
 </a>
 
@@ -1091,7 +1121,7 @@ pointer-events: auto;
 <span class="tile-origin">T&uuml;rkiye</span>
 <h3>Kilim Pillow Covers</h3>
 <p>Cut from antique Anatolian flatweaves that had reached the end of their life as rugs.</p>
-<span class="tile-link">Browse kilim pillows &rarr;</span>
+<span class="tile-link">Browse kilim pillows<span class="tile-arrow">&rarr;</span></span>
 </div>
 </a>
 
@@ -1103,7 +1133,7 @@ pointer-events: auto;
 <span class="tile-origin">Anatolia</span>
 <h3>Turkish Rugs &amp; Kilims</h3>
 <p>Full-size floor pieces in hand-spun wool and natural dyes, bought whole.</p>
-<span class="tile-link">Browse rugs &amp; kilims &rarr;</span>
+<span class="tile-link">Browse rugs &amp; kilims<span class="tile-arrow">&rarr;</span></span>
 </div>
 </a>
 

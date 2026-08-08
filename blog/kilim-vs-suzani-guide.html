@@ -430,14 +430,21 @@ display: flex;
 flex-direction: column;
 position: fixed;
 top: 0;
-right: -100%;
+right: 0;
+/* Revealed with clip-path, not by moving the box: a transformed or
+   negatively-offset fixed element still contributes horizontal scroll, and
+   clipping <html> to hide that would make the root the containing block for
+   position:fixed - which parks this drawer at the top of the document instead
+   of the viewport. clip-path changes no layout at all. */
+clip-path: inset(0 0 0 100%);
+visibility: hidden;
 width: min(320px, 82vw);
 height: 100vh;
 height: 100dvh;
 background: var(--warm-white);
 padding: 100px 0 40px;
 gap: 0;
-transition: right 0.3s ease;
+transition: clip-path 0.3s ease, visibility 0.3s;
 box-shadow: -10px 0 40px rgba(0,0,0,0.2);
 z-index: 300;
 overflow-y: auto;
@@ -445,7 +452,7 @@ pointer-events: none;
 -webkit-user-select: none;
 user-select: none;
 }
-.nav-links.open { right: 0; pointer-events: auto; z-index: 300; }
+.nav-links.open { clip-path: inset(0); visibility: visible; pointer-events: auto; z-index: 300; }
 .nav-links li { width: 100%; border-bottom: 1px solid var(--line); pointer-events: auto; }
 .nav-links a {
   display: flex;
@@ -554,13 +561,13 @@ text-decoration: none;
 .nav-shop-panel a { padding-left: 18px; opacity: 0.92; }
 }
 
-/* The closed mobile drawer is parked off-canvas at right:-100%, which made
-   every page scroll sideways on a phone (pre-dates the category pages -
-   the committed baseline slid 289px at 390px wide). Clip the overflow rather
-   than hiding it: `clip` does not create a scroll container, so the sticky
-   header keeps working. `hidden` is the fallback for browsers without clip. */
-html { overflow-x: hidden; overflow-x: clip; }
-body { overflow-x: hidden; overflow-x: clip; }
+/* The closed drawer used to be parked at right:-100%, which made every page
+   scroll sideways on a phone. Do NOT fix that by clipping overflow on <html>:
+   any overflow on the root makes it the containing block for position:fixed,
+   so the drawer starts positioning against the document instead of the
+   viewport - open it at the bottom of a long page and it appears thousands of
+   pixels above you. The drawer now keeps its box on-screen at right:0 and is
+   moved out of view with a transform instead (see the drawer rules below). */
 
 /* Floating CTA - see /assets/js/floating-cta.js. Shown on every page because
    the header CTA is hidden below 1279px, which left phones with no route to
