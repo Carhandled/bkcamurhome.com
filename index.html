@@ -387,8 +387,8 @@ color: var(--taupe-grey);
 .trust-inner span strong { color: var(--terracotta); }
 
 /* ============ GENERAL SECTION ============ */
-section { padding: 130px 0; }
-.section-head { max-width: 680px; margin-bottom: 64px; }
+section { padding: 88px 0; }
+.section-head { max-width: 680px; margin-bottom: 42px; }
 .section-head h2 { font-size: 44px; }
 .section-head p { color: var(--taupe-grey); font-size: 16px; margin-top: 20px; }
 .section-head.center { margin-left: auto; margin-right: auto; text-align: center; }
@@ -566,9 +566,8 @@ color: var(--warm-white);
 }
 .sourcing-grid {
 display: grid;
-grid-template-columns: 1fr 1fr;
-gap: 64px;
-align-items: center;
+grid-template-columns: 1fr;
+max-width: 780px;
 }
 .sourcing h2 { color: var(--warm-white); font-size: 36px; margin-bottom: 20px; }
 .sourcing p { color: #D9C9AF; font-size: 15px; margin-bottom: 16px; }
@@ -587,8 +586,6 @@ left: 0; top: 8px;
 width: 10px; height: 1px;
 background: var(--gold);
 }
-.sourcing-photo { overflow: hidden; border-radius: 2px; }
-.sourcing-photo img { width: 100%; display: block; }
 
 /* ============ POLICIES ============ */
 .policies { background: var(--warm-white); }
@@ -746,7 +743,7 @@ user-select: none;
 .sourcing-grid { grid-template-columns: 1fr; }
 .wholesale-inner { grid-template-columns: 1fr; }
 .policy-grid { grid-template-columns: repeat(2, 1fr); }
-section { padding: 76px 0; }
+section { padding: 52px 0; }
 .manifesto p { font-size: 24px; }
 /* horizontal swipe product carousels */
 .product-grid {
@@ -944,7 +941,31 @@ color: var(--warm-white);
 gap: 14px;
 }
 .collection-tile:focus-visible { outline: 2px solid var(--terracotta); outline-offset: 3px; }
-@media (max-width: 860px) { .collection-tiles { grid-template-columns: 1fr; gap: 24px; } }
+@media (max-width: 860px) {
+/* Stacked full-height cards meant scrolling past each category one at a
+   time. As rows, all three sit within a screen. */
+.collection-tiles { grid-template-columns: 1fr; gap: 12px; margin-top: 30px; }
+.collection-tile { flex-direction: row; align-items: stretch; }
+.tile-photo { flex: 0 0 108px; aspect-ratio: 1; }
+.tile-copy { padding: 14px 16px; gap: 3px; justify-content: center; position: relative; padding-right: 40px; }
+.tile-origin { font-size: 9px; letter-spacing: 0.16em; }
+.tile-copy h3 { font-size: 19px; }
+.tile-copy p {
+font-size: 12.5px; line-height: 1.5;
+display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+overflow: hidden;
+}
+/* The row itself is the control at this size, so the button becomes a
+   chevron pinned to the right edge. */
+.tile-link {
+position: absolute; right: 14px; top: 50%; transform: translateY(-50%);
+margin: 0; padding: 0; border: 0; background: none;
+font-size: 0; letter-spacing: 0; gap: 0;
+}
+.tile-arrow { font-size: 17px; color: var(--terracotta); }
+.collection-tile:hover .tile-link,
+.collection-tile:focus-visible .tile-link { background: none; color: inherit; gap: 0; }
+}
 
 .story-teaser { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: center; }
 .story-teaser-photo { aspect-ratio: 4/3; overflow: hidden; background: var(--cream); box-shadow: 0 24px 54px rgba(43,27,18,0.16); }
@@ -1166,9 +1187,6 @@ pointer-events: auto;
 <li>No obligation — if we can't find it, you owe nothing</li>
 </ul>
 <a href="sourcing.html" class="btn btn-primary">Start a Custom Search</a>
-</div>
-<div class="sourcing-photo">
-<img src="https://i.etsystatic.com/61471058/r/il/ddcfd2/8243459220/il_1588xN.8243459220_2o2n.jpg" srcset="https://i.etsystatic.com/61471058/r/il/ddcfd2/8243459220/il_340xN.8243459220_2o2n.jpg 340w, https://i.etsystatic.com/61471058/r/il/ddcfd2/8243459220/il_570xN.8243459220_2o2n.jpg 570w, https://i.etsystatic.com/61471058/r/il/ddcfd2/8243459220/il_794xN.8243459220_2o2n.jpg 794w, https://i.etsystatic.com/61471058/r/il/ddcfd2/8243459220/il_1140xN.8243459220_2o2n.jpg 1140w, https://i.etsystatic.com/61471058/r/il/ddcfd2/8243459220/il_1588xN.8243459220_2o2n.jpg 1588w" sizes="(max-width: 960px) 100vw, 45vw" alt="Vintage Turkish rug, hand-loomed wool" />
 </div>
 </div>
 </section>
