@@ -38,8 +38,7 @@ jobs:
         run: |
           git config user.name "etsy-sync-bot"
           git config user.email "actions@users.noreply.github.com"
-          git add index.html \
-                  suzani-pillow-covers.html \
+          git add suzani-pillow-covers.html \
                   kilim-pillow-covers.html \
                   turkish-rugs-kilims.html \
                   sitemap.xml

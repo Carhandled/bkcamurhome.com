@@ -47,7 +47,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="/assets/css/site.css" />
 <style>
-.cat-hero { padding: 132px 0 0; }
 .breadcrumb { font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--taupe-grey); margin-bottom: 20px; }
 .breadcrumb a { color: var(--taupe-grey); text-decoration: none; }
 .breadcrumb a:hover { color: var(--terracotta); }
@@ -63,6 +62,14 @@
 .spec-table th { font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--espresso); font-weight: 600; }
 .cross-link { background: var(--cream); border-left: 3px solid var(--gold); padding: 20px 24px; margin: 34px 0; }
 .cross-link p { margin: 0; line-height: 1.75; }
+
+/* The closed mobile drawer is parked off-canvas at right:-100%, which made
+   every page scroll sideways on a phone (pre-dates the category pages -
+   the committed baseline slid 289px at 390px wide). Clip the overflow rather
+   than hiding it: `clip` does not create a scroll container, so the sticky
+   header keeps working. `hidden` is the fallback for browsers without clip. */
+html { overflow-x: hidden; overflow-x: clip; }
+body { overflow-x: hidden; overflow-x: clip; }
 </style>
 </head>
 <body>
@@ -78,7 +85,7 @@
 <li><a href="/turkish-rugs-kilims.html">Turkish Rugs &amp; Kilims</a></li>
 </ul>
 </li>
-<li><a href="/#story">Our Story</a></li>
+<li><a href="/our-story.html">Our Story</a></li>
 <li><a href="/blog/">Journal</a></li>
 <li><a href="/wholesale.html">Trade / Wholesale</a></li>
 <li><a href="/sourcing.html">Custom Sourcing</a></li>
@@ -95,11 +102,24 @@
 
 <section class="cat-hero">
 <div class="container">
+<div class="cat-hero-inner">
+<div class="cat-hero-copy">
 <nav class="breadcrumb" aria-label="Breadcrumb">
 <a href="/">Home</a> &nbsp;&middot;&nbsp; Turkish Rugs &amp; Kilims
 </nav>
 <h1>Vintage Turkish Rugs &amp; Kilims</h1>
 <p class="cat-lede">Floor pieces, sourced whole. Hand-spun wool on hand-loomed foundations, dyed with plants and minerals, walked on for decades before they reached us &mdash; which is precisely why they look the way they do.</p>
+<div class="cat-hero-facts">
+<span>Anatolia</span>
+<span>Hand-spun wool</span>
+<span>Natural dyes</span>
+<span>Free US shipping</span>
+</div>
+</div>
+<div class="cat-hero-photo">
+<img src="https://i.etsystatic.com/61471058/r/il/089468/8299188947/il_1140xN.8299188947_ea7o.jpg" srcset="https://i.etsystatic.com/61471058/r/il/089468/8299188947/il_340xN.8299188947_ea7o.jpg 340w, https://i.etsystatic.com/61471058/r/il/089468/8299188947/il_570xN.8299188947_ea7o.jpg 570w, https://i.etsystatic.com/61471058/r/il/089468/8299188947/il_794xN.8299188947_ea7o.jpg 794w, https://i.etsystatic.com/61471058/r/il/089468/8299188947/il_1140xN.8299188947_ea7o.jpg 1140w, https://i.etsystatic.com/61471058/r/il/089468/8299188947/il_1588xN.8299188947_ea7o.jpg 1588w" sizes="(max-width: 960px) 100vw, 46vw" alt="Vintage hand-loomed Turkish flatweave rug in muted natural dyes" />
+</div>
+</div>
 </div>
 </section>
 
@@ -111,6 +131,11 @@
 <p>Nearly everything people admire in an old Anatolian rug traces back to how the yarn was made. Hand-spun wool is uneven &mdash; the thickness wanders slightly along its length, and the twist varies with the spinner's hand. When that yarn meets a dye bath, the thicker sections take up less pigment than the thin, so a single strand emerges faintly banded.</p>
 <p>Woven across a rug, thousands of those small inconsistencies produce <em>abrash</em>: the horizontal striations of tone that make a vintage field shimmer rather than sit flat. Machine-spun yarn is perfectly regular and dyes perfectly evenly, which is why a reproduction can copy every motif and still look inert. Abrash cannot be faked convincingly, and it is the first thing we check.</p>
 <p>Anatolian fleece helps too. Mountain sheep grow a long, lustrous, high-lanolin fleece that takes dye deeply and resists soiling. It is also what gives a well-used rug its slight sheen underfoot after years of wear.</p>
+
+<figure class="prose-figure">
+<img src="https://i.etsystatic.com/61471058/r/il/ddcfd2/8243459220/il_1140xN.8243459220_2o2n.jpg" srcset="https://i.etsystatic.com/61471058/r/il/ddcfd2/8243459220/il_340xN.8243459220_2o2n.jpg 340w, https://i.etsystatic.com/61471058/r/il/ddcfd2/8243459220/il_570xN.8243459220_2o2n.jpg 570w, https://i.etsystatic.com/61471058/r/il/ddcfd2/8243459220/il_794xN.8243459220_2o2n.jpg 794w, https://i.etsystatic.com/61471058/r/il/ddcfd2/8243459220/il_1140xN.8243459220_2o2n.jpg 1140w, https://i.etsystatic.com/61471058/r/il/ddcfd2/8243459220/il_1588xN.8243459220_2o2n.jpg 1588w" sizes="(max-width: 960px) 100vw, 760px" alt="Vintage Yalameh Rug, Handmade Wool Area Rug, Red Blue Tribal Persian Style Carpet, Geometric Oriental Runner, Boho Home Decor - hand-loomed wool area rug, natural dyes" loading="lazy" />
+<figcaption>Madder, indigo and oak gall soften with age rather than greying &mdash; the reason an old field sits so easily in a room.</figcaption>
+</figure>
 
 <h2>Natural dyes and how they age</h2>
 <p>The traditional palette came from what grew nearby: madder root for the reds through to rust, indigo for blues, weld and vine leaf for yellows, oak gall and iron for the darks. Greens were usually two baths &mdash; indigo over yellow &mdash; which is why the yellow sometimes wears away first and leaves a green that has drifted towards blue.</p>
@@ -125,6 +150,11 @@
 <h3>Pile</h3>
 <p>Individually knotted and trimmed, producing the plush surface most people picture. Turkish pile uses the symmetrical <em>G&ouml;rdes</em> knot, looped around two warps. Warmer, quieter and softer underfoot, but thicker and considerably heavier.</p>
 <p>One clarification, since the name comes up constantly in rug listings: <strong>Yalameh</strong> rugs are Persian rather than Anatolian &mdash; a tribal pile weave known for bold medallions on hand-spun wool. They are frequently sold alongside Turkish pieces and are easily confused with them. We will say so plainly when a piece is Persian rather than Turkish; the two traditions are related but not interchangeable.</p>
+
+<figure class="prose-figure">
+<img src="https://i.etsystatic.com/61471058/r/il/089468/8299188947/il_1140xN.8299188947_ea7o.jpg" srcset="https://i.etsystatic.com/61471058/r/il/089468/8299188947/il_340xN.8299188947_ea7o.jpg 340w, https://i.etsystatic.com/61471058/r/il/089468/8299188947/il_570xN.8299188947_ea7o.jpg 570w, https://i.etsystatic.com/61471058/r/il/089468/8299188947/il_794xN.8299188947_ea7o.jpg 794w, https://i.etsystatic.com/61471058/r/il/089468/8299188947/il_1140xN.8299188947_ea7o.jpg 1140w, https://i.etsystatic.com/61471058/r/il/089468/8299188947/il_1588xN.8299188947_ea7o.jpg 1588w" sizes="(max-width: 960px) 100vw, 760px" alt="Vintage Sumak Kilim Rug 6.2 x4 ft, Muted Pastel Beige Handwoven Turkish Flatware Area Rug, Natural Soumac Wool Rug, Living Room decor - hand-loomed wool area rug, natural dyes" loading="lazy" />
+<figcaption>Vintage rugs come in loom sizes, not showroom sizes. Measure the room and work to the figures in each listing.</figcaption>
+</figure>
 
 <h2>Sizing a rug to a room</h2>
 <p>The most common mistake is buying too small. A rug that floats in the middle of a floor with everything sitting off it makes a room read smaller, not larger.</p>
@@ -258,7 +288,7 @@
 </div>
 <div class="footer-col">
 <h4>Company</h4>
-<a href="/#story">Our Story</a>
+<a href="/our-story.html">Our Story</a>
 <a href="/blog/">Journal</a>
 <a href="/wholesale.html">Trade / Wholesale</a>
 <a href="/sourcing.html">Custom Sourcing</a>

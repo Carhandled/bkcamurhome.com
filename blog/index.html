@@ -464,6 +464,14 @@ text-decoration: none;
 .nav-shop-panel { padding: 0; }
 .nav-shop-panel a { padding-left: 18px; opacity: 0.92; }
 }
+
+/* The closed mobile drawer is parked off-canvas at right:-100%, which made
+   every page scroll sideways on a phone (pre-dates the category pages -
+   the committed baseline slid 289px at 390px wide). Clip the overflow rather
+   than hiding it: `clip` does not create a scroll container, so the sticky
+   header keeps working. `hidden` is the fallback for browsers without clip. */
+html { overflow-x: hidden; overflow-x: clip; }
+body { overflow-x: hidden; overflow-x: clip; }
 </style>
 </head>
 <body>
@@ -479,7 +487,7 @@ text-decoration: none;
 <li><a href="/turkish-rugs-kilims.html">Turkish Rugs &amp; Kilims</a></li>
 </ul>
 </li>
-<li><a href="/#story">Our Story</a></li>
+<li><a href="/our-story.html">Our Story</a></li>
 <li><a href="/blog/">Journal</a></li>
 <li><a href="/wholesale.html">Trade / Wholesale</a></li>
 <li><a href="/sourcing.html">Custom Sourcing</a></li>
@@ -590,7 +598,7 @@ text-decoration: none;
 </div>
 <div class="footer-col">
 <h4>Company</h4>
-<a href="/#story">Our Story</a>
+<a href="/our-story.html">Our Story</a>
 <a href="index.html">Journal</a>
 <a href="/wholesale.html">Trade / Wholesale</a>
 <a href="/sourcing.html">Custom Sourcing</a>

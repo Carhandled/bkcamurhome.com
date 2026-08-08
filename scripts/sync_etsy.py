@@ -2,7 +2,7 @@
 """
 sync_etsy.py
 
-Runs inside GitHub Actions (see .github/workflows/etsy-sync.yml) on an hourly
+Runs inside GitHub Actions (see .github/workflows/etsy-sync.yml) on a daily
 schedule. It:
 
   1. Exchanges the stored Etsy refresh token for a fresh access token
@@ -12,10 +12,10 @@ schedule. It:
   3. Sorts each listing into one of three categories by keyword match on its
      title: Suzani Pillow Covers (Uzbekistan), Kilim Pillow Covers (Turkey),
      or Rugs & Kilims (Turkey) - see categorize() below.
-  4. Regenerates each category's product grid in index.html between its own
-     comment markers, so the site always mirrors exactly what's live on
-     Etsy. A category with zero active listings gets a graceful
-     "coming soon" placeholder instead of an empty grid.
+  4. Regenerates each category page's product grid between its own comment
+     markers, so the site always mirrors exactly what's live on Etsy. A
+     category with zero active listings gets a graceful "coming soon"
+     placeholder instead of an empty grid.
   5. If Etsy issued a new refresh token, writes it back to the GitHub repo's
      Actions secret (ETSY_REFRESH_TOKEN) so the next run can use it - Etsy
      refresh tokens are valid 90 days but rotate on each use, so this keeps
@@ -49,12 +49,9 @@ ETSY_TOKEN_URL = "https://api.etsy.com/v3/public/oauth/token"
 ETSY_API_BASE = "https://api.etsy.com/v3/application"
 SHOP_URL = "https://www.etsy.com/shop/BKCAMURHOME"
 
-# The homepage routes; the category pages rank. Each category's full inventory
-# is written into its own page, and only the first PREVIEW_COUNT cards are
-# mirrored onto the homepage between its separate _PREVIEW_ markers.
-HOMEPAGE_PATH = Path("index.html")
+# The homepage routes with static category tiles and carries no product cards,
+# so each category's inventory is written only into its own page.
 SITEMAP_PATH = Path("sitemap.xml")
-PREVIEW_COUNT = 6
 
 # Category key -> markers, target page, meta label shown on each card, and the
 # alt-text suffix appended to every image for that category.
@@ -62,8 +59,6 @@ CATEGORIES = {
     "suzani": {
         "start": "<!-- ETSY_SUZANI_START -->",
         "end": "<!-- ETSY_SUZANI_END -->",
-        "preview_start": "<!-- ETSY_SUZANI_PREVIEW_START -->",
-        "preview_end": "<!-- ETSY_SUZANI_PREVIEW_END -->",
         "page": Path("suzani-pillow-covers.html"),
         "meta": "Uzbekistan &middot; Hand-Embroidered",
         "alt_suffix": "Uzbek silk hand embroidery",
@@ -72,8 +67,6 @@ CATEGORIES = {
     "kilim_pillow": {
         "start": "<!-- ETSY_KILIM_PILLOW_START -->",
         "end": "<!-- ETSY_KILIM_PILLOW_END -->",
-        "preview_start": "<!-- ETSY_KILIM_PILLOW_PREVIEW_START -->",
-        "preview_end": "<!-- ETSY_KILIM_PILLOW_PREVIEW_END -->",
         "page": Path("kilim-pillow-covers.html"),
         "meta": "Turkey &middot; Flatwoven Kilim",
         "alt_suffix": "upcycled Anatolian wool flatweave",
@@ -82,8 +75,6 @@ CATEGORIES = {
     "rug": {
         "start": "<!-- ETSY_RUGS_START -->",
         "end": "<!-- ETSY_RUGS_END -->",
-        "preview_start": "<!-- ETSY_RUGS_PREVIEW_START -->",
-        "preview_end": "<!-- ETSY_RUGS_PREVIEW_END -->",
         "page": Path("turkish-rugs-kilims.html"),
         "meta": "Turkey &middot; Hand-Loomed",
         "alt_suffix": "hand-loomed wool area rug, natural dyes",
@@ -391,18 +382,14 @@ def write_if_changed(path, new_html):
 
 
 def regenerate_pages(listings):
-    """Write each category's full inventory into its own page, and the first
-    PREVIEW_COUNT of each onto the homepage. Returns the list of files that
-    actually changed."""
+    """Write each category's full inventory into its own page. Returns the
+    list of files that actually changed."""
     grouped = group_by_category(listings)
     changed = []
-
-    home_html = HOMEPAGE_PATH.read_text(encoding="utf-8")
 
     for cat_key, cfg in CATEGORIES.items():
         cat_listings = grouped.get(cat_key, [])
 
-        # Full list -> the category page that is meant to rank for it.
         page = cfg["page"]
         if not page.exists():
             print(f"ERROR: {page} not found", file=sys.stderr)
@@ -417,22 +404,8 @@ def regenerate_pages(listings):
         if write_if_changed(page, page_html):
             changed.append(str(page))
 
-        # Preview -> the homepage, which now routes rather than lists.
-        home_html = replace_block(
-            home_html,
-            cfg["preview_start"],
-            cfg["preview_end"],
-            build_category_block(cat_key, cat_listings[:PREVIEW_COUNT]),
-            str(HOMEPAGE_PATH),
-        )
-
-    if write_if_changed(HOMEPAGE_PATH, home_html):
-        changed.append(str(HOMEPAGE_PATH))
-
     counts = {k: len(v) for k, v in grouped.items()}
     print(f"Listing counts by category: {counts}")
-    print(f"Homepage shows up to {PREVIEW_COUNT} per category; "
-          f"full lists live on the category pages.")
 
     if changed and update_sitemap_lastmod(changed):
         changed.append(str(SITEMAP_PATH))
@@ -446,7 +419,7 @@ def update_sitemap_lastmod(changed_files):
     if not SITEMAP_PATH.exists():
         return False
 
-    url_for = {str(HOMEPAGE_PATH): "https://www.bkcamurhome.com/"}
+    url_for = {}
     for cfg in CATEGORIES.values():
         url_for[str(cfg["page"])] = "https://www.bkcamurhome.com/" + cfg["page"].name
 

@@ -105,6 +105,14 @@ border: 1px solid transparent;
 
 .btn-outline { border-color: rgba(245, 237, 224, 0.4); color: var(--warm-white); }
 .btn-outline:hover { border-color: var(--gold); color: var(--gold); }
+
+/* The closed mobile drawer is parked off-canvas at right:-100%, which made
+   every page scroll sideways on a phone (pre-dates the category pages -
+   the committed baseline slid 289px at 390px wide). Clip the overflow rather
+   than hiding it: `clip` does not create a scroll container, so the sticky
+   header keeps working. `hidden` is the fallback for browsers without clip. */
+html { overflow-x: hidden; overflow-x: clip; }
+body { overflow-x: hidden; overflow-x: clip; }
 </style>
 </head>
 <body>
