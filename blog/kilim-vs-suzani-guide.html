@@ -561,6 +561,50 @@ text-decoration: none;
    header keeps working. `hidden` is the fallback for browsers without clip. */
 html { overflow-x: hidden; overflow-x: clip; }
 body { overflow-x: hidden; overflow-x: clip; }
+
+/* Floating CTA - see /assets/js/floating-cta.js. Shown on every page because
+   the header CTA is hidden below 1279px, which left phones with no route to
+   the shop short of scrolling back to the hamburger. */
+.floating-cta {
+position: fixed;
+right: 22px;
+bottom: calc(22px + env(safe-area-inset-bottom, 0px));
+z-index: 260;
+display: inline-flex;
+align-items: center;
+gap: 10px;
+padding: 14px 24px;
+background: var(--terracotta);
+color: var(--warm-white);
+font-size: 10px;
+letter-spacing: 0.18em;
+text-transform: uppercase;
+text-decoration: none;
+white-space: nowrap;
+border-radius: 999px;
+box-shadow: 0 12px 30px rgba(43,27,18,0.28);
+opacity: 0;
+visibility: hidden;
+transform: translateY(14px);
+pointer-events: none;
+transition: opacity 0.28s ease, transform 0.28s ease, visibility 0.28s, background 0.25s ease;
+}
+.floating-cta.visible {
+opacity: 1;
+visibility: visible;
+transform: translateY(0);
+pointer-events: auto;
+}
+.floating-cta:hover { background: var(--terracotta-deep); }
+.floating-cta-arrow { font-size: 13px; line-height: 1; }
+
+@media (max-width: 560px) {
+.floating-cta { right: 14px; bottom: calc(14px + env(safe-area-inset-bottom, 0px)); padding: 13px 20px; font-size: 9px; }
+}
+
+/* Anchor targets must clear the sticky header, which is ~87px tall - without
+   this, jumping to #collections lands the heading underneath it. */
+:target, [id] { scroll-margin-top: 104px; }
 </style>
 </head>
 <body>
@@ -803,5 +847,6 @@ document.getElementById('newsletter-form').addEventListener('submit', function (
 })();
 </script>
 
+<script src="/assets/js/floating-cta.js" defer></script>
 </body>
 </html>
