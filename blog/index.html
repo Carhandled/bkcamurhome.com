@@ -389,24 +389,104 @@ user-select: none;
 .post-grid { grid-template-columns: 1fr; }
 section { padding: 60px 0; }
 }
+/* ---------------------------------------------------------------------------
+   Shop dropdown
+   The three category pages carry long keyword names ("Suzani Pillow Covers"),
+   which will not fit the desktop bar alongside everything else. They live in a
+   dropdown instead. Links are plain <a> in the markup either way, so crawlers
+   read them normally.
+   Desktop: hover/focus reveals the panel. Mobile (<=960px): the hamburger menu
+   is already a vertical list, so the panel is flattened inline rather than
+   nested - a second collapsible layer inside the drawer is where this nav has
+   broken before.
+--------------------------------------------------------------------------- */
+.nav-shop { position: relative; }
+
+.nav-shop > a::after {
+content: '';
+display: inline-block;
+width: 5px; height: 5px;
+margin-left: 6px;
+vertical-align: 1px;
+border-right: 1px solid currentColor;
+border-bottom: 1px solid currentColor;
+transform: rotate(45deg);
+}
+
+.nav-shop-panel {
+list-style: none;
+margin: 0;
+padding: 10px 0;
+}
+
+@media (min-width: 1280px) {
+.nav-shop-panel {
+position: absolute;
+top: 100%;
+left: 50%;
+transform: translateX(-50%) translateY(6px);
+min-width: 232px;
+background: var(--warm-white);
+border: 1px solid var(--line);
+box-shadow: 0 18px 40px rgba(43,27,18,0.14);
+opacity: 0;
+visibility: hidden;
+pointer-events: none;
+transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
+z-index: 320;
+}
+.nav-shop:hover .nav-shop-panel,
+.nav-shop:focus-within .nav-shop-panel {
+opacity: 1;
+visibility: visible;
+pointer-events: auto;
+transform: translateX(-50%) translateY(0);
+}
+.nav-shop-panel li { display: block; }
+.nav-shop-panel a {
+display: block;
+padding: 9px 18px;
+white-space: nowrap;
+font-size: 11px;
+letter-spacing: 0.1em;
+text-transform: uppercase;
+color: var(--espresso);
+text-decoration: none;
+}
+.nav-shop-panel a:hover { background: var(--cream); color: var(--terracotta); }
+}
+
+/* In the mobile drawer the panel is just part of the vertical list. The
+   drawer engages at 1279px, so this must match that - not the 960px
+   product-carousel breakpoint. */
+@media (max-width: 1279px) {
+.nav-shop > a::after { display: none; }
+.nav-shop-panel { padding: 0; }
+.nav-shop-panel a { padding-left: 18px; opacity: 0.92; }
+}
 </style>
 </head>
 <body>
 
 <header>
 <nav>
-<a href="../index.html" class="logo"><img src="../assets/image/logo.png" alt="bkCAMUR Home logo" class="logo-mark" />bkCAMUR <span>Home</span></a>
+<a href="/" class="logo"><img src="../assets/image/logo.png" alt="bkCAMUR Home logo" class="logo-mark" />bkCAMUR <span>Home</span></a>
 <ul class="nav-links" id="nav-links">
-<li><a href="../index.html#suzani">Suzani</a></li>
-<li><a href="../index.html#kilim-pillows">Kilim Pillows</a></li>
-<li><a href="../index.html#rugs-kilims">Rugs &amp; Kilims</a></li>
-<li><a href="../index.html#story">Our Story</a></li>
-<li><a href="index.html" class="current">Journal</a></li>
-<li><a href="../wholesale.html">Trade / Wholesale</a></li>
-<li><a href="../sourcing.html">Custom Sourcing</a></li>
-<li class="nav-mobile-cta"><a href="../index.html#shop" class="btn btn-primary">Shop the Collection</a></li>
+<li class="nav-shop"><a href="/#collections">Shop</a>
+<ul class="nav-shop-panel">
+<li><a href="/suzani-pillow-covers.html">Suzani Pillow Covers</a></li>
+<li><a href="/kilim-pillow-covers.html">Kilim Pillow Covers</a></li>
+<li><a href="/turkish-rugs-kilims.html">Turkish Rugs &amp; Kilims</a></li>
 </ul>
-<a href="../index.html#shop" class="nav-cta">Shop the Collection</a>
+</li>
+<li><a href="/#story">Our Story</a></li>
+<li><a href="/blog/">Journal</a></li>
+<li><a href="/wholesale.html">Trade / Wholesale</a></li>
+<li><a href="/sourcing.html">Custom Sourcing</a></li>
+<li><a href="/#contact">Contact</a></li>
+<li class="nav-mobile-cta"><a href="/#collections" class="btn btn-primary">Shop the Collection</a></li>
+</ul>
+<a href="/#collections" class="nav-cta">Shop the Collection</a>
 <button class="menu-toggle" id="menu-toggle" aria-label="Toggle menu" aria-expanded="false">
 <span></span><span></span><span></span>
 </button>
@@ -475,7 +555,7 @@ section { padding: 60px 0; }
 <div class="container">
 <h2>Looking for something specific?</h2>
 <p>Browse the full collection of one-of-a-kind vintage rugs, kilim pillow covers, and suzani textiles &mdash; or reach out and we'll help you find the right piece.</p>
-<a href="../index.html#shop" class="btn btn-primary">Shop the Collection</a>
+<a href="/#collections" class="btn btn-primary">Shop the Collection</a>
 </div>
 </section>
 
@@ -503,17 +583,18 @@ section { padding: 60px 0; }
 <div class="footer-links">
 <div class="footer-col">
 <h4>Shop</h4>
-<a href="../index.html#suzani">Suzani Pillows</a>
-<a href="../index.html#kilim-pillows">Kilim Pillows</a>
-<a href="../index.html#rugs-kilims">Rugs &amp; Kilims</a>
+<a href="/suzani-pillow-covers.html">Suzani Pillow Covers</a>
+<a href="/kilim-pillow-covers.html">Kilim Pillow Covers</a>
+<a href="/turkish-rugs-kilims.html">Turkish Rugs &amp; Kilims</a>
+<a href="https://www.etsy.com/shop/BKCAMURHOME" target="_blank" rel="noopener">Full Collection on Etsy</a>
 </div>
 <div class="footer-col">
 <h4>Company</h4>
-<a href="../index.html#story">Our Story</a>
+<a href="/#story">Our Story</a>
 <a href="index.html">Journal</a>
-<a href="../wholesale.html">Trade / Wholesale</a>
-<a href="../sourcing.html">Custom Sourcing</a>
-<a href="../index.html#contact">Contact</a>
+<a href="/wholesale.html">Trade / Wholesale</a>
+<a href="/sourcing.html">Custom Sourcing</a>
+<a href="/#contact">Contact</a>
 </div>
 <div class="footer-col">
 <h4>Follow</h4>

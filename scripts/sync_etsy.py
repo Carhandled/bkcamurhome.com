@@ -38,6 +38,7 @@ workflow):
 
 import base64
 import os
+import re
 import sys
 import time
 from pathlib import Path
@@ -46,26 +47,47 @@ import requests
 
 ETSY_TOKEN_URL = "https://api.etsy.com/v3/public/oauth/token"
 ETSY_API_BASE = "https://api.etsy.com/v3/application"
-INDEX_HTML_PATH = Path("index.html")
 SHOP_URL = "https://www.etsy.com/shop/BKCAMURHOME"
 
-# Category key -> (start marker, end marker, meta label shown on each card,
-# empty-state copy shown when this category has zero active listings)
+# The homepage routes; the category pages rank. Each category's full inventory
+# is written into its own page, and only the first PREVIEW_COUNT cards are
+# mirrored onto the homepage between its separate _PREVIEW_ markers.
+HOMEPAGE_PATH = Path("index.html")
+SITEMAP_PATH = Path("sitemap.xml")
+PREVIEW_COUNT = 6
+
+# Category key -> markers, target page, meta label shown on each card, and the
+# alt-text suffix appended to every image for that category.
 CATEGORIES = {
     "suzani": {
         "start": "<!-- ETSY_SUZANI_START -->",
         "end": "<!-- ETSY_SUZANI_END -->",
+        "preview_start": "<!-- ETSY_SUZANI_PREVIEW_START -->",
+        "preview_end": "<!-- ETSY_SUZANI_PREVIEW_END -->",
+        "page": Path("suzani-pillow-covers.html"),
         "meta": "Uzbekistan &middot; Hand-Embroidered",
+        "alt_suffix": "Uzbek silk hand embroidery",
+        "alt_token": "uzbek",
     },
     "kilim_pillow": {
         "start": "<!-- ETSY_KILIM_PILLOW_START -->",
         "end": "<!-- ETSY_KILIM_PILLOW_END -->",
+        "preview_start": "<!-- ETSY_KILIM_PILLOW_PREVIEW_START -->",
+        "preview_end": "<!-- ETSY_KILIM_PILLOW_PREVIEW_END -->",
+        "page": Path("kilim-pillow-covers.html"),
         "meta": "Turkey &middot; Flatwoven Kilim",
+        "alt_suffix": "upcycled Anatolian wool flatweave",
+        "alt_token": "anatolian",
     },
     "rug": {
         "start": "<!-- ETSY_RUGS_START -->",
         "end": "<!-- ETSY_RUGS_END -->",
+        "preview_start": "<!-- ETSY_RUGS_PREVIEW_START -->",
+        "preview_end": "<!-- ETSY_RUGS_PREVIEW_END -->",
+        "page": Path("turkish-rugs-kilims.html"),
         "meta": "Turkey &middot; Hand-Loomed",
+        "alt_suffix": "hand-loomed wool area rug, natural dyes",
+        "alt_token": "hand-loomed",
     },
 }
 
@@ -272,7 +294,25 @@ def build_product_schema(listing, title, url, image_url, price_obj):
 </script>"""
 
 
-def build_card(listing, meta_label):
+def build_alt_text(raw_title, alt_suffix, alt_token=""):
+    """Descriptive alt built from the listing's own keywords plus a category
+    descriptor. Etsy CDN filenames can't be changed, so alt is the only image
+    signal we control.
+
+    alt_token is the one word that shows the descriptor is already covered by
+    the title; when present we leave the title alone rather than repeating
+    ourselves. Checking a distinctive token instead of the suffix's first word
+    matters - "hand-embroidered" and "vintage" appear in nearly every title and
+    would suppress the append every time."""
+    title = (raw_title or "").strip().rstrip(".")
+    if not title:
+        return escape_html(alt_suffix[:1].upper() + alt_suffix[1:])
+    if alt_token and alt_token.lower() in title.lower():
+        return escape_html(title)
+    return escape_html("%s - %s" % (title, alt_suffix))
+
+
+def build_card(listing, meta_label, alt_suffix="", alt_token=""):
     title = escape_html(listing.get("title", "").strip())
     url = listing.get("url", "#")
     quantity = listing.get("quantity", 1)
@@ -288,10 +328,11 @@ def build_card(listing, meta_label):
         badge = "1 of 1 Available"
 
     schema = build_product_schema(listing, listing.get("title", "").strip(), url, image_url, price_obj)
+    alt = build_alt_text(listing.get("title", ""), alt_suffix, alt_token) if alt_suffix else title
 
     return f"""
 <div class="product-card">
-<div class="product-photo"><img src="{escape_html(image_url)}" alt="{title}" loading="lazy" /></div>
+<div class="product-photo"><img src="{escape_html(image_url)}" alt="{alt}" loading="lazy" /></div>
 <div class="product-info">
 <span class="one-of-a-kind">{badge}</span>
 <div class="product-name">{title}</div>
@@ -312,49 +353,124 @@ def group_by_category(listings):
 
 
 def build_category_block(cat_key, cat_listings):
-    meta_label = CATEGORIES[cat_key]["meta"]
+    cfg = CATEGORIES[cat_key]
     if not cat_listings:
         return EMPTY_STATE_TEMPLATE.format(label=EMPTY_STATE_LABELS[cat_key])
     # Emitted flat, as direct children of .product-grid - the two-row collapse
-    # and its "See More" button are applied by CSS/JS in index.html and rely on
+    # and its "See More" button are applied by CSS/JS on the page and rely on
     # the cards not being wrapped in anything.
-    return "\n".join(build_card(l, meta_label) for l in cat_listings)
+    return "\n".join(
+        build_card(l, cfg["meta"], cfg["alt_suffix"], cfg["alt_token"])
+        for l in cat_listings
+    )
 
 
-def regenerate_index_html(listings):
-    if not INDEX_HTML_PATH.exists():
-        print(f"ERROR: {INDEX_HTML_PATH} not found", file=sys.stderr)
+def replace_block(html, start, end, block_html, where):
+    """Swap the content between two marker comments. Returns the new html."""
+    if start not in html or end not in html:
+        print(
+            f"ERROR: {where} is missing markers {start} / {end}.",
+            file=sys.stderr,
+        )
         sys.exit(1)
+    pre, rest = html.split(start, 1)
+    _, post = rest.split(end, 1)
+    return pre + f"{start}\n{block_html}\n{end}" + post
 
-    html = INDEX_HTML_PATH.read_text(encoding="utf-8")
+
+def write_if_changed(path, new_html):
+    """Write only on a real change, so the commit step stays a no-op when
+    nothing moved on Etsy."""
+    if not path.exists():
+        print(f"ERROR: {path} not found", file=sys.stderr)
+        sys.exit(1)
+    if path.read_text(encoding="utf-8") == new_html:
+        return False
+    path.write_text(new_html, encoding="utf-8")
+    return True
+
+
+def regenerate_pages(listings):
+    """Write each category's full inventory into its own page, and the first
+    PREVIEW_COUNT of each onto the homepage. Returns the list of files that
+    actually changed."""
     grouped = group_by_category(listings)
+    changed = []
+
+    home_html = HOMEPAGE_PATH.read_text(encoding="utf-8")
 
     for cat_key, cfg in CATEGORIES.items():
-        start, end = cfg["start"], cfg["end"]
-        if start not in html or end not in html:
-            print(
-                f"ERROR: index.html is missing markers {start} / {end} "
-                "for category '" + cat_key + "'.",
-                file=sys.stderr,
-            )
+        cat_listings = grouped.get(cat_key, [])
+
+        # Full list -> the category page that is meant to rank for it.
+        page = cfg["page"]
+        if not page.exists():
+            print(f"ERROR: {page} not found", file=sys.stderr)
             sys.exit(1)
+        page_html = replace_block(
+            page.read_text(encoding="utf-8"),
+            cfg["start"],
+            cfg["end"],
+            build_category_block(cat_key, cat_listings),
+            str(page),
+        )
+        if write_if_changed(page, page_html):
+            changed.append(str(page))
 
-        block_html = build_category_block(cat_key, grouped.get(cat_key, []))
-        new_block = f"{start}\n{block_html}\n{end}"
+        # Preview -> the homepage, which now routes rather than lists.
+        home_html = replace_block(
+            home_html,
+            cfg["preview_start"],
+            cfg["preview_end"],
+            build_category_block(cat_key, cat_listings[:PREVIEW_COUNT]),
+            str(HOMEPAGE_PATH),
+        )
 
-        pre, rest = html.split(start, 1)
-        _, post = rest.split(end, 1)
-        html = pre + new_block + post
-
-    original = INDEX_HTML_PATH.read_text(encoding="utf-8")
-    changed = html != original
-    if changed:
-        INDEX_HTML_PATH.write_text(html, encoding="utf-8")
+    if write_if_changed(HOMEPAGE_PATH, home_html):
+        changed.append(str(HOMEPAGE_PATH))
 
     counts = {k: len(v) for k, v in grouped.items()}
     print(f"Listing counts by category: {counts}")
+    print(f"Homepage shows up to {PREVIEW_COUNT} per category; "
+          f"full lists live on the category pages.")
+
+    if changed and update_sitemap_lastmod(changed):
+        changed.append(str(SITEMAP_PATH))
 
     return changed
+
+
+def update_sitemap_lastmod(changed_files):
+    """Bump <lastmod> for the pages this run rewrote, so the sitemap stops
+    advertising dates from months ago."""
+    if not SITEMAP_PATH.exists():
+        return False
+
+    url_for = {str(HOMEPAGE_PATH): "https://www.bkcamurhome.com/"}
+    for cfg in CATEGORIES.values():
+        url_for[str(cfg["page"])] = "https://www.bkcamurhome.com/" + cfg["page"].name
+
+    today = time.strftime("%Y-%m-%d")
+    xml = SITEMAP_PATH.read_text(encoding="utf-8")
+    original = xml
+
+    for f in changed_files:
+        loc = url_for.get(f)
+        if not loc:
+            continue
+        # Rewrite the <lastmod> inside this URL's own <url> block only.
+        pattern = re.compile(
+            r"(<loc>%s</loc>\s*<lastmod>)[^<]*(</lastmod>)" % re.escape(loc)
+        )
+        xml, n = pattern.subn(r"\g<1>%s\g<2>" % today, xml)
+        if not n:
+            print(f"WARNING: no sitemap entry to date-stamp for {loc}")
+
+    if xml == original:
+        return False
+    SITEMAP_PATH.write_text(xml, encoding="utf-8")
+    print(f"sitemap.xml lastmod updated to {today}.")
+    return True
 
 
 def get_repo_public_key(gh_pat, repo):
@@ -432,8 +548,11 @@ def main():
     listings = fetch_active_listings(x_api_key, access_token, shop_id)
     print(f"Found {len(listings)} active listing(s).")
 
-    changed = regenerate_index_html(listings)
-    print("index.html updated." if changed else "No changes to index.html.")
+    changed = regenerate_pages(listings)
+    if changed:
+        print("Updated: " + ", ".join(changed))
+    else:
+        print("No page changes this run.")
 
     if new_refresh_token != refresh_token:
         print("Refresh token rotated - updating GitHub secret...")

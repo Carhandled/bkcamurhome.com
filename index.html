@@ -17,7 +17,7 @@
 <link rel="apple-touch-icon" href="assets/image/logo.png" />
 <link rel="manifest" href="/manifest.json" />
 
-<title>bkCAMUR Home — Vintage Turkish Rugs, Kilim &amp; Uzbek Suzani Textiles</title>
+<title>bkCAMUR Home — Turkish &amp; Uzbek Textiles, Sourced with Intention</title>
 <meta name="description" content="bkCAMUR Home brings hand-loomed Turkish rugs and kilim pillow covers from Anatolia together with hand-embroidered suzani textiles from Uzbekistan. One-of-a-kind pieces for retail and trade. Based in Philadelphia." />
 <meta name="author" content="bkCAMUR Home" />
 <meta name="keywords" content="vintage Turkish rugs, kilim pillow covers, suzani pillow cover, Uzbek textiles, Turkish home decor, Anatolian textiles, wholesale rugs, trade textiles, hand embroidered pillow, vintage kilim, Turkish textiles Philadelphia" />
@@ -66,6 +66,33 @@
 "name": "bkCAMUR Home",
 "publisher": { "@id": "https://www.bkcamurhome.com/#organization" },
 "inLanguage": "en-US"
+},
+{
+"@type": "LocalBusiness",
+"@id": "https://www.bkcamurhome.com/#localbusiness",
+"name": "bkCAMUR Home",
+"description": "Vintage Turkish rugs and kilim pillow covers, and hand-embroidered Uzbek suzani textiles, sourced and sold from Philadelphia, PA.",
+"url": "https://www.bkcamurhome.com/",
+"image": "https://www.bkcamurhome.com/assets/image/logo.png",
+"logo": "https://www.bkcamurhome.com/assets/image/logo.png",
+"parentOrganization": { "@id": "https://www.bkcamurhome.com/#organization" },
+"sameAs": ["https://www.instagram.com/bkcamurhome/", "https://www.etsy.com/shop/BKCAMURHOME"],
+"priceRange": "$$",
+"currenciesAccepted": "USD",
+"areaServed": { "@type": "Country", "name": "United States" },
+"address": {
+"@type": "PostalAddress",
+"addressLocality": "Philadelphia",
+"addressRegion": "PA",
+"addressCountry": "US"
+}
+},
+{
+"@type": "BreadcrumbList",
+"@id": "https://www.bkcamurhome.com/#breadcrumb",
+"itemListElement": [
+{ "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.bkcamurhome.com/" }
+]
 }
 ]
 }
@@ -779,6 +806,95 @@ color: var(--warm-white);
 @media (max-width: 960px) {
 .expand-btn { display: none; }
 }
+/* ---------------------------------------------------------------------------
+   Shop dropdown
+   The three category pages carry long keyword names ("Suzani Pillow Covers"),
+   which will not fit the desktop bar alongside everything else. They live in a
+   dropdown instead. Links are plain <a> in the markup either way, so crawlers
+   read them normally.
+   Desktop: hover/focus reveals the panel. Mobile (<=960px): the hamburger menu
+   is already a vertical list, so the panel is flattened inline rather than
+   nested - a second collapsible layer inside the drawer is where this nav has
+   broken before.
+--------------------------------------------------------------------------- */
+.nav-shop { position: relative; }
+
+.nav-shop > a::after {
+content: '';
+display: inline-block;
+width: 5px; height: 5px;
+margin-left: 6px;
+vertical-align: 1px;
+border-right: 1px solid currentColor;
+border-bottom: 1px solid currentColor;
+transform: rotate(45deg);
+}
+
+.nav-shop-panel {
+list-style: none;
+margin: 0;
+padding: 10px 0;
+}
+
+@media (min-width: 1280px) {
+.nav-shop-panel {
+position: absolute;
+top: 100%;
+left: 50%;
+transform: translateX(-50%) translateY(6px);
+min-width: 232px;
+background: var(--warm-white);
+border: 1px solid var(--line);
+box-shadow: 0 18px 40px rgba(43,27,18,0.14);
+opacity: 0;
+visibility: hidden;
+pointer-events: none;
+transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
+z-index: 320;
+}
+.nav-shop:hover .nav-shop-panel,
+.nav-shop:focus-within .nav-shop-panel {
+opacity: 1;
+visibility: visible;
+pointer-events: auto;
+transform: translateX(-50%) translateY(0);
+}
+.nav-shop-panel li { display: block; }
+.nav-shop-panel a {
+display: block;
+padding: 9px 18px;
+white-space: nowrap;
+font-size: 11px;
+letter-spacing: 0.1em;
+text-transform: uppercase;
+color: var(--espresso);
+text-decoration: none;
+}
+.nav-shop-panel a:hover { background: var(--cream); color: var(--terracotta); }
+}
+
+/* In the mobile drawer the panel is just part of the vertical list. The
+   drawer engages at 1279px, so this must match that - not the 960px
+   product-carousel breakpoint. */
+@media (max-width: 1279px) {
+.nav-shop > a::after { display: none; }
+.nav-shop-panel { padding: 0; }
+.nav-shop-panel a { padding-left: 18px; opacity: 0.92; }
+}
+
+.cat-viewall { margin-top: 30px; text-align: center; }
+.cat-viewall a {
+display: inline-block;
+padding: 13px 30px;
+border: 1px solid var(--espresso);
+color: var(--espresso);
+font-size: 11px;
+letter-spacing: 0.16em;
+text-transform: uppercase;
+text-decoration: none;
+transition: all 0.25s ease;
+}
+.cat-viewall a:hover { background: var(--espresso); color: var(--warm-white); }
 </style>
 </head>
 <body>
@@ -787,15 +903,19 @@ color: var(--warm-white);
 <nav>
 <a href="#top" class="logo"><img src="assets/image/logo.png" alt="bkCAMUR Home logo" class="logo-mark" />bkCAMUR <span>Home</span></a>
 <ul class="nav-links" id="nav-links">
-<li><a href="#suzani">Suzani</a></li>
-<li><a href="#kilim-pillows">Kilim Pillows</a></li>
-<li><a href="#rugs-kilims">Rugs &amp; Kilims</a></li>
-<li><a href="#story">Our Story</a></li>
-<li><a href="blog/index.html">Journal</a></li>
-<li><a href="wholesale.html">Trade / Wholesale</a></li>
-<li><a href="sourcing.html">Custom Sourcing</a></li>
-<li><a href="#contact">Contact</a></li>
-<li class="nav-mobile-cta"><a href="#suzani" class="btn btn-primary">Shop the Collection</a></li>
+<li class="nav-shop"><a href="/#collections">Shop</a>
+<ul class="nav-shop-panel">
+<li><a href="/suzani-pillow-covers.html">Suzani Pillow Covers</a></li>
+<li><a href="/kilim-pillow-covers.html">Kilim Pillow Covers</a></li>
+<li><a href="/turkish-rugs-kilims.html">Turkish Rugs &amp; Kilims</a></li>
+</ul>
+</li>
+<li><a href="/#story">Our Story</a></li>
+<li><a href="/blog/">Journal</a></li>
+<li><a href="/wholesale.html">Trade / Wholesale</a></li>
+<li><a href="/sourcing.html">Custom Sourcing</a></li>
+<li><a href="/#contact">Contact</a></li>
+<li class="nav-mobile-cta"><a href="/#collections" class="btn btn-primary">Shop the Collection</a></li>
 </ul>
 <a href="#suzani" class="nav-cta">Shop the Collection</a>
 <button class="menu-toggle" id="menu-toggle" aria-label="Toggle menu" aria-expanded="false">
@@ -878,6 +998,7 @@ color: var(--warm-white);
 </div>
 </section>
 
+<div id="collections"></div>
 <!-- ============ SUZANI ============ -->
 <section class="category-section" id="suzani">
 <div class="container">
@@ -891,10 +1012,9 @@ color: var(--warm-white);
 </div>
 
 <div class="product-grid">
-<!-- ETSY_SUZANI_START -->
-
+<!-- ETSY_SUZANI_PREVIEW_START -->
 <div class="product-card">
-<div class="product-photo"><img src="https://i.etsystatic.com/61471058/r/il/e07334/8060960674/il_570xN.8060960674_i07t.jpg" alt="Hand-Embroidered Suzani Pillow Cover 18x18, Boho Floral Cushion Case, Ethnic Home Decor" loading="lazy" /></div>
+<div class="product-photo"><img src="https://i.etsystatic.com/61471058/r/il/e07334/8060960674/il_570xN.8060960674_i07t.jpg" alt="Hand-Embroidered Suzani Pillow Cover 18x18, Boho Floral Cushion Case, Ethnic Home Decor - Uzbek silk hand embroidery" loading="lazy" /></div>
 <div class="product-info">
 <span class="one-of-a-kind">1 of 1 Available</span>
 <div class="product-name">Hand-Embroidered Suzani Pillow Cover 18x18, Boho Floral Cushion Case, Ethnic Home Decor</div>
@@ -922,9 +1042,8 @@ color: var(--warm-white);
 }
 }
 </script>
-
 <div class="product-card">
-<div class="product-photo"><img src="https://i.etsystatic.com/61471058/r/il/3958f7/8060957954/il_570xN.8060957954_blud.jpg" alt="Boho Floral Throw Pillow 18x18, Hand Embroidered Suzani Cushion Cover, Colorful Eclectic Home Decor" loading="lazy" /></div>
+<div class="product-photo"><img src="https://i.etsystatic.com/61471058/r/il/3958f7/8060957954/il_570xN.8060957954_blud.jpg" alt="Boho Floral Throw Pillow 18x18, Hand Embroidered Suzani Cushion Cover, Colorful Eclectic Home Decor - Uzbek silk hand embroidery" loading="lazy" /></div>
 <div class="product-info">
 <span class="one-of-a-kind">1 of 1 Available</span>
 <div class="product-name">Boho Floral Throw Pillow 18x18, Hand Embroidered Suzani Cushion Cover, Colorful Eclectic Home Decor</div>
@@ -952,7 +1071,6 @@ color: var(--warm-white);
 }
 }
 </script>
-
 <div class="product-card">
 <div class="product-photo"><img src="https://i.etsystatic.com/61471058/r/il/364cd4/8060953852/il_570xN.8060953852_fibd.jpg" alt="Uzbek Suzani Cushion Cover 18x18, Silk Hand Embroidered Throw Pillow, Maximalist Boho Home Decor" loading="lazy" /></div>
 <div class="product-info">
@@ -982,9 +1100,8 @@ color: var(--warm-white);
 }
 }
 </script>
-
 <div class="product-card">
-<div class="product-photo"><img src="https://i.etsystatic.com/61471058/r/il/5ea622/8060933626/il_570xN.8060933626_l9g7.jpg" alt="Red Flower Embroidered Pillow Cover 18x19, Handmade Suzani Cushion, Bohemian Bedroom Accent" loading="lazy" /></div>
+<div class="product-photo"><img src="https://i.etsystatic.com/61471058/r/il/5ea622/8060933626/il_570xN.8060933626_l9g7.jpg" alt="Red Flower Embroidered Pillow Cover 18x19, Handmade Suzani Cushion, Bohemian Bedroom Accent - Uzbek silk hand embroidery" loading="lazy" /></div>
 <div class="product-info">
 <span class="one-of-a-kind">1 of 1 Available</span>
 <div class="product-name">Red Flower Embroidered Pillow Cover 18x19, Handmade Suzani Cushion, Bohemian Bedroom Accent</div>
@@ -1012,9 +1129,37 @@ color: var(--warm-white);
 }
 }
 </script>
-
 <div class="product-card">
-<div class="product-photo"><img src="https://i.etsystatic.com/61471058/r/il/f8f27c/8108851407/il_570xN.8108851407_sdyh.jpg" alt="Statement Throw Pillow 18x18, Suzani Hand Embroidered Cover, Multicolor Boho Housewarming Gift" loading="lazy" /></div>
+<div class="product-photo"><img src="https://i.etsystatic.com/61471058/r/il/d29147/8060926894/il_570xN.8060926894_h4zv.jpg" alt="Poppy Red Floral Suzani Pillow Cover 18x19, Hand Stitched Cushion Case, Eclectic Living Room Decor - Uzbek silk hand embroidery" loading="lazy" /></div>
+<div class="product-info">
+<span class="one-of-a-kind">1 of 1 Available</span>
+<div class="product-name">Poppy Red Floral Suzani Pillow Cover 18x19, Hand Stitched Cushion Case, Eclectic Living Room Decor</div>
+<div class="product-meta">Uzbekistan &middot; Hand-Embroidered</div>
+<div class="product-price">$65.00 &middot; Free Shipping</div>
+<a class="product-buy" href="https://www.etsy.com/listing/4511245469/hand-embroidered-suzani-pillow-cover" target="_blank" rel="noopener">View &amp; Purchase</a>
+</div>
+</div>
+<script type="application/ld+json">
+{
+"@context": "https://schema.org",
+"@type": "Product",
+"name": "Poppy Red Floral Suzani Pillow Cover 18x19, Hand Stitched Cushion Case, Eclectic Living Room Decor",
+"image": "https://i.etsystatic.com/61471058/r/il/d29147/8060926894/il_570xN.8060926894_h4zv.jpg",
+"url": "https://www.etsy.com/listing/4511245469/hand-embroidered-suzani-pillow-cover",
+"sku": "4511245469",
+"brand": { "@type": "Brand", "name": "bkCAMUR Home" },
+"offers": {
+"@type": "Offer",
+"url": "https://www.etsy.com/listing/4511245469/hand-embroidered-suzani-pillow-cover",
+"priceCurrency": "USD",
+"price": "65.00",
+"availability": "https://schema.org/InStock",
+"itemCondition": "https://schema.org/UsedCondition"
+}
+}
+</script>
+<div class="product-card">
+<div class="product-photo"><img src="https://i.etsystatic.com/61471058/r/il/f8f27c/8108851407/il_570xN.8108851407_sdyh.jpg" alt="Statement Throw Pillow 18x18, Suzani Hand Embroidered Cover, Multicolor Boho Housewarming Gift - Uzbek silk hand embroidery" loading="lazy" /></div>
 <div class="product-info">
 <span class="one-of-a-kind">1 of 1 Available</span>
 <div class="product-name">Statement Throw Pillow 18x18, Suzani Hand Embroidered Cover, Multicolor Boho Housewarming Gift</div>
@@ -1042,579 +1187,10 @@ color: var(--warm-white);
 }
 }
 </script>
-
-<div class="product-card">
-<div class="product-photo"><img src="https://i.etsystatic.com/61471058/r/il/203ffe/8108856913/il_570xN.8108856913_1amm.jpg" alt="Pink Floral Suzani Accent Pillow 18x18, Hand Embroidered Cushion Cover, Colorful Eclectic Decor" loading="lazy" /></div>
-<div class="product-info">
-<span class="one-of-a-kind">1 of 1 Available</span>
-<div class="product-name">Pink Floral Suzani Accent Pillow 18x18, Hand Embroidered Cushion Cover, Colorful Eclectic Decor</div>
-<div class="product-meta">Uzbekistan &middot; Hand-Embroidered</div>
-<div class="product-price">$65.00 &middot; Free Shipping</div>
-<a class="product-buy" href="https://www.etsy.com/listing/4511247953/pink-floral-suzani-accent-pillow-18x18" target="_blank" rel="noopener">View &amp; Purchase</a>
+<!-- ETSY_SUZANI_PREVIEW_END -->
 </div>
-</div>
-<script type="application/ld+json">
-{
-"@context": "https://schema.org",
-"@type": "Product",
-"name": "Pink Floral Suzani Accent Pillow 18x18, Hand Embroidered Cushion Cover, Colorful Eclectic Decor",
-"image": "https://i.etsystatic.com/61471058/r/il/203ffe/8108856913/il_570xN.8108856913_1amm.jpg",
-"url": "https://www.etsy.com/listing/4511247953/pink-floral-suzani-accent-pillow-18x18",
-"sku": "4511247953",
-"brand": { "@type": "Brand", "name": "bkCAMUR Home" },
-"offers": {
-"@type": "Offer",
-"url": "https://www.etsy.com/listing/4511247953/pink-floral-suzani-accent-pillow-18x18",
-"priceCurrency": "USD",
-"price": "65.00",
-"availability": "https://schema.org/InStock",
-"itemCondition": "https://schema.org/UsedCondition"
-}
-}
-</script>
-
-<div class="product-card">
-<div class="product-photo"><img src="https://i.etsystatic.com/61471058/r/il/cc2402/8060919806/il_570xN.8060919806_9f1u.jpg" alt="Eclectic Couch Pillow Cover 18x18, Suzani Hand Embroidery, Colorful Boho Living Room Decor" loading="lazy" /></div>
-<div class="product-info">
-<span class="one-of-a-kind">1 of 1 Available</span>
-<div class="product-name">Eclectic Couch Pillow Cover 18x18, Suzani Hand Embroidery, Colorful Boho Living Room Decor</div>
-<div class="product-meta">Uzbekistan &middot; Hand-Embroidered</div>
-<div class="product-price">$65.00 &middot; Free Shipping</div>
-<a class="product-buy" href="https://www.etsy.com/listing/4511244762/eclectic-couch-pillow-cover-18x18-suzani" target="_blank" rel="noopener">View &amp; Purchase</a>
-</div>
-</div>
-<script type="application/ld+json">
-{
-"@context": "https://schema.org",
-"@type": "Product",
-"name": "Eclectic Couch Pillow Cover 18x18, Suzani Hand Embroidery, Colorful Boho Living Room Decor",
-"image": "https://i.etsystatic.com/61471058/r/il/cc2402/8060919806/il_570xN.8060919806_9f1u.jpg",
-"url": "https://www.etsy.com/listing/4511244762/eclectic-couch-pillow-cover-18x18-suzani",
-"sku": "4511244762",
-"brand": { "@type": "Brand", "name": "bkCAMUR Home" },
-"offers": {
-"@type": "Offer",
-"url": "https://www.etsy.com/listing/4511244762/eclectic-couch-pillow-cover-18x18-suzani",
-"priceCurrency": "USD",
-"price": "65.00",
-"availability": "https://schema.org/InStock",
-"itemCondition": "https://schema.org/UsedCondition"
-}
-}
-</script>
-
-<div class="product-card">
-<div class="product-photo"><img src="https://i.etsystatic.com/61471058/r/il/064c8f/8060912304/il_570xN.8060912304_maks.jpg" alt="Bohemian Sofa Pillow 19x19, Hand Embroidered Suzani Cushion Cover, Ethnic Floral Home Decor" loading="lazy" /></div>
-<div class="product-info">
-<span class="one-of-a-kind">1 of 1 Available</span>
-<div class="product-name">Bohemian Sofa Pillow 19x19, Hand Embroidered Suzani Cushion Cover, Ethnic Floral Home Decor</div>
-<div class="product-meta">Uzbekistan &middot; Hand-Embroidered</div>
-<div class="product-price">$65.00 &middot; Free Shipping</div>
-<a class="product-buy" href="https://www.etsy.com/listing/4511243497/bohemian-sofa-pillow-19x19-hand" target="_blank" rel="noopener">View &amp; Purchase</a>
-</div>
-</div>
-<script type="application/ld+json">
-{
-"@context": "https://schema.org",
-"@type": "Product",
-"name": "Bohemian Sofa Pillow 19x19, Hand Embroidered Suzani Cushion Cover, Ethnic Floral Home Decor",
-"image": "https://i.etsystatic.com/61471058/r/il/064c8f/8060912304/il_570xN.8060912304_maks.jpg",
-"url": "https://www.etsy.com/listing/4511243497/bohemian-sofa-pillow-19x19-hand",
-"sku": "4511243497",
-"brand": { "@type": "Brand", "name": "bkCAMUR Home" },
-"offers": {
-"@type": "Offer",
-"url": "https://www.etsy.com/listing/4511243497/bohemian-sofa-pillow-19x19-hand",
-"priceCurrency": "USD",
-"price": "65.00",
-"availability": "https://schema.org/InStock",
-"itemCondition": "https://schema.org/UsedCondition"
-}
-}
-</script>
-
-<div class="product-card">
-<div class="product-photo"><img src="https://i.etsystatic.com/61471058/r/il/89fc7a/8093667569/il_570xN.8093667569_apwf.jpg" alt="Floral Embroidered Cushion Cover 17x18, Suzani Throw Pillow, Colorful Bohemian Home Decor" loading="lazy" /></div>
-<div class="product-info">
-<span class="one-of-a-kind">1 of 1 Available</span>
-<div class="product-name">Floral Embroidered Cushion Cover 17x18, Suzani Throw Pillow, Colorful Bohemian Home Decor</div>
-<div class="product-meta">Uzbekistan &middot; Hand-Embroidered</div>
-<div class="product-price">$65.00 &middot; Free Shipping</div>
-<a class="product-buy" href="https://www.etsy.com/listing/4509145120/floral-embroidered-cushion-cover-17x18" target="_blank" rel="noopener">View &amp; Purchase</a>
-</div>
-</div>
-<script type="application/ld+json">
-{
-"@context": "https://schema.org",
-"@type": "Product",
-"name": "Floral Embroidered Cushion Cover 17x18, Suzani Throw Pillow, Colorful Bohemian Home Decor",
-"image": "https://i.etsystatic.com/61471058/r/il/89fc7a/8093667569/il_570xN.8093667569_apwf.jpg",
-"url": "https://www.etsy.com/listing/4509145120/floral-embroidered-cushion-cover-17x18",
-"sku": "4509145120",
-"brand": { "@type": "Brand", "name": "bkCAMUR Home" },
-"offers": {
-"@type": "Offer",
-"url": "https://www.etsy.com/listing/4509145120/floral-embroidered-cushion-cover-17x18",
-"priceCurrency": "USD",
-"price": "65.00",
-"availability": "https://schema.org/InStock",
-"itemCondition": "https://schema.org/UsedCondition"
-}
-}
-</script>
-
-<div class="product-card">
-<div class="product-photo"><img src="https://i.etsystatic.com/61471058/r/il/9ba8ed/8093661993/il_570xN.8093661993_1llf.jpg" alt="Sweetheart Floral Suzani Pillow Cover 18x18, Hand Embroidered Cushion, Romantic Boho Decor" loading="lazy" /></div>
-<div class="product-info">
-<span class="one-of-a-kind">1 of 1 Available</span>
-<div class="product-name">Sweetheart Floral Suzani Pillow Cover 18x18, Hand Embroidered Cushion, Romantic Boho Decor</div>
-<div class="product-meta">Uzbekistan &middot; Hand-Embroidered</div>
-<div class="product-price">$65.00 &middot; Free Shipping</div>
-<a class="product-buy" href="https://www.etsy.com/listing/4509138277/sweetheart-floral-suzani-pillow-cover" target="_blank" rel="noopener">View &amp; Purchase</a>
-</div>
-</div>
-<script type="application/ld+json">
-{
-"@context": "https://schema.org",
-"@type": "Product",
-"name": "Sweetheart Floral Suzani Pillow Cover 18x18, Hand Embroidered Cushion, Romantic Boho Decor",
-"image": "https://i.etsystatic.com/61471058/r/il/9ba8ed/8093661993/il_570xN.8093661993_1llf.jpg",
-"url": "https://www.etsy.com/listing/4509138277/sweetheart-floral-suzani-pillow-cover",
-"sku": "4509138277",
-"brand": { "@type": "Brand", "name": "bkCAMUR Home" },
-"offers": {
-"@type": "Offer",
-"url": "https://www.etsy.com/listing/4509138277/sweetheart-floral-suzani-pillow-cover",
-"priceCurrency": "USD",
-"price": "65.00",
-"availability": "https://schema.org/InStock",
-"itemCondition": "https://schema.org/UsedCondition"
-}
-}
-</script>
-
-<div class="product-card">
-<div class="product-photo"><img src="https://i.etsystatic.com/61471058/r/il/926bd0/8045731698/il_570xN.8045731698_kh7y.jpg" alt="Handmade Suzani Pillow Case 20x20, Bold Floral Silk Embroidery, Eclectic Interior Accent" loading="lazy" /></div>
-<div class="product-info">
-<span class="one-of-a-kind">1 of 1 Available</span>
-<div class="product-name">Handmade Suzani Pillow Case 20x20, Bold Floral Silk Embroidery, Eclectic Interior Accent</div>
-<div class="product-meta">Uzbekistan &middot; Hand-Embroidered</div>
-<div class="product-price">$85.00 &middot; Free Shipping</div>
-<a class="product-buy" href="https://www.etsy.com/listing/4506557076/handmade-suzani-pillow-case-20x20-bold" target="_blank" rel="noopener">View &amp; Purchase</a>
-</div>
-</div>
-<script type="application/ld+json">
-{
-"@context": "https://schema.org",
-"@type": "Product",
-"name": "Handmade Suzani Pillow Case 20x20, Bold Floral Silk Embroidery, Eclectic Interior Accent",
-"image": "https://i.etsystatic.com/61471058/r/il/926bd0/8045731698/il_570xN.8045731698_kh7y.jpg",
-"url": "https://www.etsy.com/listing/4506557076/handmade-suzani-pillow-case-20x20-bold",
-"sku": "4506557076",
-"brand": { "@type": "Brand", "name": "bkCAMUR Home" },
-"offers": {
-"@type": "Offer",
-"url": "https://www.etsy.com/listing/4506557076/handmade-suzani-pillow-case-20x20-bold",
-"priceCurrency": "USD",
-"price": "85.00",
-"availability": "https://schema.org/InStock",
-"itemCondition": "https://schema.org/UsedCondition"
-}
-}
-</script>
-
-<div class="product-card">
-<div class="product-photo"><img src="https://i.etsystatic.com/61471058/r/il/88c0d7/8041127790/il_570xN.8041127790_bgy6.jpg" alt="Hand Embroidered Suzani Pillow Cover, Butterfly Design, Boho Floral Throw, Multicolor Ethnic Home Decor" loading="lazy" /></div>
-<div class="product-info">
-<span class="one-of-a-kind">1 of 1 Available</span>
-<div class="product-name">Hand Embroidered Suzani Pillow Cover, Butterfly Design, Boho Floral Throw, Multicolor Ethnic Home Decor</div>
-<div class="product-meta">Uzbekistan &middot; Hand-Embroidered</div>
-<div class="product-price">$65.00 &middot; Free Shipping</div>
-<a class="product-buy" href="https://www.etsy.com/listing/4508450685/hand-embroidered-suzani-pillow-cover" target="_blank" rel="noopener">View &amp; Purchase</a>
-</div>
-</div>
-<script type="application/ld+json">
-{
-"@context": "https://schema.org",
-"@type": "Product",
-"name": "Hand Embroidered Suzani Pillow Cover, Butterfly Design, Boho Floral Throw, Multicolor Ethnic Home Decor",
-"image": "https://i.etsystatic.com/61471058/r/il/88c0d7/8041127790/il_570xN.8041127790_bgy6.jpg",
-"url": "https://www.etsy.com/listing/4508450685/hand-embroidered-suzani-pillow-cover",
-"sku": "4508450685",
-"brand": { "@type": "Brand", "name": "bkCAMUR Home" },
-"offers": {
-"@type": "Offer",
-"url": "https://www.etsy.com/listing/4508450685/hand-embroidered-suzani-pillow-cover",
-"priceCurrency": "USD",
-"price": "65.00",
-"availability": "https://schema.org/InStock",
-"itemCondition": "https://schema.org/UsedCondition"
-}
-}
-</script>
-
-<div class="product-card">
-<div class="product-photo"><img src="https://i.etsystatic.com/61471058/r/il/acd745/8041115966/il_570xN.8041115966_9bn8.jpg" alt="Vibrant Boho Cushion Cover 18x18, Hand Stitched Suzani Throw Pillow, Ethnic Home Styling" loading="lazy" /></div>
-<div class="product-info">
-<span class="one-of-a-kind">1 of 1 Available</span>
-<div class="product-name">Vibrant Boho Cushion Cover 18x18, Hand Stitched Suzani Throw Pillow, Ethnic Home Styling</div>
-<div class="product-meta">Uzbekistan &middot; Hand-Embroidered</div>
-<div class="product-price">$65.00 &middot; Free Shipping</div>
-<a class="product-buy" href="https://www.etsy.com/listing/4508447615/vibrant-boho-cushion-cover-18x18-hand" target="_blank" rel="noopener">View &amp; Purchase</a>
-</div>
-</div>
-<script type="application/ld+json">
-{
-"@context": "https://schema.org",
-"@type": "Product",
-"name": "Vibrant Boho Cushion Cover 18x18, Hand Stitched Suzani Throw Pillow, Ethnic Home Styling",
-"image": "https://i.etsystatic.com/61471058/r/il/acd745/8041115966/il_570xN.8041115966_9bn8.jpg",
-"url": "https://www.etsy.com/listing/4508447615/vibrant-boho-cushion-cover-18x18-hand",
-"sku": "4508447615",
-"brand": { "@type": "Brand", "name": "bkCAMUR Home" },
-"offers": {
-"@type": "Offer",
-"url": "https://www.etsy.com/listing/4508447615/vibrant-boho-cushion-cover-18x18-hand",
-"priceCurrency": "USD",
-"price": "65.00",
-"availability": "https://schema.org/InStock",
-"itemCondition": "https://schema.org/UsedCondition"
-}
-}
-</script>
-
-<div class="product-card">
-<div class="product-photo"><img src="https://i.etsystatic.com/61471058/r/il/45cec0/8041121824/il_570xN.8041121824_b4uc.jpg" alt="Parrot Motif Suzani Pillow Cover 18x19, Hand Embroidered Bird Cushion, Whimsical Boho Decor" loading="lazy" /></div>
-<div class="product-info">
-<span class="one-of-a-kind">1 of 1 Available</span>
-<div class="product-name">Parrot Motif Suzani Pillow Cover 18x19, Hand Embroidered Bird Cushion, Whimsical Boho Decor</div>
-<div class="product-meta">Uzbekistan &middot; Hand-Embroidered</div>
-<div class="product-price">$65.00 &middot; Free Shipping</div>
-<a class="product-buy" href="https://www.etsy.com/listing/4508452322/parrot-motif-suzani-pillow-cover-18x19" target="_blank" rel="noopener">View &amp; Purchase</a>
-</div>
-</div>
-<script type="application/ld+json">
-{
-"@context": "https://schema.org",
-"@type": "Product",
-"name": "Parrot Motif Suzani Pillow Cover 18x19, Hand Embroidered Bird Cushion, Whimsical Boho Decor",
-"image": "https://i.etsystatic.com/61471058/r/il/45cec0/8041121824/il_570xN.8041121824_b4uc.jpg",
-"url": "https://www.etsy.com/listing/4508452322/parrot-motif-suzani-pillow-cover-18x19",
-"sku": "4508452322",
-"brand": { "@type": "Brand", "name": "bkCAMUR Home" },
-"offers": {
-"@type": "Offer",
-"url": "https://www.etsy.com/listing/4508452322/parrot-motif-suzani-pillow-cover-18x19",
-"priceCurrency": "USD",
-"price": "65.00",
-"availability": "https://schema.org/InStock",
-"itemCondition": "https://schema.org/UsedCondition"
-}
-}
-</script>
-
-<div class="product-card">
-<div class="product-photo"><img src="https://i.etsystatic.com/61471058/r/il/f5d185/8088995785/il_570xN.8088995785_97vs.jpg" alt="Artisan Embroidered Pillow 17x17, Suzani Cushion Cover, Colorful Eclectic Accent Decor" loading="lazy" /></div>
-<div class="product-info">
-<span class="one-of-a-kind">1 of 1 Available</span>
-<div class="product-name">Artisan Embroidered Pillow 17x17, Suzani Cushion Cover, Colorful Eclectic Accent Decor</div>
-<div class="product-meta">Uzbekistan &middot; Hand-Embroidered</div>
-<div class="product-price">$65.00 &middot; Free Shipping</div>
-<a class="product-buy" href="https://www.etsy.com/listing/4508445714/artisan-embroidered-pillow-17x17-suzani" target="_blank" rel="noopener">View &amp; Purchase</a>
-</div>
-</div>
-<script type="application/ld+json">
-{
-"@context": "https://schema.org",
-"@type": "Product",
-"name": "Artisan Embroidered Pillow 17x17, Suzani Cushion Cover, Colorful Eclectic Accent Decor",
-"image": "https://i.etsystatic.com/61471058/r/il/f5d185/8088995785/il_570xN.8088995785_97vs.jpg",
-"url": "https://www.etsy.com/listing/4508445714/artisan-embroidered-pillow-17x17-suzani",
-"sku": "4508445714",
-"brand": { "@type": "Brand", "name": "bkCAMUR Home" },
-"offers": {
-"@type": "Offer",
-"url": "https://www.etsy.com/listing/4508445714/artisan-embroidered-pillow-17x17-suzani",
-"priceCurrency": "USD",
-"price": "65.00",
-"availability": "https://schema.org/InStock",
-"itemCondition": "https://schema.org/UsedCondition"
-}
-}
-</script>
-
-<div class="product-card">
-<div class="product-photo"><img src="https://i.etsystatic.com/61471058/r/il/e99830/8041077286/il_570xN.8041077286_iqzz.jpg" alt="Plum Garden Suzani Pillow Cover 20x20, Hand Embroidered Cushion Case, Rich Boho Color Accent" loading="lazy" /></div>
-<div class="product-info">
-<span class="one-of-a-kind">1 of 1 Available</span>
-<div class="product-name">Plum Garden Suzani Pillow Cover 20x20, Hand Embroidered Cushion Case, Rich Boho Color Accent</div>
-<div class="product-meta">Uzbekistan &middot; Hand-Embroidered</div>
-<div class="product-price">$65.00 &middot; Free Shipping</div>
-<a class="product-buy" href="https://www.etsy.com/listing/4508444956/plum-garden-suzani-pillow-cover-20x20" target="_blank" rel="noopener">View &amp; Purchase</a>
-</div>
-</div>
-<script type="application/ld+json">
-{
-"@context": "https://schema.org",
-"@type": "Product",
-"name": "Plum Garden Suzani Pillow Cover 20x20, Hand Embroidered Cushion Case, Rich Boho Color Accent",
-"image": "https://i.etsystatic.com/61471058/r/il/e99830/8041077286/il_570xN.8041077286_iqzz.jpg",
-"url": "https://www.etsy.com/listing/4508444956/plum-garden-suzani-pillow-cover-20x20",
-"sku": "4508444956",
-"brand": { "@type": "Brand", "name": "bkCAMUR Home" },
-"offers": {
-"@type": "Offer",
-"url": "https://www.etsy.com/listing/4508444956/plum-garden-suzani-pillow-cover-20x20",
-"priceCurrency": "USD",
-"price": "65.00",
-"availability": "https://schema.org/InStock",
-"itemCondition": "https://schema.org/UsedCondition"
-}
-}
-</script>
-
-<div class="product-card">
-<div class="product-photo"><img src="https://i.etsystatic.com/61471058/r/il/b6e35e/8041064302/il_570xN.8041064302_sr2d.jpg" alt="Hand Embroidered Silk Suzani Pillow Cover, Boho Floral Throw Pillow, Multicolor Ethnic Home Decor" loading="lazy" /></div>
-<div class="product-info">
-<span class="one-of-a-kind">1 of 1 Available</span>
-<div class="product-name">Hand Embroidered Silk Suzani Pillow Cover, Boho Floral Throw Pillow, Multicolor Ethnic Home Decor</div>
-<div class="product-meta">Uzbekistan &middot; Hand-Embroidered</div>
-<div class="product-price">$99.00 &middot; Free Shipping</div>
-<a class="product-buy" href="https://www.etsy.com/listing/4508440025/hand-embroidered-silk-suzani-pillow" target="_blank" rel="noopener">View &amp; Purchase</a>
-</div>
-</div>
-<script type="application/ld+json">
-{
-"@context": "https://schema.org",
-"@type": "Product",
-"name": "Hand Embroidered Silk Suzani Pillow Cover, Boho Floral Throw Pillow, Multicolor Ethnic Home Decor",
-"image": "https://i.etsystatic.com/61471058/r/il/b6e35e/8041064302/il_570xN.8041064302_sr2d.jpg",
-"url": "https://www.etsy.com/listing/4508440025/hand-embroidered-silk-suzani-pillow",
-"sku": "4508440025",
-"brand": { "@type": "Brand", "name": "bkCAMUR Home" },
-"offers": {
-"@type": "Offer",
-"url": "https://www.etsy.com/listing/4508440025/hand-embroidered-silk-suzani-pillow",
-"priceCurrency": "USD",
-"price": "99.00",
-"availability": "https://schema.org/InStock",
-"itemCondition": "https://schema.org/UsedCondition"
-}
-}
-</script>
-
-<div class="product-card">
-<div class="product-photo"><img src="https://i.etsystatic.com/61471058/r/il/d10c47/8029031934/il_570xN.8029031934_9ngw.jpg" alt="Violet Bloom Suzani Pillow Cover 18x18, Hand Embroidered Boho Cushion, Purple Accent Decor" loading="lazy" /></div>
-<div class="product-info">
-<span class="one-of-a-kind">1 of 1 Available</span>
-<div class="product-name">Violet Bloom Suzani Pillow Cover 18x18, Hand Embroidered Boho Cushion, Purple Accent Decor</div>
-<div class="product-meta">Uzbekistan &middot; Hand-Embroidered</div>
-<div class="product-price">$65.00 &middot; Free Shipping</div>
-<a class="product-buy" href="https://www.etsy.com/listing/4506554773/violet-bloom-suzani-pillow-cover-18x18" target="_blank" rel="noopener">View &amp; Purchase</a>
-</div>
-</div>
-<script type="application/ld+json">
-{
-"@context": "https://schema.org",
-"@type": "Product",
-"name": "Violet Bloom Suzani Pillow Cover 18x18, Hand Embroidered Boho Cushion, Purple Accent Decor",
-"image": "https://i.etsystatic.com/61471058/r/il/d10c47/8029031934/il_570xN.8029031934_9ngw.jpg",
-"url": "https://www.etsy.com/listing/4506554773/violet-bloom-suzani-pillow-cover-18x18",
-"sku": "4506554773",
-"brand": { "@type": "Brand", "name": "bkCAMUR Home" },
-"offers": {
-"@type": "Offer",
-"url": "https://www.etsy.com/listing/4506554773/violet-bloom-suzani-pillow-cover-18x18",
-"priceCurrency": "USD",
-"price": "65.00",
-"availability": "https://schema.org/InStock",
-"itemCondition": "https://schema.org/UsedCondition"
-}
-}
-</script>
-
-<div class="product-card">
-<div class="product-photo"><img src="https://i.etsystatic.com/61471058/r/il/15e76e/8029006684/il_570xN.8029006684_69qr.jpg" alt="Moody Floral Suzani Pillow Cover 18x18, Hand Embroidered Cushion, Dark Boho Home Accent" loading="lazy" /></div>
-<div class="product-info">
-<span class="one-of-a-kind">1 of 1 Available</span>
-<div class="product-name">Moody Floral Suzani Pillow Cover 18x18, Hand Embroidered Cushion, Dark Boho Home Accent</div>
-<div class="product-meta">Uzbekistan &middot; Hand-Embroidered</div>
-<div class="product-price">$65.00 &middot; Free Shipping</div>
-<a class="product-buy" href="https://www.etsy.com/listing/4506549559/moody-floral-suzani-pillow-cover-18x18" target="_blank" rel="noopener">View &amp; Purchase</a>
-</div>
-</div>
-<script type="application/ld+json">
-{
-"@context": "https://schema.org",
-"@type": "Product",
-"name": "Moody Floral Suzani Pillow Cover 18x18, Hand Embroidered Cushion, Dark Boho Home Accent",
-"image": "https://i.etsystatic.com/61471058/r/il/15e76e/8029006684/il_570xN.8029006684_69qr.jpg",
-"url": "https://www.etsy.com/listing/4506549559/moody-floral-suzani-pillow-cover-18x18",
-"sku": "4506549559",
-"brand": { "@type": "Brand", "name": "bkCAMUR Home" },
-"offers": {
-"@type": "Offer",
-"url": "https://www.etsy.com/listing/4506549559/moody-floral-suzani-pillow-cover-18x18",
-"priceCurrency": "USD",
-"price": "65.00",
-"availability": "https://schema.org/InStock",
-"itemCondition": "https://schema.org/UsedCondition"
-}
-}
-</script>
-
-<div class="product-card">
-<div class="product-photo"><img src="https://i.etsystatic.com/61471058/r/il/23b327/7953800297/il_570xN.7953800297_od8y.jpg" alt="Pomegranate Songbird Suzani Pillow Cover 18x18, Hand Embroidered Folk Art Cushion, Boho Decor" loading="lazy" /></div>
-<div class="product-info">
-<span class="one-of-a-kind">1 of 1 Available</span>
-<div class="product-name">Pomegranate Songbird Suzani Pillow Cover 18x18, Hand Embroidered Folk Art Cushion, Boho Decor</div>
-<div class="product-meta">Uzbekistan &middot; Hand-Embroidered</div>
-<div class="product-price">$85.00 &middot; Free Shipping</div>
-<a class="product-buy" href="https://www.etsy.com/listing/4450830698/pomegranate-songbird-suzani-pillow-cover" target="_blank" rel="noopener">View &amp; Purchase</a>
-</div>
-</div>
-<script type="application/ld+json">
-{
-"@context": "https://schema.org",
-"@type": "Product",
-"name": "Pomegranate Songbird Suzani Pillow Cover 18x18, Hand Embroidered Folk Art Cushion, Boho Decor",
-"image": "https://i.etsystatic.com/61471058/r/il/23b327/7953800297/il_570xN.7953800297_od8y.jpg",
-"url": "https://www.etsy.com/listing/4450830698/pomegranate-songbird-suzani-pillow-cover",
-"sku": "4450830698",
-"brand": { "@type": "Brand", "name": "bkCAMUR Home" },
-"offers": {
-"@type": "Offer",
-"url": "https://www.etsy.com/listing/4450830698/pomegranate-songbird-suzani-pillow-cover",
-"priceCurrency": "USD",
-"price": "85.00",
-"availability": "https://schema.org/InStock",
-"itemCondition": "https://schema.org/UsedCondition"
-}
-}
-</script>
-
-<div class="product-card">
-<div class="product-photo"><img src="https://i.etsystatic.com/61471058/r/il/5b6e79/7957833343/il_570xN.7957833343_14jj.jpg" alt="Spring Floral Pillow Cover 18x18, Handmade Suzani Embroidery Cushion, Bright Bohemian Decor" loading="lazy" /></div>
-<div class="product-info">
-<span class="one-of-a-kind">1 of 1 Available</span>
-<div class="product-name">Spring Floral Pillow Cover 18x18, Handmade Suzani Embroidery Cushion, Bright Bohemian Decor</div>
-<div class="product-meta">Uzbekistan &middot; Hand-Embroidered</div>
-<div class="product-price">$65.00 &middot; Free Shipping</div>
-<a class="product-buy" href="https://www.etsy.com/listing/4488235753/spring-floral-pillow-cover-18x18" target="_blank" rel="noopener">View &amp; Purchase</a>
-</div>
-</div>
-<script type="application/ld+json">
-{
-"@context": "https://schema.org",
-"@type": "Product",
-"name": "Spring Floral Pillow Cover 18x18, Handmade Suzani Embroidery Cushion, Bright Bohemian Decor",
-"image": "https://i.etsystatic.com/61471058/r/il/5b6e79/7957833343/il_570xN.7957833343_14jj.jpg",
-"url": "https://www.etsy.com/listing/4488235753/spring-floral-pillow-cover-18x18",
-"sku": "4488235753",
-"brand": { "@type": "Brand", "name": "bkCAMUR Home" },
-"offers": {
-"@type": "Offer",
-"url": "https://www.etsy.com/listing/4488235753/spring-floral-pillow-cover-18x18",
-"priceCurrency": "USD",
-"price": "65.00",
-"availability": "https://schema.org/InStock",
-"itemCondition": "https://schema.org/UsedCondition"
-}
-}
-</script>
-
-<div class="product-card">
-<div class="product-photo"><img src="https://i.etsystatic.com/61471058/r/il/123a62/7905886746/il_570xN.7905886746_7cux.jpg" alt="Turkish Boho Pillow Cover 18x18, Suzani Silk Embroidery, Colorful Sofa Accent Cushion" loading="lazy" /></div>
-<div class="product-info">
-<span class="one-of-a-kind">1 of 1 Available</span>
-<div class="product-name">Turkish Boho Pillow Cover 18x18, Suzani Silk Embroidery, Colorful Sofa Accent Cushion</div>
-<div class="product-meta">Uzbekistan &middot; Hand-Embroidered</div>
-<div class="product-price">$65.00 &middot; Free Shipping</div>
-<a class="product-buy" href="https://www.etsy.com/listing/4487632437/turkish-boho-pillow-cover-18x18-suzani" target="_blank" rel="noopener">View &amp; Purchase</a>
-</div>
-</div>
-<script type="application/ld+json">
-{
-"@context": "https://schema.org",
-"@type": "Product",
-"name": "Turkish Boho Pillow Cover 18x18, Suzani Silk Embroidery, Colorful Sofa Accent Cushion",
-"image": "https://i.etsystatic.com/61471058/r/il/123a62/7905886746/il_570xN.7905886746_7cux.jpg",
-"url": "https://www.etsy.com/listing/4487632437/turkish-boho-pillow-cover-18x18-suzani",
-"sku": "4487632437",
-"brand": { "@type": "Brand", "name": "bkCAMUR Home" },
-"offers": {
-"@type": "Offer",
-"url": "https://www.etsy.com/listing/4487632437/turkish-boho-pillow-cover-18x18-suzani",
-"priceCurrency": "USD",
-"price": "65.00",
-"availability": "https://schema.org/InStock",
-"itemCondition": "https://schema.org/UsedCondition"
-}
-}
-</script>
-
-<div class="product-card">
-<div class="product-photo"><img src="https://i.etsystatic.com/61471058/r/il/6e4c94/7953829781/il_570xN.7953829781_dj6h.jpg" alt="Rosette Embroidered Pillow Cover 18x18, Suzani Boho Cushion Case, Charming Eclectic Decor" loading="lazy" /></div>
-<div class="product-info">
-<span class="one-of-a-kind">1 of 1 Available</span>
-<div class="product-name">Rosette Embroidered Pillow Cover 18x18, Suzani Boho Cushion Case, Charming Eclectic Decor</div>
-<div class="product-meta">Uzbekistan &middot; Hand-Embroidered</div>
-<div class="product-price">$65.00 &middot; Free Shipping</div>
-<a class="product-buy" href="https://www.etsy.com/listing/4487630735/rosette-embroidered-pillow-cover-18x18" target="_blank" rel="noopener">View &amp; Purchase</a>
-</div>
-</div>
-<script type="application/ld+json">
-{
-"@context": "https://schema.org",
-"@type": "Product",
-"name": "Rosette Embroidered Pillow Cover 18x18, Suzani Boho Cushion Case, Charming Eclectic Decor",
-"image": "https://i.etsystatic.com/61471058/r/il/6e4c94/7953829781/il_570xN.7953829781_dj6h.jpg",
-"url": "https://www.etsy.com/listing/4487630735/rosette-embroidered-pillow-cover-18x18",
-"sku": "4487630735",
-"brand": { "@type": "Brand", "name": "bkCAMUR Home" },
-"offers": {
-"@type": "Offer",
-"url": "https://www.etsy.com/listing/4487630735/rosette-embroidered-pillow-cover-18x18",
-"priceCurrency": "USD",
-"price": "65.00",
-"availability": "https://schema.org/InStock",
-"itemCondition": "https://schema.org/UsedCondition"
-}
-}
-</script>
-
-<div class="product-card">
-<div class="product-photo"><img src="https://i.etsystatic.com/61471058/r/il/1926f2/7957821119/il_570xN.7957821119_84cr.jpg" alt="Scarlet Blossom Suzani Cushion Cover 19x19, Hand Embroidered Throw Pillow, Boho Chic Decor" loading="lazy" /></div>
-<div class="product-info">
-<span class="one-of-a-kind">1 of 1 Available</span>
-<div class="product-name">Scarlet Blossom Suzani Cushion Cover 19x19, Hand Embroidered Throw Pillow, Boho Chic Decor</div>
-<div class="product-meta">Uzbekistan &middot; Hand-Embroidered</div>
-<div class="product-price">$65.00 &middot; Free Shipping</div>
-<a class="product-buy" href="https://www.etsy.com/listing/4488242422/scarlet-blossom-suzani-cushion-cover" target="_blank" rel="noopener">View &amp; Purchase</a>
-</div>
-</div>
-<script type="application/ld+json">
-{
-"@context": "https://schema.org",
-"@type": "Product",
-"name": "Scarlet Blossom Suzani Cushion Cover 19x19, Hand Embroidered Throw Pillow, Boho Chic Decor",
-"image": "https://i.etsystatic.com/61471058/r/il/1926f2/7957821119/il_570xN.7957821119_84cr.jpg",
-"url": "https://www.etsy.com/listing/4488242422/scarlet-blossom-suzani-cushion-cover",
-"sku": "4488242422",
-"brand": { "@type": "Brand", "name": "bkCAMUR Home" },
-"offers": {
-"@type": "Offer",
-"url": "https://www.etsy.com/listing/4488242422/scarlet-blossom-suzani-cushion-cover",
-"priceCurrency": "USD",
-"price": "65.00",
-"availability": "https://schema.org/InStock",
-"itemCondition": "https://schema.org/UsedCondition"
-}
-}
-</script>
-<!-- ETSY_SUZANI_END -->
-</div>
-<p class="shop-footnote">Every suzani above is pulled automatically from our <a href="https://www.etsy.com/shop/BKCAMURHOME" target="_blank" rel="noopener">Etsy shop</a> and kept in sync daily.</p>
+<p class="cat-viewall"><a href="/suzani-pillow-covers.html">View all Suzani Pillow Covers &rarr;</a></p>
+<p class="shop-footnote">A selection from the collection, synced daily from our <a href="https://www.etsy.com/shop/BKCAMURHOME" target="_blank" rel="noopener">Etsy shop</a>. See the full range on the category pages.</p>
 </div>
 </section>
 
@@ -1631,10 +1207,9 @@ color: var(--warm-white);
 </div>
 
 <div class="product-grid">
-<!-- ETSY_KILIM_PILLOW_START -->
-
+<!-- ETSY_KILIM_PILLOW_PREVIEW_START -->
 <div class="product-card">
-<div class="product-photo"><img src="https://i.etsystatic.com/61471058/r/il/f30190/8280194023/il_570xN.8280194023_oq7r.jpg" alt="Kilim Pillow Cover 18x18, Vintage Turkish Rug Pillow, Upcycled Wool Boho Accent" loading="lazy" /></div>
+<div class="product-photo"><img src="https://i.etsystatic.com/61471058/r/il/f30190/8280194023/il_570xN.8280194023_oq7r.jpg" alt="Kilim Pillow Cover 18x18, Vintage Turkish Rug Pillow, Upcycled Wool Boho Accent - Uzbek silk hand embroidery" loading="lazy" /></div>
 <div class="product-info">
 <span class="one-of-a-kind">1 of 1 Available</span>
 <div class="product-name">Kilim Pillow Cover 18x18, Vintage Turkish Rug Pillow, Upcycled Wool Boho Accent</div>
@@ -1662,9 +1237,8 @@ color: var(--warm-white);
 }
 }
 </script>
-
 <div class="product-card">
-<div class="product-photo"><img src="https://i.etsystatic.com/61471058/r/il/27aa0b/8340938659/il_570xN.8340938659_drx7.jpg" alt="Kilim Pillow Cover 20x20 Vintage Turkish Rug Pillow, Upcycled Wool Boho Accent" loading="lazy" /></div>
+<div class="product-photo"><img src="https://i.etsystatic.com/61471058/r/il/27aa0b/8340938659/il_570xN.8340938659_drx7.jpg" alt="Kilim Pillow Cover 20x20 Vintage Turkish Rug Pillow, Upcycled Wool Boho Accent - Uzbek silk hand embroidery" loading="lazy" /></div>
 <div class="product-info">
 <span class="one-of-a-kind">1 of 1 Available</span>
 <div class="product-name">Kilim Pillow Cover 20x20 Vintage Turkish Rug Pillow, Upcycled Wool Boho Accent</div>
@@ -1692,9 +1266,8 @@ color: var(--warm-white);
 }
 }
 </script>
-
 <div class="product-card">
-<div class="product-photo"><img src="https://i.etsystatic.com/61471058/r/il/f249c9/8280159051/il_570xN.8280159051_p53k.jpg" alt="Kilim Pillow Cover 20x20, Striped Pattern Vintage Turkish Rug Pillow, Upcycled Wool Boho Accent" loading="lazy" /></div>
+<div class="product-photo"><img src="https://i.etsystatic.com/61471058/r/il/f249c9/8280159051/il_570xN.8280159051_p53k.jpg" alt="Kilim Pillow Cover 20x20, Striped Pattern Vintage Turkish Rug Pillow, Upcycled Wool Boho Accent - Uzbek silk hand embroidery" loading="lazy" /></div>
 <div class="product-info">
 <span class="one-of-a-kind">1 of 1 Available</span>
 <div class="product-name">Kilim Pillow Cover 20x20, Striped Pattern Vintage Turkish Rug Pillow, Upcycled Wool Boho Accent</div>
@@ -1722,9 +1295,8 @@ color: var(--warm-white);
 }
 }
 </script>
-
 <div class="product-card">
-<div class="product-photo"><img src="https://i.etsystatic.com/61471058/r/il/bdd34f/8280145031/il_570xN.8280145031_tl8g.jpg" alt="Kilim Pillow Cover 20x20, Striped Pattern Vintage Turkish Rug Pillow, Upcycled Wool Boho Accent" loading="lazy" /></div>
+<div class="product-photo"><img src="https://i.etsystatic.com/61471058/r/il/bdd34f/8280145031/il_570xN.8280145031_tl8g.jpg" alt="Kilim Pillow Cover 20x20, Striped Pattern Vintage Turkish Rug Pillow, Upcycled Wool Boho Accent - Uzbek silk hand embroidery" loading="lazy" /></div>
 <div class="product-info">
 <span class="one-of-a-kind">1 of 1 Available</span>
 <div class="product-name">Kilim Pillow Cover 20x20, Striped Pattern Vintage Turkish Rug Pillow, Upcycled Wool Boho Accent</div>
@@ -1752,9 +1324,8 @@ color: var(--warm-white);
 }
 }
 </script>
-
 <div class="product-card">
-<div class="product-photo"><img src="https://i.etsystatic.com/61471058/r/il/4f1b41/8232363762/il_570xN.8232363762_n55c.jpg" alt="Kilim Pillow Cover 24x18, Vintage Turkish Rug Pillow, Upcycled Wool Boho Accent" loading="lazy" /></div>
+<div class="product-photo"><img src="https://i.etsystatic.com/61471058/r/il/4f1b41/8232363762/il_570xN.8232363762_n55c.jpg" alt="Kilim Pillow Cover 24x18, Vintage Turkish Rug Pillow, Upcycled Wool Boho Accent - Uzbek silk hand embroidery" loading="lazy" /></div>
 <div class="product-info">
 <span class="one-of-a-kind">1 of 1 Available</span>
 <div class="product-name">Kilim Pillow Cover 24x18, Vintage Turkish Rug Pillow, Upcycled Wool Boho Accent</div>
@@ -1782,9 +1353,8 @@ color: var(--warm-white);
 }
 }
 </script>
-
 <div class="product-card">
-<div class="product-photo"><img src="https://i.etsystatic.com/61471058/r/il/884417/8280208553/il_570xN.8280208553_k2tj.jpg" alt="Kilim Pillow Cover Pair 16x16, Matching Vintage Turkish Rug Pillows, Set of 2 Upcycled Wool Cushions" loading="lazy" /></div>
+<div class="product-photo"><img src="https://i.etsystatic.com/61471058/r/il/884417/8280208553/il_570xN.8280208553_k2tj.jpg" alt="Kilim Pillow Cover Pair 16x16, Matching Vintage Turkish Rug Pillows, Set of 2 Upcycled Wool Cushions - Uzbek silk hand embroidery" loading="lazy" /></div>
 <div class="product-info">
 <span class="one-of-a-kind">1 of 1 Available</span>
 <div class="product-name">Kilim Pillow Cover Pair 16x16, Matching Vintage Turkish Rug Pillows, Set of 2 Upcycled Wool Cushions</div>
@@ -1812,128 +1382,9 @@ color: var(--warm-white);
 }
 }
 </script>
-
-<div class="product-card">
-<div class="product-photo"><img src="https://i.etsystatic.com/61471058/r/il/ded837/8232262484/il_570xN.8232262484_tav0.jpg" alt="Kilim Pillow Cover 18x18, Vintage Turkish Rug Pillow, Upcycled Wool Boho Accent" loading="lazy" /></div>
-<div class="product-info">
-<span class="one-of-a-kind">1 of 1 Available</span>
-<div class="product-name">Kilim Pillow Cover 18x18, Vintage Turkish Rug Pillow, Upcycled Wool Boho Accent</div>
-<div class="product-meta">Turkey &middot; Flatwoven Kilim</div>
-<div class="product-price">$70.00 &middot; Free Shipping</div>
-<a class="product-buy" href="https://www.etsy.com/listing/4535242305/kilim-pillow-cover-18x18-vintage-turkish" target="_blank" rel="noopener">View &amp; Purchase</a>
+<!-- ETSY_KILIM_PILLOW_PREVIEW_END -->
 </div>
-</div>
-<script type="application/ld+json">
-{
-"@context": "https://schema.org",
-"@type": "Product",
-"name": "Kilim Pillow Cover 18x18, Vintage Turkish Rug Pillow, Upcycled Wool Boho Accent",
-"image": "https://i.etsystatic.com/61471058/r/il/ded837/8232262484/il_570xN.8232262484_tav0.jpg",
-"url": "https://www.etsy.com/listing/4535242305/kilim-pillow-cover-18x18-vintage-turkish",
-"sku": "4535242305",
-"brand": { "@type": "Brand", "name": "bkCAMUR Home" },
-"offers": {
-"@type": "Offer",
-"url": "https://www.etsy.com/listing/4535242305/kilim-pillow-cover-18x18-vintage-turkish",
-"priceCurrency": "USD",
-"price": "70.00",
-"availability": "https://schema.org/InStock",
-"itemCondition": "https://schema.org/UsedCondition"
-}
-}
-</script>
-
-<div class="product-card">
-<div class="product-photo"><img src="https://i.etsystatic.com/61471058/r/il/f7fe11/8279049357/il_570xN.8279049357_swff.jpg" alt="Mustard Yellow Striped Kilim Pillow Cover 20x20, Vintage Turkish Wool Cushion, Boho Accent Pillow" loading="lazy" /></div>
-<div class="product-info">
-<span class="one-of-a-kind">1 of 1 Available</span>
-<div class="product-name">Mustard Yellow Striped Kilim Pillow Cover 20x20, Vintage Turkish Wool Cushion, Boho Accent Pillow</div>
-<div class="product-meta">Turkey &middot; Flatwoven Kilim</div>
-<div class="product-price">$70.00 &middot; Free Shipping</div>
-<a class="product-buy" href="https://www.etsy.com/listing/4535111220/mustard-yellow-striped-kilim-pillow" target="_blank" rel="noopener">View &amp; Purchase</a>
-</div>
-</div>
-<script type="application/ld+json">
-{
-"@context": "https://schema.org",
-"@type": "Product",
-"name": "Mustard Yellow Striped Kilim Pillow Cover 20x20, Vintage Turkish Wool Cushion, Boho Accent Pillow",
-"image": "https://i.etsystatic.com/61471058/r/il/f7fe11/8279049357/il_570xN.8279049357_swff.jpg",
-"url": "https://www.etsy.com/listing/4535111220/mustard-yellow-striped-kilim-pillow",
-"sku": "4535111220",
-"brand": { "@type": "Brand", "name": "bkCAMUR Home" },
-"offers": {
-"@type": "Offer",
-"url": "https://www.etsy.com/listing/4535111220/mustard-yellow-striped-kilim-pillow",
-"priceCurrency": "USD",
-"price": "70.00",
-"availability": "https://schema.org/InStock",
-"itemCondition": "https://schema.org/UsedCondition"
-}
-}
-</script>
-
-<div class="product-card">
-<div class="product-photo"><img src="https://i.etsystatic.com/61471058/r/il/a453f1/8279042297/il_570xN.8279042297_1s9c.jpg" alt="Red Striped Kilim Pillow Cover 20x20, Vintage Turkish Wool Cushion, Southwestern Boho Decor" loading="lazy" /></div>
-<div class="product-info">
-<span class="one-of-a-kind">1 of 1 Available</span>
-<div class="product-name">Red Striped Kilim Pillow Cover 20x20, Vintage Turkish Wool Cushion, Southwestern Boho Decor</div>
-<div class="product-meta">Turkey &middot; Flatwoven Kilim</div>
-<div class="product-price">$70.00 &middot; Free Shipping</div>
-<a class="product-buy" href="https://www.etsy.com/listing/4535096857/red-striped-kilim-pillow-cover-20x20" target="_blank" rel="noopener">View &amp; Purchase</a>
-</div>
-</div>
-<script type="application/ld+json">
-{
-"@context": "https://schema.org",
-"@type": "Product",
-"name": "Red Striped Kilim Pillow Cover 20x20, Vintage Turkish Wool Cushion, Southwestern Boho Decor",
-"image": "https://i.etsystatic.com/61471058/r/il/a453f1/8279042297/il_570xN.8279042297_1s9c.jpg",
-"url": "https://www.etsy.com/listing/4535096857/red-striped-kilim-pillow-cover-20x20",
-"sku": "4535096857",
-"brand": { "@type": "Brand", "name": "bkCAMUR Home" },
-"offers": {
-"@type": "Offer",
-"url": "https://www.etsy.com/listing/4535096857/red-striped-kilim-pillow-cover-20x20",
-"priceCurrency": "USD",
-"price": "70.00",
-"availability": "https://schema.org/InStock",
-"itemCondition": "https://schema.org/UsedCondition"
-}
-}
-</script>
-
-<div class="product-card">
-<div class="product-photo"><img src="https://i.etsystatic.com/61471058/r/il/c906cc/8230963708/il_570xN.8230963708_mnsw.jpg" alt="Orange Pink Striped Kilim Pillow Cover 20x20, Vintage Turkish Wool Cushion, Colorful Boho Accent" loading="lazy" /></div>
-<div class="product-info">
-<span class="one-of-a-kind">1 of 1 Available</span>
-<div class="product-name">Orange Pink Striped Kilim Pillow Cover 20x20, Vintage Turkish Wool Cushion, Colorful Boho Accent</div>
-<div class="product-meta">Turkey &middot; Flatwoven Kilim</div>
-<div class="product-price">$70.00 &middot; Free Shipping</div>
-<a class="product-buy" href="https://www.etsy.com/listing/4535108426/orange-pink-striped-kilim-pillow-cover" target="_blank" rel="noopener">View &amp; Purchase</a>
-</div>
-</div>
-<script type="application/ld+json">
-{
-"@context": "https://schema.org",
-"@type": "Product",
-"name": "Orange Pink Striped Kilim Pillow Cover 20x20, Vintage Turkish Wool Cushion, Colorful Boho Accent",
-"image": "https://i.etsystatic.com/61471058/r/il/c906cc/8230963708/il_570xN.8230963708_mnsw.jpg",
-"url": "https://www.etsy.com/listing/4535108426/orange-pink-striped-kilim-pillow-cover",
-"sku": "4535108426",
-"brand": { "@type": "Brand", "name": "bkCAMUR Home" },
-"offers": {
-"@type": "Offer",
-"url": "https://www.etsy.com/listing/4535108426/orange-pink-striped-kilim-pillow-cover",
-"priceCurrency": "USD",
-"price": "70.00",
-"availability": "https://schema.org/InStock",
-"itemCondition": "https://schema.org/UsedCondition"
-}
-}
-</script>
-<!-- ETSY_KILIM_PILLOW_END -->
-</div>
+<p class="cat-viewall"><a href="/kilim-pillow-covers.html">View all Kilim Pillow Covers &rarr;</a></p>
 </div>
 </section>
 
@@ -1950,10 +1401,9 @@ color: var(--warm-white);
 </div>
 
 <div class="product-grid">
-<!-- ETSY_RUGS_START -->
-
+<!-- ETSY_RUGS_PREVIEW_START -->
 <div class="product-card">
-<div class="product-photo"><img src="https://i.etsystatic.com/61471058/r/il/089468/8299188947/il_570xN.8299188947_ea7o.jpg" alt="Vintage Sumak Kilim Rug 6.2 x4 ft, Muted Pastel Beige Handwoven Turkish Flatware Area Rug, Natural Soumac Wool Rug, Living Room decor" loading="lazy" /></div>
+<div class="product-photo"><img src="https://i.etsystatic.com/61471058/r/il/089468/8299188947/il_570xN.8299188947_ea7o.jpg" alt="Vintage Sumak Kilim Rug 6.2 x4 ft, Muted Pastel Beige Handwoven Turkish Flatware Area Rug, Natural Soumac Wool Rug, Living Room decor - Uzbek silk hand embroidery" loading="lazy" /></div>
 <div class="product-info">
 <span class="one-of-a-kind">1 of 1 Available</span>
 <div class="product-name">Vintage Sumak Kilim Rug 6.2 x4 ft, Muted Pastel Beige Handwoven Turkish Flatware Area Rug, Natural Soumac Wool Rug, Living Room decor</div>
@@ -1981,9 +1431,8 @@ color: var(--warm-white);
 }
 }
 </script>
-
 <div class="product-card">
-<div class="product-photo"><img src="https://i.etsystatic.com/61471058/r/il/ddcfd2/8243459220/il_570xN.8243459220_2o2n.jpg" alt="Vintage Yalameh Rug, Handmade Wool Area Rug, Red Blue Tribal Persian Style Carpet, Geometric Oriental Runner, Boho Home Decor" loading="lazy" /></div>
+<div class="product-photo"><img src="https://i.etsystatic.com/61471058/r/il/ddcfd2/8243459220/il_570xN.8243459220_2o2n.jpg" alt="Vintage Yalameh Rug, Handmade Wool Area Rug, Red Blue Tribal Persian Style Carpet, Geometric Oriental Runner, Boho Home Decor - Uzbek silk hand embroidery" loading="lazy" /></div>
 <div class="product-info">
 <span class="one-of-a-kind">1 of 1 Available</span>
 <div class="product-name">Vintage Yalameh Rug, Handmade Wool Area Rug, Red Blue Tribal Persian Style Carpet, Geometric Oriental Runner, Boho Home Decor</div>
@@ -2011,8 +1460,9 @@ color: var(--warm-white);
 }
 }
 </script>
-<!-- ETSY_RUGS_END -->
+<!-- ETSY_RUGS_PREVIEW_END -->
 </div>
+<p class="cat-viewall"><a href="/turkish-rugs-kilims.html">View all Turkish Rugs &amp; Kilims &rarr;</a></p>
 </div>
 </section>
 
@@ -2112,15 +1562,15 @@ color: var(--warm-white);
 <div class="footer-links">
 <div class="footer-col">
 <h4>Shop</h4>
-<a href="#suzani">Suzani Pillows</a>
-<a href="#kilim-pillows">Kilim Pillows</a>
-<a href="#rugs-kilims">Rugs &amp; Kilims</a>
+<a href="/suzani-pillow-covers.html">Suzani Pillow Covers</a>
+<a href="/kilim-pillow-covers.html">Kilim Pillow Covers</a>
+<a href="/turkish-rugs-kilims.html">Turkish Rugs &amp; Kilims</a>
 <a href="https://www.etsy.com/shop/BKCAMURHOME" target="_blank" rel="noopener">Full Collection on Etsy</a>
 </div>
 <div class="footer-col">
 <h4>Company</h4>
 <a href="#story">Our Story</a>
-<a href="blog/index.html">Journal</a>
+<a href="/blog/">Journal</a>
 <a href="wholesale.html">Trade / Wholesale</a>
 <a href="sourcing.html">Custom Sourcing</a>
 <a href="#policies">Shipping &amp; Policies</a>

@@ -1,0 +1,786 @@
+/* bkCAMUR Home - shared site styles.
+   Extracted verbatim from index.html so the category pages don't each
+   carry another copy. Existing pages still inline their own; migrating
+   them onto this file is a safe follow-up. */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+--near-black: #201409;
+--espresso: #2B1B12;
+--terracotta: #B5563C;
+--terracotta-deep: #96432D;
+--cream: #F5EDE0;
+--warm-white: #FBF7EF;
+--gold: #C9A24C;
+--taupe-grey: #7C6F5E;
+--line: #E4D9C6;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+background: var(--warm-white);
+color: var(--espresso);
+font-family: 'Montserrat', sans-serif;
+font-weight: 300;
+line-height: 1.6;
+}
+
+a { color: inherit; }
+img { max-width: 100%; display: block; }
+
+h1, h2, h3, .display {
+font-family: 'Cormorant Garamond', serif;
+font-weight: 500;
+line-height: 1.12;
+}
+
+.eyebrow {
+font-size: 11px;
+letter-spacing: 0.32em;
+text-transform: uppercase;
+color: var(--terracotta);
+font-weight: 500;
+margin-bottom: 16px;
+display: block;
+}
+
+.eyebrow.on-dark { color: var(--gold); }
+
+.container {
+max-width: 1240px;
+margin: 0 auto;
+padding: 0 40px;
+}
+
+header {
+position: sticky;
+top: 0;
+z-index: 200;
+background: rgba(251, 247, 239, 0.94);
+backdrop-filter: blur(8px);
+border-bottom: 1px solid var(--line);
+}
+
+nav {
+max-width: 1240px;
+margin: 0 auto;
+padding: 22px 40px;
+display: flex;
+align-items: center;
+justify-content: space-between;
+}
+
+.logo {
+font-family: 'Cormorant Garamond', serif;
+font-size: 25px;
+letter-spacing: 0.04em;
+text-decoration: none;
+color: var(--espresso);
+font-weight: 600;
+white-space: nowrap;
+display: flex;
+align-items: center;
+gap: 10px;
+}
+
+.logo-mark { width: 36px; height: 36px; border-radius: 8px; object-fit: cover; flex-shrink: 0; }
+
+.logo span { color: var(--terracotta); font-style: italic; font-weight: 400; }
+
+.nav-links {
+display: flex;
+gap: 14px;
+margin: 0 20px;
+list-style: none;
+}
+
+.nav-links a {
+font-size: 10px;
+letter-spacing: 0.06em;
+white-space: nowrap;
+text-transform: uppercase;
+text-decoration: none;
+color: var(--espresso);
+transition: color 0.25s ease;
+}
+
+.nav-links a:hover { color: var(--terracotta); }
+
+.nav-cta {
+background: var(--espresso);
+color: var(--warm-white) !important;
+padding: 13px 22px;
+font-size: 10px;
+letter-spacing: 0.2em;
+text-transform: uppercase;
+text-decoration: none;
+white-space: nowrap;
+transition: background 0.25s ease;
+}
+.nav-cta:hover { background: var(--near-black); }
+
+.menu-toggle {
+display: none;
+flex-direction: column;
+justify-content: center;
+gap: 5px;
+width: 30px;
+height: 30px;
+background: none;
+border: none;
+cursor: pointer;
+padding: 0;
+z-index: 310;
+}
+.menu-toggle span {
+display: block;
+width: 100%;
+height: 2px;
+background: var(--espresso);
+transition: transform 0.25s ease, opacity 0.25s ease;
+}
+.menu-toggle.active span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.menu-toggle.active span:nth-child(2) { opacity: 0; }
+.menu-toggle.active span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+.nav-overlay {
+display: none;
+position: fixed;
+inset: 0;
+background: rgba(32,20,9,0.5);
+z-index: 250;
+opacity: 0;
+visibility: hidden;
+transition: opacity 0.25s ease, visibility 0.25s ease;
+pointer-events: none;
+}
+.nav-overlay.open { display: block; opacity: 1; visibility: visible; pointer-events: none; }
+
+.nav-mobile-cta { display: none; }
+
+/* ============ HERO ============ */
+.hero {
+position: relative;
+background: linear-gradient(160deg, var(--espresso) 0%, #3a2517 58%, var(--terracotta-deep) 130%);
+color: var(--warm-white);
+overflow: hidden;
+min-height: 88vh;
+display: flex;
+align-items: center;
+}
+
+.hero-inner {
+max-width: 1240px;
+margin: 0 auto;
+padding: 100px 40px;
+display: grid;
+grid-template-columns: 1.05fr 0.95fr;
+gap: 72px;
+align-items: center;
+width: 100%;
+}
+
+.hero-eyebrow {
+font-size: 11px;
+letter-spacing: 0.38em;
+text-transform: uppercase;
+color: var(--gold);
+margin-bottom: 26px;
+}
+
+.hero h1 {
+font-size: 68px;
+color: var(--warm-white);
+margin-bottom: 28px;
+letter-spacing: -0.01em;
+}
+
+.hero h1 em { color: var(--gold); font-style: italic; }
+
+.hero p.lede {
+font-size: 17px;
+color: #E6D9C4;
+max-width: 480px;
+margin-bottom: 40px;
+font-weight: 300;
+}
+
+.origin-tags { display: flex; gap: 14px; margin-bottom: 40px; flex-wrap: wrap; }
+.origin-tag {
+font-size: 10px;
+letter-spacing: 0.16em;
+text-transform: uppercase;
+color: var(--cream);
+border: 1px solid rgba(245,237,224,0.35);
+padding: 8px 16px;
+}
+
+.btn-row { display: flex; gap: 16px; flex-wrap: wrap; }
+
+.btn {
+display: inline-block;
+padding: 17px 36px;
+font-size: 11px;
+letter-spacing: 0.2em;
+text-transform: uppercase;
+text-decoration: none;
+transition: all 0.25s ease;
+border: 1px solid transparent;
+}
+
+.btn-primary {
+background: var(--gold);
+color: var(--espresso);
+}
+.btn-primary:hover { background: #dab766; }
+
+.btn-outline {
+border-color: rgba(245, 237, 224, 0.4);
+color: var(--warm-white);
+}
+.btn-outline:hover { border-color: var(--gold); color: var(--gold); }
+
+.btn-dark {
+border-color: var(--espresso);
+color: var(--espresso);
+}
+.btn-dark:hover { background: var(--espresso); color: var(--warm-white); }
+
+.hero-photo {
+position: relative;
+border-radius: 2px;
+overflow: hidden;
+box-shadow: 0 40px 80px rgba(0,0,0,0.45);
+aspect-ratio: 4/5;
+}
+.hero-photo img { width: 100%; height: 100%; object-fit: cover; }
+
+.hero-photo-tag {
+position: absolute;
+bottom: 24px;
+left: 24px;
+background: rgba(32, 20, 9, 0.78);
+color: var(--cream);
+padding: 11px 20px;
+font-size: 10px;
+letter-spacing: 0.2em;
+text-transform: uppercase;
+}
+
+/* ============ TRUST STRIP ============ */
+.trust-strip {
+background: var(--cream);
+border-bottom: 1px solid var(--line);
+}
+.trust-inner {
+max-width: 1240px;
+margin: 0 auto;
+padding: 24px 40px;
+display: flex;
+justify-content: space-between;
+flex-wrap: wrap;
+gap: 18px;
+font-size: 11px;
+letter-spacing: 0.1em;
+text-transform: uppercase;
+color: var(--taupe-grey);
+}
+.trust-inner span strong { color: var(--terracotta); }
+
+/* ============ GENERAL SECTION ============ */
+section { padding: 130px 0; }
+.section-head { max-width: 680px; margin-bottom: 64px; }
+.section-head h2 { font-size: 44px; }
+.section-head p { color: var(--taupe-grey); font-size: 16px; margin-top: 20px; }
+.section-head.center { margin-left: auto; margin-right: auto; text-align: center; }
+
+/* ============ MANIFESTO ============ */
+.manifesto {
+background: var(--warm-white);
+padding: 90px 0;
+text-align: center;
+}
+.manifesto p {
+font-family: 'Cormorant Garamond', serif;
+font-size: 32px;
+font-weight: 400;
+font-style: italic;
+color: var(--espresso);
+max-width: 900px;
+margin: 0 auto;
+line-height: 1.4;
+}
+
+/* ============ STORY / TWO TRADITIONS ============ */
+.story { background: var(--cream); }
+.traditions-grid {
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 56px;
+}
+.tradition-card {
+background: var(--warm-white);
+border: 1px solid var(--line);
+padding: 0;
+overflow: hidden;
+}
+.tradition-photo { aspect-ratio: 5/4; overflow: hidden; }
+.tradition-photo img { width: 100%; height: 100%; object-fit: cover; }
+.tradition-copy { padding: 40px; }
+.tradition-copy .eyebrow { margin-bottom: 10px; }
+.tradition-copy h3 { font-size: 28px; margin-bottom: 16px; }
+.tradition-copy p { font-size: 14.5px; color: #4A3B2C; margin-bottom: 14px; }
+.tradition-copy p:last-child { margin-bottom: 0; }
+
+/* ============ SHOP CATEGORY SECTIONS ============ */
+.category-section.alt { background: var(--cream); }
+
+.cat-head {
+display: flex;
+justify-content: space-between;
+align-items: flex-end;
+gap: 40px;
+margin-bottom: 56px;
+flex-wrap: wrap;
+}
+.cat-head-copy { max-width: 620px; }
+.cat-head h2 { font-size: 42px; margin-bottom: 14px; }
+.cat-head p { color: var(--taupe-grey); font-size: 15px; }
+.cat-origin-badge {
+font-size: 10px;
+letter-spacing: 0.16em;
+text-transform: uppercase;
+color: var(--espresso);
+background: rgba(181,86,60,0.1);
+border: 1px solid rgba(181,86,60,0.25);
+padding: 8px 16px;
+white-space: nowrap;
+}
+
+.spotlight {
+display: grid;
+grid-template-columns: 1.1fr 0.9fr;
+gap: 56px;
+align-items: center;
+margin-bottom: 64px;
+}
+.spotlight.reverse { grid-template-columns: 0.9fr 1.1fr; }
+.spotlight.reverse .spotlight-photo { order: 2; }
+.spotlight.reverse .spotlight-info { order: 1; }
+
+.spotlight-photo { aspect-ratio: 4/5; overflow: hidden; border-radius: 2px; box-shadow: 0 30px 60px rgba(43,27,18,0.15); }
+.spotlight-photo img { width: 100%; height: 100%; object-fit: cover; }
+
+.spotlight-info .one-of-a-kind { margin-bottom: 18px; }
+.spotlight-info h3 { font-size: 32px; margin-bottom: 14px; }
+.spotlight-info .spotlight-meta { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--taupe-grey); margin-bottom: 18px; }
+.spotlight-info .spotlight-price { font-size: 22px; color: var(--terracotta); font-weight: 500; margin-bottom: 26px; }
+
+.product-grid {
+display: grid;
+grid-template-columns: repeat(3, 1fr);
+gap: 32px;
+}
+
+.product-card {
+background: var(--warm-white);
+border: 1px solid var(--line);
+display: flex;
+flex-direction: column;
+transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.product-card:hover { transform: translateY(-4px); box-shadow: 0 20px 40px rgba(43,27,18,0.12); }
+
+.product-photo { aspect-ratio: 1/1; overflow: hidden; background: #eee; }
+.product-photo img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
+.product-card:hover .product-photo img { transform: scale(1.06); }
+
+.product-info { padding: 22px 22px 26px; display: flex; flex-direction: column; gap: 10px; flex: 1; }
+.product-name { font-family: 'Cormorant Garamond', serif; font-size: 19px; font-weight: 500; line-height: 1.3; }
+.product-meta { font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--taupe-grey); }
+.product-price { font-size: 16px; color: var(--terracotta); font-weight: 500; margin-top: auto; }
+
+.product-buy {
+margin-top: 14px;
+display: inline-flex;
+justify-content: center;
+padding: 12px;
+font-size: 10px;
+letter-spacing: 0.18em;
+text-transform: uppercase;
+text-decoration: none;
+color: var(--espresso);
+border: 1px solid var(--espresso);
+transition: all 0.25s ease;
+}
+.product-buy:hover { background: var(--espresso); color: var(--warm-white); }
+
+.one-of-a-kind {
+display: inline-block;
+font-size: 9px;
+letter-spacing: 0.15em;
+text-transform: uppercase;
+color: var(--gold);
+background: rgba(201,162,76,0.12);
+padding: 5px 11px;
+width: fit-content;
+}
+
+.cat-empty {
+border: 1px dashed var(--line);
+padding: 60px 40px;
+text-align: center;
+color: var(--taupe-grey);
+font-size: 14px;
+}
+.cat-empty a { color: var(--terracotta); text-decoration: underline; }
+
+.shop-footnote {
+text-align: center;
+margin-top: 56px;
+font-size: 13px;
+color: var(--taupe-grey);
+}
+.shop-footnote a { color: var(--terracotta); text-decoration: underline; }
+
+/* ============ WHOLESALE BAND ============ */
+.wholesale-band {
+background: var(--near-black);
+color: var(--warm-white);
+padding: 100px 0;
+}
+.wholesale-inner {
+display: grid;
+grid-template-columns: 1.2fr 0.8fr;
+gap: 60px;
+align-items: center;
+}
+.wholesale-inner h2 { color: var(--warm-white); font-size: 40px; margin-bottom: 18px; }
+.wholesale-inner p { color: #D9C9AF; font-size: 15.5px; max-width: 520px; }
+.wholesale-cta { text-align: right; }
+@media (max-width: 860px) { .wholesale-cta { text-align: left; margin-top: 24px; } }
+
+/* ============ SOURCING ============ */
+.sourcing {
+background: var(--espresso);
+color: var(--warm-white);
+}
+.sourcing-grid {
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 64px;
+align-items: center;
+}
+.sourcing h2 { color: var(--warm-white); font-size: 36px; margin-bottom: 20px; }
+.sourcing p { color: #D9C9AF; font-size: 15px; margin-bottom: 16px; }
+.sourcing-list { margin: 28px 0; list-style: none; }
+.sourcing-list li {
+padding-left: 26px;
+position: relative;
+margin-bottom: 14px;
+font-size: 14px;
+color: #E6D9C4;
+}
+.sourcing-list li::before {
+content: '';
+position: absolute;
+left: 0; top: 8px;
+width: 10px; height: 1px;
+background: var(--gold);
+}
+.sourcing-photo { overflow: hidden; border-radius: 2px; }
+.sourcing-photo img { width: 100%; display: block; }
+
+/* ============ POLICIES ============ */
+.policies { background: var(--warm-white); }
+.policy-grid {
+display: grid;
+grid-template-columns: repeat(4, 1fr);
+gap: 32px;
+}
+.policy-card {
+padding: 32px 26px;
+border: 1px solid var(--line);
+}
+.policy-card h3 { font-size: 19px; margin-bottom: 10px; }
+.policy-card p { font-size: 13px; color: var(--taupe-grey); }
+
+/* ============ CONTACT ============ */
+.contact { background: var(--cream); }
+.contact-inner {
+text-align: center;
+max-width: 640px;
+margin: 0 auto;
+}
+.contact h2 { font-size: 40px; margin-bottom: 18px; }
+.contact p { color: var(--taupe-grey); font-size: 15px; margin-bottom: 36px; }
+.contact-links { display: flex; gap: 18px; justify-content: center; flex-wrap: wrap; }
+
+.newsletter { background: var(--near-black); color: var(--warm-white); text-align: center; }
+.newsletter .container { max-width: 620px; }
+.newsletter .eyebrow { justify-content: center; display: flex; color: var(--gold); }
+.newsletter h2 { color: var(--warm-white); font-size: 34px; margin-bottom: 16px; }
+.newsletter p { color: #C9B79A; font-size: 14.5px; margin-bottom: 30px; }
+.newsletter-form { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+.newsletter-form input[type="email"] {
+flex: 1;
+min-width: 240px;
+padding: 15px 16px;
+border: 1px solid rgba(245,237,224,0.2);
+background: rgba(245,237,224,0.06);
+color: var(--warm-white);
+font-family: 'Montserrat', sans-serif;
+font-size: 14px;
+}
+.newsletter-form input[type="email"]::placeholder { color: #8C7B60; }
+.newsletter-form button {
+background: var(--gold);
+color: var(--espresso);
+border: none;
+padding: 15px 32px;
+font-size: 11px;
+letter-spacing: 0.2em;
+text-transform: uppercase;
+cursor: pointer;
+transition: background 0.25s ease;
+}
+.newsletter-form button:hover { background: #dab766; }
+.newsletter-note { font-size: 11px; color: #8C7B60; margin-top: 16px; }
+.newsletter-success { display: none; font-size: 14px; color: var(--gold); }
+
+/* ============ FOOTER ============ */
+footer {
+background: var(--near-black);
+color: #B8A98D;
+padding: 60px 0 32px;
+font-size: 12px;
+}
+.footer-inner {
+display: flex;
+justify-content: space-between;
+flex-wrap: wrap;
+gap: 24px;
+align-items: flex-start;
+margin-bottom: 32px;
+}
+.footer-logo { font-family: 'Cormorant Garamond', serif; font-size: 22px; color: var(--warm-white); margin-bottom: 10px; }
+.footer-links { display: flex; gap: 44px; flex-wrap: wrap; }
+.footer-col h4 { font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 14px; font-weight: 500; }
+.footer-col a { display: block; text-decoration: none; color: #B8A98D; margin-bottom: 8px; font-size: 13px; }
+.footer-col a:hover { color: var(--warm-white); }
+.footer-bottom {
+border-top: 1px solid rgba(255,255,255,0.08);
+padding-top: 24px;
+display: flex;
+justify-content: space-between;
+flex-wrap: wrap;
+gap: 12px;
+font-size: 11px;
+}
+
+@media (max-width: 1279px) {
+/* nav collapses to the drawer early: the full bar
+   does not fit alongside the logo and CTA below this width */
+/* mobile nav */
+.menu-toggle { display: flex; }
+.nav-cta { display: none; }
+.nav-links {
+display: flex;
+flex-direction: column;
+position: fixed;
+top: 0;
+right: -100%;
+width: min(320px, 82vw);
+height: 100vh;
+height: 100dvh;
+background: var(--warm-white);
+padding: 100px 0 40px;
+gap: 0;
+transition: right 0.3s ease;
+box-shadow: -10px 0 40px rgba(0,0,0,0.2);
+z-index: 300;
+overflow-y: auto;
+pointer-events: none;
+-webkit-user-select: none;
+user-select: none;
+}
+.nav-links.open { right: 0; pointer-events: auto; z-index: 300; }
+.nav-links li { width: 100%; border-bottom: 1px solid var(--line); pointer-events: auto; }
+.nav-links a {
+  display: flex;
+  align-items: center;
+  padding: 16px 32px;
+  font-size: 13px;
+  letter-spacing: 0.12em;
+  text-decoration: none;
+  color: var(--espresso);
+  transition: color 0.25s ease;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  min-height: 44px;
+  pointer-events: auto;
+  position: relative;
+  z-index: 301;
+}
+.nav-links a:hover { color: var(--terracotta); }
+.nav-links a:active { color: var(--terracotta); }
+.nav-mobile-cta { display: block; margin-top: 28px; border-bottom: none; }
+.nav-mobile-cta a { padding: 15px; text-align: center; }
+}
+
+@media (max-width: 960px) {
+.hero-inner { grid-template-columns: 1fr; padding-top: 60px; text-align: left; }
+.hero { min-height: auto; }
+.hero h1 { font-size: 44px; }
+.traditions-grid { grid-template-columns: 1fr; }
+.spotlight, .spotlight.reverse { grid-template-columns: 1fr; }
+.spotlight.reverse .spotlight-photo, .spotlight.reverse .spotlight-info { order: initial; }
+.sourcing-grid { grid-template-columns: 1fr; }
+.wholesale-inner { grid-template-columns: 1fr; }
+.policy-grid { grid-template-columns: repeat(2, 1fr); }
+section { padding: 76px 0; }
+.manifesto p { font-size: 24px; }
+/* horizontal swipe product carousels */
+.product-grid {
+display: flex;
+grid-template-columns: none;
+overflow-x: auto;
+scroll-snap-type: x mandatory;
+gap: 16px;
+padding-bottom: 10px;
+-webkit-overflow-scrolling: touch;
+scrollbar-width: none;
+}
+.product-grid::-webkit-scrollbar { display: none; }
+.product-card {
+flex: 0 0 72vw;
+max-width: 300px;
+scroll-snap-align: start;
+}
+}
+@media (max-width: 560px) {
+.policy-grid { grid-template-columns: 1fr; }
+.hero h1 { font-size: 34px; }
+.cat-head { flex-direction: column; align-items: flex-start; }
+.product-card { flex-basis: 80vw; }
+}
+
+/* Collapse each grid to its first two rows, desktop only: below 960px
+   .product-grid becomes a horizontal swipe carousel, where hiding cards
+   makes no sense. nth-of-type rather than nth-child because each card is
+   followed by its JSON-LD <script> sibling - nth-child would count those
+   too and start hiding at the 4th card instead of the 7th. */
+@media (min-width: 961px) {
+.product-grid > div.product-card:nth-of-type(n+7) {
+display: none;
+}
+.product-grid.expanded > div.product-card {
+display: flex;
+}
+}
+
+.expand-btn {
+grid-column: 1 / -1;
+justify-self: center;
+margin-top: 24px;
+padding: 12px 24px;
+font-size: 12px;
+letter-spacing: 0.15em;
+text-transform: uppercase;
+background: var(--warm-white);
+color: var(--espresso);
+border: 1px solid var(--espresso);
+cursor: pointer;
+transition: all 0.25s ease;
+font-family: 'Cormorant Garamond', serif;
+font-weight: 500;
+}
+
+.expand-btn:hover {
+background: var(--espresso);
+color: var(--warm-white);
+}
+
+/* Nothing is collapsed in the mobile carousel, so there is nothing to expand. */
+@media (max-width: 960px) {
+.expand-btn { display: none; }
+}
+
+/* ---------------------------------------------------------------------------
+   Shop dropdown
+   The three category pages carry long keyword names ("Suzani Pillow Covers"),
+   which will not fit the desktop bar alongside everything else. They live in a
+   dropdown instead. Links are plain <a> in the markup either way, so crawlers
+   read them normally.
+   Desktop: hover/focus reveals the panel. Mobile (<=960px): the hamburger menu
+   is already a vertical list, so the panel is flattened inline rather than
+   nested - a second collapsible layer inside the drawer is where this nav has
+   broken before.
+--------------------------------------------------------------------------- */
+.nav-shop { position: relative; }
+
+.nav-shop > a::after {
+content: '';
+display: inline-block;
+width: 5px; height: 5px;
+margin-left: 6px;
+vertical-align: 1px;
+border-right: 1px solid currentColor;
+border-bottom: 1px solid currentColor;
+transform: rotate(45deg);
+}
+
+.nav-shop-panel {
+list-style: none;
+margin: 0;
+padding: 10px 0;
+}
+
+@media (min-width: 1280px) {
+.nav-shop-panel {
+position: absolute;
+top: 100%;
+left: 50%;
+transform: translateX(-50%) translateY(6px);
+min-width: 232px;
+background: var(--warm-white);
+border: 1px solid var(--line);
+box-shadow: 0 18px 40px rgba(43,27,18,0.14);
+opacity: 0;
+visibility: hidden;
+pointer-events: none;
+transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
+z-index: 320;
+}
+.nav-shop:hover .nav-shop-panel,
+.nav-shop:focus-within .nav-shop-panel {
+opacity: 1;
+visibility: visible;
+pointer-events: auto;
+transform: translateX(-50%) translateY(0);
+}
+.nav-shop-panel li { display: block; }
+.nav-shop-panel a {
+display: block;
+padding: 9px 18px;
+white-space: nowrap;
+font-size: 11px;
+letter-spacing: 0.1em;
+text-transform: uppercase;
+color: var(--espresso);
+text-decoration: none;
+}
+.nav-shop-panel a:hover { background: var(--cream); color: var(--terracotta); }
+}
+
+/* In the mobile drawer the panel is just part of the vertical list. The
+   drawer engages at 1279px, so this must match that - not the 960px
+   product-carousel breakpoint. */
+@media (max-width: 1279px) {
+.nav-shop > a::after { display: none; }
+.nav-shop-panel { padding: 0; }
+.nav-shop-panel a { padding-left: 18px; opacity: 0.92; }
+}
