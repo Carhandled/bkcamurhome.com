@@ -99,13 +99,11 @@ nav { padding: 15px 22px; }
 
 /* A light scrim with a blur, not a 50% blackout - the old one read as the
    screen brightness dropping. It is also clickable now: tapping outside
-   used to do nothing because the overlay had pointer-events:none. */
+   used to do nothing because the overlay had pointer-events:none.
+   z-index must stay BELOW the header: <header> is sticky at z-index:200 and
+   therefore opens a stacking context, so the drawer's z-index:300 is scoped
+   inside it - an overlay above 200 paints over the drawer and swallows taps. */
 .nav-overlay {
-/* Must sit BELOW the header. <header> is sticky with z-index:200, so it opens
-   a stacking context and the drawer's z-index:300 is scoped inside it - an
-   overlay at 250 paints over the whole header subtree, drawer included. That
-   was invisible while the overlay had pointer-events:none; the moment it
-   became clickable it swallowed every tap. */
 z-index: 150;
 background: rgba(32, 20, 9, 0.2);
 -webkit-backdrop-filter: blur(3px);
@@ -114,64 +112,136 @@ backdrop-filter: blur(3px);
 .nav-overlay.open { pointer-events: auto; }
 
 .nav-links {
-padding: 26px 0 36px;
+padding: 0 0 32px;
 background: var(--warm-white);
-box-shadow: -20px 0 56px rgba(32, 20, 9, 0.2);
-width: min(340px, 86vw);
+box-shadow: -22px 0 60px rgba(32, 20, 9, 0.22);
+width: min(352px, 88vw);
 }
 
-/* Drawer header: gives the panel a title and room clear of the toggle. */
+/* Panel title, aligned with the toggle that sits opposite it. */
 .nav-links::before {
 content: 'Menu';
 display: block;
-padding: 0 24px 20px;
-margin-bottom: 8px;
+padding: 26px 26px 20px;
+margin-bottom: 14px;
 border-bottom: 1px solid var(--line);
 font-family: 'Cormorant Garamond', serif;
-font-size: 21px;
-letter-spacing: 0.02em;
+font-size: 23px;
 color: var(--espresso);
 }
 
-.nav-links > li { border-bottom: 1px solid rgba(228, 217, 198, 0.6); }
-.nav-links > li:last-of-type { border-bottom: 0; }
+/* The old rule was a descendant selector, so it also drew a divider under
+   every category inside the Shop panel - and a second one under the panel
+   itself. Dividers belong to top-level items only, and are inset. */
+.nav-links li { border-bottom: 0; }
+.nav-links > li + li:not(.nav-mobile-cta) { border-top: 1px solid rgba(228, 217, 198, 0.7); }
+.nav-links > li { margin: 0 26px; width: auto; }
 
 .nav-links > li > a {
 display: block;
-padding: 15px 24px;
-font-size: 12px;
-letter-spacing: 0.12em;
+padding: 15px 0;
+font-size: 11.5px;
+letter-spacing: 0.16em;
 color: var(--espresso);
-transition: background 0.2s ease, color 0.2s ease;
+opacity: 0.9;
+transition: color 0.2s ease, opacity 0.2s ease;
 }
-.nav-links > li > a:active { background: var(--cream); }
-.nav-links > li.current > a { color: var(--terracotta); }
+.nav-links > li > a:active { color: var(--terracotta); }
+.nav-links > li.current > a { color: var(--terracotta); opacity: 1; }
 
-/* "Shop" reads as a group label with the three categories nested under it. */
+/* Shop reads as a labelled group; the categories are the prominent items. */
+.nav-shop { padding-bottom: 6px; }
 .nav-shop > a {
-font-size: 10px !important;
-letter-spacing: 0.2em !important;
+font-size: 9.5px !important;
+letter-spacing: 0.26em !important;
 color: var(--taupe-grey) !important;
-padding-bottom: 6px !important;
+padding: 16px 0 4px !important;
+opacity: 1 !important;
 }
-.nav-shop-panel { padding: 0 0 10px; }
+.nav-shop-panel { padding: 0 0 8px; }
+.nav-shop-panel li { border: 0; }
 .nav-shop-panel a {
 display: block;
-padding: 12px 24px 12px 36px;
-font-size: 12.5px;
-letter-spacing: 0.06em;
-text-transform: none;
+padding: 9px 0;
 font-family: 'Cormorant Garamond', serif;
+font-size: 20px;
 font-weight: 500;
+letter-spacing: 0.01em;
+line-height: 1.35;
+text-transform: none;
 color: var(--espresso);
 text-decoration: none;
 opacity: 1;
+transition: color 0.2s ease, padding-left 0.2s ease;
 }
-.nav-shop-panel a:active { background: var(--cream); }
+.nav-shop-panel a::before {
+content: '';
+display: inline-block;
+width: 0;
+height: 1px;
+margin-right: 0;
+vertical-align: middle;
+background: var(--terracotta);
+transition: width 0.22s ease, margin-right 0.22s ease;
+}
+.nav-shop-panel a:active,
 .nav-shop-panel li.current > a { color: var(--terracotta); }
+.nav-shop-panel li.current > a::before { width: 16px; margin-right: 9px; }
 
-.nav-mobile-cta { padding: 22px 24px 0; border-bottom: 0 !important; }
-.nav-mobile-cta a { display: block; text-align: center; }
+/* Primary action, then a quiet footer for the rest. */
+.nav-mobile-cta { margin: 26px 26px 0; padding: 0; border: 0 !important; }
+/* Scoped through the id: this anchor also carries .btn.btn-primary, whose
+   own colour was winning and rendering espresso text on an espresso button.
+   The drawer CTA is its own component, so it should not inherit that. */
+#nav-links .nav-mobile-cta a {
+display: block;
+text-align: center;
+padding: 15px;
+background: var(--espresso);
+color: var(--warm-white);
+font-size: 10px;
+letter-spacing: 0.2em;
+border-radius: 2px;
+}
+#nav-links .nav-mobile-cta a:active { background: var(--terracotta); }
+.nav-links::after {
+content: 'Instagram  ·  Etsy  ·  Philadelphia, PA';
+display: block;
+margin: 22px 26px 0;
+padding-top: 18px;
+border-top: 1px solid rgba(228, 217, 198, 0.7);
+font-size: 9.5px;
+letter-spacing: 0.14em;
+text-transform: uppercase;
+color: var(--taupe-grey);
+}
+
+/* Items settle in behind the panel rather than appearing all at once. */
+.nav-links > li,
+.nav-links::before,
+.nav-links::after {
+opacity: 0;
+transform: translateX(10px);
+transition: opacity 0.32s ease, transform 0.32s ease;
+}
+.nav-links.open > li,
+.nav-links.open::before,
+.nav-links.open::after { opacity: 1; transform: translateX(0); }
+.nav-links.open::before { transition-delay: 0.05s; }
+.nav-links.open > li:nth-child(1) { transition-delay: 0.09s; }
+.nav-links.open > li:nth-child(2) { transition-delay: 0.13s; }
+.nav-links.open > li:nth-child(3) { transition-delay: 0.16s; }
+.nav-links.open > li:nth-child(4) { transition-delay: 0.19s; }
+.nav-links.open > li:nth-child(5) { transition-delay: 0.22s; }
+.nav-links.open > li:nth-child(6) { transition-delay: 0.25s; }
+.nav-links.open > li:nth-child(7) { transition-delay: 0.28s; }
+.nav-links.open::after { transition-delay: 0.31s; }
+
+@media (prefers-reduced-motion: reduce) {
+.nav-links > li,
+.nav-links::before,
+.nav-links::after { transition: none; opacity: 1; transform: none; }
+}
 
 .menu-toggle { z-index: 310; }
 }
