@@ -76,3 +76,26 @@ display: block;
 .one-of-a-kind { font-size: 8.5px; letter-spacing: 0.08em; }
 .product-buy { margin-top: 10px; padding: 10px 6px; font-size: 8.5px; letter-spacing: 0.1em; }
 }
+
+/* ---------------------------------------------------- category page shelf -- */
+/* The grid now sits directly under the hero on the three category pages, so the
+   hero has to earn its height on a phone - it was 958px on an 812px screen,
+   pushing the first row off the first swipe on its own. */
+@media (max-width: 639px) {
+.cat-hero { padding: 88px 0 30px; }
+.cat-hero h1 { font-size: 29px; }
+.cat-hero .cat-lede { font-size: 15.5px; line-height: 1.6; margin-top: 12px; }
+.cat-hero-photo { aspect-ratio: 16 / 10; }
+.cat-hero-facts { margin-top: 16px; padding-top: 14px; gap: 7px 16px; font-size: 9.5px; }
+.cat-hero-inner { gap: 22px; }
+}
+
+/* Section head above the grid: it repeats what the H1 already said, so keep it
+   quiet rather than spending a screen on it. */
+.cat-head { align-items: flex-end; margin-bottom: 22px; }
+@media (max-width: 639px) {
+.cat-head { margin-bottom: 14px; }
+.cat-head h2 { font-size: 22px; }
+.cat-origin-badge { display: none; }
+section#suzani, section#kilim-pillows, section#rugs-kilims { padding-top: 26px; }
+}
