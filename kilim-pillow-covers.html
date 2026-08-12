@@ -72,6 +72,7 @@
    moved out of view with a transform instead (see the drawer rules below). */
 </style>
 <link rel="stylesheet" href="/assets/css/nav.css" />
+<link rel="stylesheet" href="/assets/css/product-grid.css" />
 </head>
 <body>
 
@@ -573,28 +574,6 @@
   overlay.addEventListener('click', closeMenu);
   links.querySelectorAll('a').forEach(function (a) {
     a.addEventListener('click', closeMenu);
-  });
-})();
-</script>
-
-<script>
-(function () {
-  var VISIBLE = 6;
-  document.querySelectorAll('.product-grid').forEach(function (grid) {
-    var hidden = grid.querySelectorAll('.product-card').length - VISIBLE;
-    if (hidden < 1) return;
-    var collapsedLabel = 'See More (' + hidden + ' more)';
-    var btn = document.createElement('button');
-    btn.type = 'button';
-    btn.className = 'expand-btn';
-    btn.textContent = collapsedLabel;
-    btn.setAttribute('aria-expanded', 'false');
-    grid.appendChild(btn);
-    btn.addEventListener('click', function () {
-      var expanded = grid.classList.toggle('expanded');
-      btn.textContent = expanded ? 'See Less' : collapsedLabel;
-      btn.setAttribute('aria-expanded', expanded ? 'true' : 'false');
-    });
   });
 })();
 </script>

@@ -49,8 +49,14 @@ ETSY_TOKEN_URL = "https://api.etsy.com/v3/public/oauth/token"
 ETSY_API_BASE = "https://api.etsy.com/v3/application"
 SHOP_URL = "https://www.etsy.com/shop/BKCAMURHOME"
 
-# The homepage routes with static category tiles and carries no product cards,
-# so each category's inventory is written only into its own page.
+# Each category's full inventory goes into its own page. The homepage also
+# carries a "Featured Pieces" grid so a visitor sees merchandise without having
+# to pick a category first - FEATURED_PER_CATEGORY items from each, interleaved
+# so the row is a genuine cross-section rather than all suzani first.
+HOMEPAGE_PATH = Path("index.html")
+FEATURED_START = "<!-- ETSY_FEATURED_START -->"
+FEATURED_END = "<!-- ETSY_FEATURED_END -->"
+FEATURED_PER_CATEGORY = 3
 SITEMAP_PATH = Path("sitemap.xml")
 
 # Category key -> markers, target page, meta label shown on each card, and the
@@ -404,6 +410,9 @@ def regenerate_pages(listings):
         if write_if_changed(page, page_html):
             changed.append(str(page))
 
+    if write_if_changed(HOMEPAGE_PATH, build_featured(grouped)):
+        changed.append(str(HOMEPAGE_PATH))
+
     counts = {k: len(v) for k, v in grouped.items()}
     print(f"Listing counts by category: {counts}")
 
@@ -413,13 +422,36 @@ def regenerate_pages(listings):
     return changed
 
 
+def build_featured(grouped):
+    """Homepage grid: take the first few from each category and interleave them
+    so the opening row mixes traditions instead of leading with one."""
+    picks = {k: grouped.get(k, [])[:FEATURED_PER_CATEGORY] for k in CATEGORIES}
+    ordered = []
+    for i in range(FEATURED_PER_CATEGORY):
+        for key in CATEGORIES:
+            if i < len(picks[key]):
+                cfg = CATEGORIES[key]
+                ordered.append(
+                    build_card(picks[key][i], cfg["meta"], cfg["alt_suffix"], cfg["alt_token"])
+                )
+    block = "\n".join(ordered) if ordered else (
+        '<div class="cat-empty">New pieces are being listed &mdash; browse the full shop on '
+        f'<a href="{SHOP_URL}" target="_blank" rel="noopener">Etsy</a>.</div>'
+    )
+    print(f"Featured on homepage: {len(ordered)} piece(s).")
+    return replace_block(
+        HOMEPAGE_PATH.read_text(encoding="utf-8"),
+        FEATURED_START, FEATURED_END, block, str(HOMEPAGE_PATH),
+    )
+
+
 def update_sitemap_lastmod(changed_files):
     """Bump <lastmod> for the pages this run rewrote, so the sitemap stops
     advertising dates from months ago."""
     if not SITEMAP_PATH.exists():
         return False
 
-    url_for = {}
+    url_for = {str(HOMEPAGE_PATH): "https://www.bkcamurhome.com/"}
     for cfg in CATEGORIES.values():
         url_for[str(cfg["page"])] = "https://www.bkcamurhome.com/" + cfg["page"].name
 

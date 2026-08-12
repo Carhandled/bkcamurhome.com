@@ -1,0 +1,78 @@
+/* bkCAMUR Home — product grid.
+ *
+ * Linked LAST in every page's <head>, after site.css and any inline <style>,
+ * so it wins on equal specificity. Product-grid layout belongs here only.
+ *
+ * Replaces two things that hurt discoverability:
+ *
+ *  1. Below 960px .product-grid was a horizontal swipe carousel with cards at
+ *     flex: 0 0 72vw (80vw under 560px) — one item filled the screen and the
+ *     rest were off to the side, so a phone showed the collection one piece at
+ *     a time. It is a real grid at every width now.
+ *
+ *  2. Desktop hid every card past the sixth behind a "See More" button. Once
+ *     someone has chosen a category they should see what is in it, so the
+ *     collapse is gone and every card renders.
+ */
+
+.product-grid {
+display: grid;
+/* minmax(0, 1fr) rather than plain 1fr: without it a long product title sets
+   the column's min-content width and the columns stop being equal. */
+grid-template-columns: repeat(2, minmax(0, 1fr));
+gap: 14px;
+
+/* Undo the carousel. */
+overflow-x: visible;
+scroll-snap-type: none;
+padding-bottom: 0;
+}
+
+/* tablet */
+@media (min-width: 640px) {
+.product-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
+}
+
+/* desktop */
+@media (min-width: 1025px) {
+.product-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 26px; }
+}
+
+.product-card {
+/* Cards were flex items sized to the viewport; as grid items they take the
+   column. flex: initial resets the 0 0 72vw basis. */
+flex: initial;
+max-width: none;
+min-width: 0;
+scroll-snap-align: none;
+display: flex;
+flex-direction: column;
+height: 100%;
+}
+
+/* Square crop keeps rows level however tall the source photo is. */
+.product-photo {
+aspect-ratio: 1 / 1;
+overflow: hidden;
+background: var(--cream);
+}
+.product-photo img {
+width: 100%;
+height: 100%;
+object-fit: cover;
+display: block;
+}
+
+/* Every card is shown - no collapsed rows at any width. */
+.product-grid > div.product-card:nth-of-type(n+7) { display: flex; }
+.expand-btn { display: none !important; }
+
+/* Type tightens on a two-column phone layout so cards stay scannable. */
+@media (max-width: 639px) {
+.product-info { padding: 13px 13px 16px; gap: 6px; }
+.product-name { font-size: 15px; line-height: 1.28; }
+.product-meta { font-size: 8.5px; letter-spacing: 0.1em; }
+.product-price { font-size: 13px; }
+.one-of-a-kind { font-size: 8.5px; letter-spacing: 0.08em; }
+.product-buy { margin-top: 10px; padding: 10px 6px; font-size: 8.5px; letter-spacing: 0.1em; }
+}
