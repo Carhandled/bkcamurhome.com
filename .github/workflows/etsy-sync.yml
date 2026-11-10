@@ -30,11 +30,12 @@ jobs:
           ETSY_SHARED_SECRET: ${{ secrets.ETSY_SHARED_SECRET }}
           ETSY_REFRESH_TOKEN: ${{ secrets.ETSY_REFRESH_TOKEN }}
           ETSY_SHOP_ID: ${{ secrets.ETSY_SHOP_ID }}
-          GH_PAT: ${{ secrets.GH_PAT }}
-          GITHUB_REPOSITORY: ${{ github.repository }}
         run: python scripts/sync_etsy.py
 
-      - name: Commit and push if any synced page changed
+      - name: Commit and push if any synced page or the token changed
+        # always(): the rotated Etsy token must be saved even if a later
+        # part of the sync failed, otherwise the token chain breaks.
+        if: always()
         run: |
           git config user.name "etsy-sync-bot"
           git config user.email "actions@users.noreply.github.com"
@@ -42,8 +43,9 @@ jobs:
                   kilim-pillow-covers.html \
                   turkish-rugs-kilims.html \
                   sitemap.xml
+          if [ -f .etsy-token ]; then git add .etsy-token; fi
           if ! git diff --cached --quiet; then
-            git commit -m "Auto-sync: update listings from Etsy"
+            git commit -m "Auto-sync: update listings and rotate Etsy token"
             git push
           else
             echo "No listing changes this run."

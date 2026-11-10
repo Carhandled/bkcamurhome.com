@@ -13,9 +13,8 @@ Set at https://github.com/Carhandled/bkcamurhome.com/settings/secrets/actions
 | --- | --- |
 | `ETSY_API_KEY` | Etsy app keystring |
 | `ETSY_SHARED_SECRET` | Etsy app shared secret |
-| `ETSY_REFRESH_TOKEN` | OAuth refresh token — **self-rotating, see below** |
+| `ETSY_REFRESH_TOKEN` | Bootstrap OAuth refresh token — only read when `.etsy-token` is missing or rejected |
 | `ETSY_SHOP_ID` | Numeric shop id for BKCAMURHOME |
-| `GH_PAT` | Fine-grained PAT, this repo, **Secrets: write** — used only to write the rotated `ETSY_REFRESH_TOKEN` back |
 
 If any are missing the script exits 0 with a "Skipping sync" message rather
 than failing, so a half-finished setup doesn't send failure mail.
@@ -23,17 +22,26 @@ than failing, so a half-finished setup doesn't send failure mail.
 ## The refresh-token chain (and how it breaks)
 
 Etsy rotates the refresh token **on every use**. Each run, `sync_etsy.py`
-spends the stored token, gets a new one back, and writes that new one into
-the `ETSY_REFRESH_TOKEN` secret using `GH_PAT`. That's what keeps the sync
-hands-off indefinitely — nobody has to re-authorize on a schedule.
+spends the stored token, gets a new one back, and saves it encrypted to
+`.etsy-token` in this repo. The workflow commits that file with the built in
+`GITHUB_TOKEN`, so there is **no personal access token to expire**. The file
+is encrypted with a key derived from `ETSY_SHARED_SECRET`, so the public repo
+never exposes a usable token.
 
-Two things break the chain:
+The token is saved the moment Etsy issues it and the commit step runs even
+if a later step fails, so a partial failure can't lose it.
 
-1. **`GH_PAT` expires or is wrong.** The rotated token can't be saved, so
-   the next run spends a token Etsy has already retired.
-2. **The workflow stops running long enough** that the stored token lapses.
+Token lookup order: `.etsy-token` first; if Etsy rejects it, the
+`ETSY_REFRESH_TOKEN` secret. That means recovery is always just "paste a new
+token into the secret". The next run uses it and takes over the file.
 
-Both end the same way — the sync fails with:
+One thing still breaks the chain:
+
+1. **The workflow stops running for 90+ days**, or the Etsy app is
+   disconnected from the shop. The daily commit of the rotated token also
+   keeps GitHub from auto disabling the schedule for inactivity.
+
+It fails with:
 
 ```
 ERROR: Failed to refresh Etsy token: 400 Client Error: Bad Request
@@ -74,7 +82,8 @@ script for a fresh one.
 
 ## Keeping it from breaking again
 
-`GH_PAT` expiry is the thing to watch, since it fails silently for a while
-before the chain lapses. When you rotate that PAT, update the secret the
-same day. A failed run shows up in the Actions tab; the site keeps serving
-the last synced grid in the meantime, so a broken sync is stale, not blank.
+Nothing to rotate on a calendar. If a run fails, the Actions tab shows it and
+the site keeps serving the last synced grid, so a broken sync is stale, not
+blank. If you ever change the Etsy shared secret, `.etsy-token` can no longer
+be decrypted; paste a fresh refresh token into `ETSY_REFRESH_TOKEN` and it
+recovers on the next run. `GH_PAT` is no longer used and can be deleted.
