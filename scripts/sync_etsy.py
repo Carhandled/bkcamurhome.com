@@ -16,10 +16,12 @@ schedule. It:
      markers, so the site always mirrors exactly what's live on Etsy. A
      category with zero active listings gets a graceful "coming soon"
      placeholder instead of an empty grid.
-  5. If Etsy issued a new refresh token, writes it back to the GitHub repo's
-     Actions secret (ETSY_REFRESH_TOKEN) so the next run can use it - Etsy
-     refresh tokens are valid 90 days but rotate on each use, so this keeps
-     the chain alive indefinitely without any human re-authorizing.
+  5. Saves the rotated refresh token, encrypted, to .etsy-token in this repo
+     (the workflow commits it with the built-in GITHUB_TOKEN). Etsy refresh
+     tokens are valid 90 days but rotate on each use, so this keeps the
+     chain alive indefinitely with no personal access token to expire.
+     The file is encrypted with a key derived from ETSY_SHARED_SECRET, so
+     the public repo never exposes a usable token.
 
 Required environment variables (set as GitHub repo secrets, injected by the
 workflow):
@@ -28,11 +30,11 @@ workflow):
                           combined as "keystring:sharedsecret", in every
                           x-api-key header as of their Feb 2026 enforcement
                           - see https://github.com/etsy/open-api/discussions/1521)
-    ETSY_REFRESH_TOKEN - current refresh token
+    ETSY_REFRESH_TOKEN - bootstrap refresh token. Only read when .etsy-token
+                          is missing or its token is rejected, so after a
+                          manual re-authorization you just paste the new
+                          token here and the next run takes over.
     ETSY_SHOP_ID       - numeric Etsy shop id for BKCAMURHOME
-    GH_PAT             - fine-grained PAT scoped to this repo with
-                          "Secrets: write" permission, used only to update
-                          the ETSY_REFRESH_TOKEN secret after rotation
     GITHUB_REPOSITORY  - "owner/repo", auto-provided by GitHub Actions
 """
 
@@ -122,30 +124,6 @@ def categorize(title):
     if "kilim" in t and ("pillow" in t or "cushion" in t or "cover" in t):
         return "kilim_pillow"
     return "rug"
-
-
-def refresh_oauth_token(api_key, refresh_token):
-    try:
-        resp = requests.post(
-            ETSY_TOKEN_URL,
-            data={
-                "grant_type": "refresh_token",
-                "client_id": api_key,
-                "refresh_token": refresh_token,
-            },
-            timeout=30,
-        )
-        resp.raise_for_status()
-        data = resp.json()
-        return data["access_token"], data["refresh_token"]
-    except requests.exceptions.RequestException as e:
-        print(f"ERROR: Failed to refresh Etsy token: {e}", file=sys.stderr)
-        if hasattr(e, 'response') and e.response is not None:
-            try:
-                print(f"Response: {e.response.text}", file=sys.stderr)
-            except:
-                pass
-        sys.exit(1)
 
 
 def fetch_active_listings(x_api_key, access_token, shop_id):
@@ -478,41 +456,57 @@ def update_sitemap_lastmod(changed_files):
     return True
 
 
-def get_repo_public_key(gh_pat, repo):
-    resp = requests.get(
-        f"https://api.github.com/repos/{repo}/actions/secrets/public-key",
-        headers={
-            "Authorization": f"Bearer {gh_pat}",
-            "Accept": "application/vnd.github+json",
-        },
-        timeout=30,
-    )
-    resp.raise_for_status()
-    return resp.json()
+TOKEN_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", ".etsy-token")
 
 
-def encrypt_secret(public_key_b64, secret_value):
-    from nacl import encoding, public
+def _box(shared_secret):
+    import hashlib
+    from nacl import secret
 
-    public_key = public.PublicKey(public_key_b64.encode("utf-8"), encoding.Base64Encoder())
-    sealed_box = public.SealedBox(public_key)
-    encrypted = sealed_box.encrypt(secret_value.encode("utf-8"))
-    return base64.b64encode(encrypted).decode("utf-8")
+    key = hashlib.sha256(("bkcamur-etsy-token:" + shared_secret).encode("utf-8")).digest()
+    return secret.SecretBox(key)
 
 
-def update_github_secret(gh_pat, repo, secret_name, secret_value):
-    key_info = get_repo_public_key(gh_pat, repo)
-    encrypted_value = encrypt_secret(key_info["key"], secret_value)
-    resp = requests.put(
-        f"https://api.github.com/repos/{repo}/actions/secrets/{secret_name}",
-        headers={
-            "Authorization": f"Bearer {gh_pat}",
-            "Accept": "application/vnd.github+json",
-        },
-        json={"encrypted_value": encrypted_value, "key_id": key_info["key_id"]},
-        timeout=30,
-    )
-    resp.raise_for_status()
+def load_stored_token(shared_secret):
+    if not os.path.exists(TOKEN_FILE):
+        return None
+    try:
+        with open(TOKEN_FILE, "r", encoding="utf-8") as f:
+            blob = base64.b64decode(f.read().strip())
+        return _box(shared_secret).decrypt(blob).decode("utf-8")
+    except Exception as exc:  # corrupt file or changed shared secret
+        print(f"WARNING: could not read {TOKEN_FILE}: {exc}")
+        return None
+
+
+def save_stored_token(shared_secret, token):
+    blob = _box(shared_secret).encrypt(token.encode("utf-8"))
+    with open(TOKEN_FILE, "w", encoding="utf-8") as f:
+        f.write(base64.b64encode(blob).decode("utf-8") + "\n")
+
+
+def try_refresh(api_key, refresh_token):
+    """Exchange a refresh token. Returns None on invalid_grant, exits on other errors."""
+    try:
+        resp = requests.post(
+            ETSY_TOKEN_URL,
+            data={
+                "grant_type": "refresh_token",
+                "client_id": api_key,
+                "refresh_token": refresh_token,
+            },
+            timeout=30,
+        )
+    except requests.RequestException as exc:
+        print(f"ERROR: Failed to reach Etsy: {exc}", file=sys.stderr)
+        sys.exit(1)
+    if resp.status_code == 400 and "invalid_grant" in resp.text:
+        return None
+    if not resp.ok:
+        print(f"ERROR: Failed to refresh Etsy token: {resp.status_code} {resp.text}", file=sys.stderr)
+        sys.exit(1)
+    data = resp.json()
+    return data["access_token"], data["refresh_token"]
 
 
 def main():
@@ -524,7 +518,6 @@ def main():
         "ETSY_SHARED_SECRET",
         "ETSY_REFRESH_TOKEN",
         "ETSY_SHOP_ID",
-        "GH_PAT",
     ]
     missing = [name for name in required if not os.environ.get(name, "").strip()]
     if missing:
@@ -539,15 +532,34 @@ def main():
     shared_secret = env("ETSY_SHARED_SECRET")
     refresh_token = env("ETSY_REFRESH_TOKEN")
     shop_id = env("ETSY_SHOP_ID")
-    gh_pat = env("GH_PAT")
-    repo = env("GITHUB_REPOSITORY")
 
     # Etsy requires x-api-key to be "keystring:sharedsecret" as of their
     # Feb 2026 enforcement - see module docstring.
     x_api_key = f"{api_key}:{shared_secret}"
 
     print("Refreshing Etsy OAuth token...")
-    access_token, new_refresh_token = refresh_oauth_token(api_key, refresh_token)
+    result = None
+    stored = load_stored_token(shared_secret)
+    if stored:
+        result = try_refresh(api_key, stored)
+        if result is None:
+            print("Stored token rejected - falling back to ETSY_REFRESH_TOKEN secret.")
+    if result is None:
+        result = try_refresh(api_key, refresh_token)
+    if result is None:
+        print(
+            'ERROR: Etsy says the refresh token is invalid (invalid_grant). '
+            "Re-authorize with scripts/get_refresh_token.py and paste the new "
+            "token into the ETSY_REFRESH_TOKEN secret. See ETSY_AUTOMATION_SETUP.md.",
+            file=sys.stderr,
+        )
+        sys.exit(1)
+    access_token, new_refresh_token = result
+
+    # Save the rotated token immediately, before anything else can fail, so
+    # the chain is never lost. The workflow commits it even if later steps fail.
+    save_stored_token(shared_secret, new_refresh_token)
+    print("Rotated refresh token saved to .etsy-token.")
 
     print("Fetching active listings (with images)...")
     listings = fetch_active_listings(x_api_key, access_token, shop_id)
@@ -558,11 +570,6 @@ def main():
         print("Updated: " + ", ".join(changed))
     else:
         print("No page changes this run.")
-
-    if new_refresh_token != refresh_token:
-        print("Refresh token rotated - updating GitHub secret...")
-        update_github_secret(gh_pat, repo, "ETSY_REFRESH_TOKEN", new_refresh_token)
-        print("ETSY_REFRESH_TOKEN secret updated.")
 
     gh_output = os.environ.get("GITHUB_OUTPUT")
     if gh_output:
